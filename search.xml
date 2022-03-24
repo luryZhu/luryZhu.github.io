@@ -91,463 +91,17 @@
 <link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
   </entry>
   <entry>
-    <title>DL笔记1：Linear Regression</title>
-    <url>/2021/07/14/deeplearning/dl1/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p><strong>参考资料：</strong><br><a href="https://cuijiahua.com/blog/2018/10/dl-7.html">感知器</a><br><a href="https://cuijiahua.com/blog/2018/11/dl-8.html">线性单元</a><br><a href="https://www.bilibili.com/video/BV1JE411g7XF?p=3">李宏毅2020:Regression</a><br><a href="https://datawhalechina.github.io/leeml-notes/#/chapter3/chapter3">李宏毅2020:Regression-文字版</a></p>
-<h1 id="感知器"><a href="#感知器" class="headerlink" title="感知器"></a>感知器</h1><p>感知器，激活函数是阶跃函数，和神经元的本质上一样，只是激活函数不同<br>上世纪提出的感知器的概念，现在<br><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/DL/pics/regression/1.png"></p>
-<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><ul>
-<li>输入<ul>
-<li>特征向量 $x&#x3D;(x_1,x_2,…x_n)$</li>
-<li>权值 $w&#x3D;(w_1,w_2,…,w_n)$</li>
-<li>偏置项 $b$</li>
-</ul>
-</li>
-<li>激活函数<ul>
-<li>$f(z)&#x3D;\left{\begin{array}{lr}<br>1 &amp; z&gt;0 \<br>0 &amp; \text { otherwise }<br>\end{array}\right.$</li>
-</ul>
-</li>
-<li>输出<ul>
-<li>$y&#x3D;f(wx+b)$</li>
-</ul>
-</li>
-</ul>
-<h3 id="二分类问题"><a href="#二分类问题" class="headerlink" title="二分类问题"></a>二分类问题</h3><p>感知器模型可以用于解决二分类问题：对给定输入，输出0或1</p>
-<h4 id="例-感知器实现布尔运算"><a href="#例-感知器实现布尔运算" class="headerlink" title="例 感知器实现布尔运算"></a>例 感知器实现布尔运算</h4><p>输入: $x&#x3D;(x_1,  x_2)$<br>输出: $y&#x3D;f(w·x+b)$</p>
-<p>激励函数: 阶跃函数 实现二分类</p>
-<ol>
-<li><p>and 与运算<br>$w 1&#x3D;0.5, \quad w 2&#x3D;0.5, \quad b&#x3D;-0.8$<br>$f(z)&#x3D;\left{\begin{array}{l}1 &amp; z&gt;0 \ 0 &amp; \text { otherwise }\end{array}\right.$</p>
-</li>
-<li><p>or 或运算<br>$w 1&#x3D;0.5, \quad w 2&#x3D;0.5, \quad b&#x3D;-0.3$<br>$f(z)&#x3D;\left{\begin{array}{l}1 &amp; z&gt;0 \ 0 &amp; \text { otherwise }\end{array}\right.$</p>
-</li>
-</ol>
-<p>上述例子是线性可分的问题<br>如图 and 用线性函数可以把true和false分开<br><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/DL/pics/regression/2.png"></p>
-<h2 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h2><p>优化目标：使损失最小的输入权值w和偏置项b</p>
-<h3 id="感知器训练算法"><a href="#感知器训练算法" class="headerlink" title="感知器训练算法"></a>感知器训练算法</h3><ol>
-<li>初始化<br> $w$和$b$初始化为0</li>
-<li>迭代<br> $\begin{aligned} &amp;w_{i} &amp; \leftarrow &amp;\quad w_{i}+\Delta w_{i} \ &amp;b &amp; \leftarrow &amp;\quad b+\Delta b \end{aligned}$<br> 其中<br> $\begin{aligned} &amp;\Delta w_{i} &amp; &#x3D;&amp;\quad \eta (t-y)x_i \ &amp;\Delta b &amp; &#x3D;&amp;\quad \eta (t-y) \end{aligned}$</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th>数学表达</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>$y$</td>
-<td>感知器的输出值</td>
-</tr>
-<tr>
-<td>$t$</td>
-<td>target&#x2F;label，训练样本的真实值</td>
-</tr>
-<tr>
-<td>$\eta $</td>
-<td>学习速率</td>
-</tr>
-</tbody></table>
-<h1 id="线性单元"><a href="#线性单元" class="headerlink" title="线性单元"></a>线性单元</h1><link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>DeepLearning</category>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>DeepLearning</tag>
-        <tag>LHY2020</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>爱してるばんざーい</title>
-    <url>/2021/07/08/karaoke/karaoke1/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=26111167&auto=1&height=66"></iframe>
-<span id="more"></span>
+    <title>web前端学习路线</title>
+    <url>/2021/07/14/frontend/frontEnd1/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h1><div class="markmap-container" style="height:700px;"><svg class="markmap-svg">{"t":"heading","d":1,"v":"前端技能","c":[{"t":"heading","d":2,"v":"交互/设计"},{"t":"heading","d":2,"v":"语言","c":[{"t":"list_item","d":3,"v":"HTML"},{"t":"list_item","d":3,"v":"CSS"},{"t":"list_item","d":3,"v":"JavaScript"},{"t":"list_item","d":3,"v":"PHP"}]},{"t":"heading","d":2,"v":"行业标准","c":[{"t":"list_item","d":3,"v":"DOM"},{"t":"list_item","d":3,"v":"ES2015"},{"t":"list_item","d":3,"v":"HTTP"},{"t":"list_item","d":3,"v":"JSON"},{"t":"list_item","d":3,"v":"XML"}]},{"t":"heading","d":2,"v":"框架","c":[{"t":"list_item","d":3,"v":"React.js"},{"t":"list_item","d":3,"v":"Angular.js"},{"t":"list_item","d":3,"v":"jQuery"},{"t":"list_item","d":3,"v":"Vue.js"},{"t":"list_item","d":3,"v":"lodash"}]},{"t":"heading","d":2,"v":"兼容性","c":[{"t":"list_item","d":3,"v":"IE"},{"t":"list_item","d":3,"v":"CSS3新特性"},{"t":"list_item","d":3,"v":"HTML5新特性"},{"t":"list_item","d":3,"v":"ES2015"},{"t":"list_item","d":3,"v":"移动端"}]},{"t":"heading","d":2,"v":"前端工程","c":[{"t":"list_item","d":3,"v":"npm"},{"t":"list_item","d":3,"v":"webpack"},{"t":"list_item","d":3,"v":"postcss"}]},{"t":"heading","d":2,"v":"调试","c":[{"t":"list_item","d":3,"v":"浏览器调试工具"},{"t":"list_item","d":3,"v":"Fiddler"}]},{"t":"heading","d":2,"v":"团队协作","c":[{"t":"list_item","d":3,"v":"Git/SVN"},{"t":"list_item","d":3,"v":"编码规范"},{"t":"list_item","d":3,"v":"文档管理"}]},{"t":"heading","d":2,"v":"性能","c":[{"t":"list_item","d":3,"v":"优化规则"},{"t":"list_item","d":3,"v":"开发者工具"},{"t":"list_item","d":3,"v":"浏览器管理"}]},{"t":"heading","d":2,"v":"安全性","c":[{"t":"list_item","d":3,"v":"XSS"},{"t":"list_item","d":3,"v":"CSRF"},{"t":"list_item","d":3,"v":"加密解密"},{"t":"list_item","d":3,"v":"编码解码"}]},{"t":"heading","d":2,"v":"编程思想","c":[{"t":"list_item","d":3,"v":"函数式编程"},{"t":"list_item","d":3,"v":"面向对象"},{"t":"list_item","d":3,"v":"设计模式"}]}]}</svg></div>
 
-<p>爱してるばんざーい!<br>aishiteru banzai!<br>ここでよかった　私たちの今がここにある<br>koko de yokatta    watashitachi no ima ga koko ni aru<br>爱してるばんざーい!<br>aishiteru banzai!<br>始まったばかり　明日もよろしくね　<br>hajimatta bakari     ashita mo yoroshikune </p>
-<p>笑ってよ　悲しいなら吹きとばそうよ<br>waratteyo kanashii- nara    fukitoba sou–yo<br>笑えたら変わる景色　晴れ间がのぞく<br>warae tara kawaru keshiki    harema ga nozoku<br>不安でもしあわせへと繋がる道が<br>fuan demo shiawase eto tsunagaru michi ga<br>见えてきたよな青空<br>mietekita yona aozora<br>时々雨が降るけど水がなくちゃたいへん<br>tokidoki ame ga furukedo mizu ga nakucha taihen<br>乾いちゃだめだよ　みんなの梦の木よ育て<br>kawaicha damedayo    minna no yume no kiyo sodate—</p>
-<p>さあ!<br>saa!<br>大好きだばんざーい!<br>daisukida banzai!<br>まけないゆうき　私たちは今を楽しもう<br>makenai yuuki    watashitachi wa ima o tanoshimou–<br>大好きだばんざーい!<br>daisukida banzai!<br>顽张れるから　昨日に手をふって　<br>ganbareru kara    kinou ni te o futte<br>ほら前向いて<br>hora    mae muite</p>
-<p>进んでよ　苦しくても隣にいてよ<br>susundeyo kurushiku temo    tonari ni iteyo<br>进んだら燃える太阳　东を照らす<br>susundara moeru taiyou     higashi o terasu<br>迷ってた答えがない先への道は<br>mayotteta kokotae ga nai saki eno michi wa<br>谁も知らない言えない<br>dare mo shiranai ienai<br>突然岚のなかへ落ちる银のひかり<br>totsuzen arashi no naka e     ochiru gin no hikari<br>怯えちゃだめだよみんなの梦の木は强い<br>obiecha damedayo minna no yume no ki wa tsuyoi</p>
-<p>さあ!<br>saa!<br>爱してるばんざーい!<br>aishiteru banzai!<br>ここでよかった　私たちの今がここにある<br>koko de yokatta watashitachi no ima ga koko ni aru</p>
-<p>爱してるばんざーい!<br>aishiteru banzai!<br>始まったばかり　明日もよろしくね　<br>hajimatta bakari    ashita mo yoroshikune<br>まだゴールじゃない<br>mada GOORU janai</p>
-<p>时々雨が降るんだ　风で干が揺れる<br>tokidoki ame ga furunda    kaze de miki ga yureru<br>一绪にいくんだ　みんなの梦の木よ育て<br>issho ni ikunda minna no yume no ki yo sodate</p>
-<p>さあ!<br>saa<br>大好きだばんざーい!<br>daisukida banzai<br>まけないゆうき　私たちは今を楽しもう<br>makenai yuuki    watashitachi wa ima wo    tanoshi mou–<br>大好きだばんざーい!<br>daisukida banzai<br>顽张れるから　昨日に手をふって　<br>ganbareru kara   kinou ni te wofutte<br>ほら前向いて<br>hora    mae mui te</p>
+<h1 id="浏览器架构"><a href="#浏览器架构" class="headerlink" title="浏览器架构"></a>浏览器架构</h1><p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/front-end-notes/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9E%B6%E6%9E%84.png"></p>
 <link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
       <categories>
-        <category>KTV小助手</category>
-        <category>LoveLive</category>
+        <category>web前端汇总</category>
       </categories>
       <tags>
-        <tag>karaoke</tag>
-        <tag>LL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>残酷な天使のテーゼ</title>
-    <url>/2021/07/08/karaoke/karaoke10/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=657666&auto=1&height=66"></iframe>
-<span id="more"></span>
-
-<p>残酷な天使のように 少年よ 神话になれ<br>zankoku na tenshi no youni    shounen yo shinwa ni na re</p>
-<p>苍い风がいま 胸のドアを叩いても<br>aoi kaze ga ima    mune no doa wo tatai temo<br>私だけを ただ见つめて 微笑んでるあなた<br>watashi dake wo    tada mitsume te    hohoen deru anata<br>そっとふれるもの もとめることに梦中で<br>sotto fureru mono    motomeru koto ni muchuu de<br>运命さえ まだ知らない いたいけな瞳<br>unmei sae    mada shiranai    itai ke na hi to mi</p>
-<p>だけどいつか气付くでしょう その背中には<br>dakedo itsuka kitsuku deshyou    sono senaka ni wa<br>遥か未来 めざすための 羽根があること<br>haruka mirai mezasu tame no hane ga aru koto</p>
-<p>残酷な天使のテ－ゼ 窗边からやがて飞び立つ<br>zankoku na tenshi no teeze    madobe kara yagate tobitatsu<br>ほとばしる热いパトスで 思い出を里切るなら<br>hotoba shiru atsui patosu de    omoide wo uragiru nara<br>この宇宙を抱いて辉く 少年よ 神话になれ<br>kono sora wo daite kagayaku    shounen yo shinwa ni na re</p>
-<hr>
-<p>ずっと眠ってる 私の爱の摇りかご<br>tsutto nemu u teru    watashi no ai no yurikago<br>あなただけが 梦の使者に 呼ばれる朝がくる<br>anata dake ga    yume no shisha ni    yobareru asa ga kuru<br>细い首筋を 月あかりが映してる<br>hosoi kubisuji wo    tsuki akari ga utsushi te ru<br>世界中の时を止めて 闭じこめたいけど<br>sekai chu u no toki wo tomete    tojikome tai ke do</p>
-<p>もしもふたり逢えたことに 意味があるなら<br>moshimo futari aeta koto ni    imi ga aru na ra<br>私はそう 自由を知る ためのバイブル<br>watashi wa sou jiyuu wo shiru tame no baiburu</p>
-<p>残酷な天使のテ－ゼ 悲しみがそしてはじまる<br>zankoku na tenshi no teeze    kanashimi ga soshite hajimaru<br>抱きしめた命のかたち その梦に目觉めたとき<br>dakishime ta inochi no katachi    so no yume ni mezameta toki<br>谁よりも光を放つ 少年よ 神话になれ<br>dare yori mo hikari wo hanatsu shounen yo shinwa ni na re</p>
-<p>人は爱をつむぎながら 历史をつくる<br>hito wa ai wo tsumugi na ga ra    rekishi wo tsukuru<br>女神なんてなれないまま 私は生きる<br>megami nante nare nai mama    watashi wa ikiru</p>
-<p>残酷な天使のテ－ゼ 窗边からやがて飞び立つ<br>zankoku na tenshi no teeze    madobe kara yagate tobitatsu<br>ほとばしる热いパトスで 思い出を里切るなら<br>hotoba shiru atsui patosu de    omoide wo uragiru nara<br>この宇宙を抱いて辉く 少年よ 神话になれ<br>kono sora wo daite kagayaku    shounen yo shinwa ni na re</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>KTV小助手</category>
-      </categories>
-      <tags>
-        <tag>karaoke</tag>
-        <tag>EVA</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Komm, süsser Tod</title>
-    <url>/2021/07/08/karaoke/karaoke11/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=1483488615&auto=1&height=66"></iframe>
-<span id="more"></span>
-
-<p>I know, I know I’ve let you down<br>我知道 我知道 是我让你失望了<br>I’ve been a fool to myself<br>对自己来说我不过是傻瓜<br>I thought that I could live for no one else<br>我一直以为我只能是为你而活<br>But now, through all the hurt and pain<br>但是现在却只是通过伤害和苦痛<br>It’s time for me to respect<br>到了我该有所敬畏的时候了<br>the ones you love mean more than anything<br>你爱的人比什么都重要<br>So with sadness in my heart<br>这真让我感觉满心苦楚<br>feel the best thing I could do<br>我想我真的该做<br>Is end it all and leave forever<br>结束了所有的一切 再永远地离开<br>What’s done is done it feels so bad<br>应该做的都已经做完 那是多么浩大的伤感<br>What once was happy now is sad<br>曾经的快乐现在成了悲伤<br>I’ll never love again my world is ending<br>我失去了再爱的心 我的世界已经完了<br>I wish that I could turn back time<br>我希望我能让时间倒转<br>‘Cos now the guilt is all mine<br>因为这都是我的罪孽<br>Can’t live without the trust from those you love<br>倘若是没有了你爱的信任我会无法生存<br>I know we can’t forget the past<br>我知道我们无法遗忘那些过去<br>You can’t forget love and pride<br>你也不能忘却爱和骄傲<br>Because of that it’s killing me inside<br>因为这样 这将把我扼杀</p>
-<p>It all returns to nothing<br>一切化为乌有<br>It all comes tumbling down<br>所有的一切都倒下来吧<br>Tumbling down, tumbling down<br>倒下来 倒下来<br>It all returns to nothing<br>一切都化为了乌有<br>I just keep letting me down<br>我也让自己让我失望<br>Letting me down, letting me down<br>让我失望 让我失望<br>In my heart of hearts<br>在我内心深处<br>I know that I could never love again<br>我知道我再也不会有爱<br>I’ve lost everything, everything<br>我已经失去了所有<br>Everything that matters to me, matters in this world<br>一切与我有关的与这个世界有关的麻烦<br>I wish that I could turn back time<br>我希望我能让时间倒转<br>Cause now the guilt is all mine<br>因为这都是我的罪孽<br>Can’t live without the trust from those you love<br>倘若是没有了你爱的信任我会无法生存<br>I know we can’t forget the past<br>我知道我们无法遗忘那些过去<br>You can’t forget love and pride<br>你也不能忘却爱和骄傲<br>Because of that it’s killing me inside<br>因为这样 这将把我扼杀</p>
-<p>It all returns to nothing<br>一切化为乌有<br>It just keeps tumbling down<br>所有的一切都倒下来吧<br>Tumbling down, tumbling down<br>倒下来 倒下来<br>It all returns to nothing<br>一切都化为了乌有<br>I just keep letting me down<br>我也让自己让我失望<br>Letting me down, letting me down<br>让我失望 让我失望</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>KTV小助手</category>
-      </categories>
-      <tags>
-        <tag>karaoke</tag>
-        <tag>EVA</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>VOYAGER～日付のない墓標</title>
-    <url>/2021/07/08/karaoke/karaoke12/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=1854433633&auto=1&height=66"></iframe>
-<span id="more"></span>
-
-<p>傷ついた友達さえ<br>Kizutsuita tomodachi sae<br>置き去りにできるソルジャー<br>Okizari ni dekiru sorujā(soldier)<br>あなたの苦しさを私だけに<br>Anata no kurushi-sa o watashi dakeni<br>つたえていってほしい<br>Tsutaete i  tte hoshī<br>忘れない<br>Wasurenai<br>自分のためだけに<br>Jibun no tame dake ni<br>生きられなかった淋さみしいひと<br>Iki rarenakatta Samishī hito</p>
-<p>私があなたと知り合えたことを<br>Watashi ga anata to shiriaeta koto o<br>私があなたを愛してたことを<br>Watashi ga anata o aishi teta koto o<br>死ぬまで死ぬまで誇りにしたいから<br>Shinu made shinu made hokori ni shitaikara</p>
-<p>冷い夢に乗り込んで<br>Tsumetai yume ni norikonde<br>宇宙に消えるヴォイジャー<br>aosora ni kieru vu~oijā(voyager)<br>いつでも人々を変えるものに<br>Itsu demo hitobito o kaeru mono ni<br>人々は気づかない<br>Hitobito wa kidzukanai<br>行く先は どれくらい遠いの<br>Yukusaki wa dore kurai tōi no<br>もう二度と戻れないの<br>Mō nidoto modorenai no</p>
-<p>私があなたと知り合えたことを<br>Watashi ga anata to shiriaeta koto o<br>私があなたを愛してたことを<br>Watashi ga anata o aishi teta koto o<br>死ぬまで死ぬまで誇りにしたいから<br>Shinu made shinu made hokori ni shitaikara</p>
-<p>私があなたと知り合えたことを<br>Watashi ga anata to shiriaeta koto o<br>私があなたを愛してたことを<br>Watashi ga anata o aishi teta koto o<br>死ぬまで死ぬまで誇りにしたいから<br>Shinu made shinu made hokori ni shitaikara<br>私があなたと知り合えたことを<br>Watashi ga anata to shiriaeta koto o<br>私があなたを愛してたことを<br>Watashi ga anata o aishi teta koto o<br>死ぬまで死ぬまで誇りにしたいから<br>Shinu made shinu made hokori ni shitaikara</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>KTV小助手</category>
-      </categories>
-      <tags>
-        <tag>karaoke</tag>
-        <tag>EVA</tag>
-        <tag>演歌</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>銀の龍の背に乗って</title>
-    <url>/2021/07/08/karaoke/karaoke13/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=28661544&auto=1&height=66"></iframe>
-<span id="more"></span>
-
-<p>あの苍（あお）ざめた海の彼方で<br>ano aozameta umi no kanata de<br>今まさに谁かが伤んでいる<br>ima masani dareka ga itande iru<br>まだ飞べない雏たちみたいに<br>mada tobenai hina-tachi mitai ni<br>仆はこの非力を叹いている<br>boku wa kono hiriki o nageite iru</p>
-<p>急げ悲しみ 翼に変われ<br>isoge kanashimi tsubasa ni kaware<br>急げ伤迹 罗针盤になれ<br>isoge kizuato rashinban ni nare<br>まだ飞べない雏たちみたいに<br>mada tobenai hina-tachi mitai ni<br>仆はこの非力を叹いている<br>boku wa kono hiriki o nageite iru</p>
-<p>梦が迎えに来てくれるまで<br>yume ga mukae ni kite kureru made<br>震えて待ってるだけだった昨日<br>furuete matte rudakeda  tta kinō<br>明日 仆は龙の足元へ崖を登り<br>ashita boku wa ryū no ashimoto e gake o nobori<br>呼ぶよ「さあ、行（い）こうぜ」<br>yobu yo &#96;sā, ikou ze’</p>
-<p>银の龙の背に乗って<br>gin’no ryū no seni notte<br>届けに行こう 命の砂漠へ<br>todoke ni ikou inochi no sabaku e<br>银の龙の背に乗って<br>gin’no ryū no seni notte<br>运んで行こう 雨云の涡を<br>hakonde ikou amagumo no uzu o</p>
-<p>失うものさえ失ってなお<br>ushinau mono sae ushinatte nao<br>人はまだ谁かの指にすがる<br>hito wa mada dareka no yubi ni sugaru<br>柔らかな皮肤しかない理由（わけ）は<br>yawarakana hifu shika nai wake wa<br>人が人の伤みを聴くためだ<br>hito ga hito no itami o kiku tameda</p>
-<p>急げ悲しみ 翼に変われ<br>isoge kanashimi tsubasa ni kaware<br>急げ伤迹 罗针盤になれ<br>isoge kizuato rashinban ni nare<br>まだ飞べない雏たちみたいに<br>mada tobenai hina-tachi mitai ni<br>仆はこの非力を叹いている<br>boku wa kono hiriki o nageite iru</p>
-<p>わたボコリみたいな翼でも<br>wata bokori mitaina tsubasa demo<br>木の芽みたいな頼りない爪でも<br>kinome mitaina tayorinai tsume demo<br>明日 仆は龙の足元へ崖を登り<br>ashita boku wa ryū no ashimoto e gake o nobori<br>呼ぶよ「さあ、行（い）こうぜ」<br>yobu yo &#96;sā, ikou ze’</p>
-<p>银の龙の背に乗って<br>gin’no ryū no seni notte<br>届けに行こう 命の砂漠へ<br>todoke ni ikou inochi no sabaku e<br>银の龙の背に乗って<br>gin’no ryū no seni notte<br>运んで行こう 雨云の涡を<br>hakonde ikou amagumo no uzu o</p>
-<p>银の龙の背に乗って<br>gin’no ryū no seni notte<br>运んで行こう 雨云の涡を<br>hakonde ikou amagumo no uzu o</p>
-<p>银の龙の背に乗って<br>gin’no ryū no seni notte<br>银の龙の背に乗って<br>gin’no ryū no seni notte</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>KTV小助手</category>
-      </categories>
-      <tags>
-        <tag>karaoke</tag>
-        <tag>演歌</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>START:DASH!!</title>
-    <url>/2021/07/08/karaoke/karaoke14/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=26218091&auto=1&height=66"></iframe>
-
-<span id="more"></span>
-
-<p>I say…<br>Hey,hey,hey,START:DASH!!<br>Hey,hey,hey,START:DASH!!<br>うぶ毛の小鸟たちも<br>ubuke no kotoritachi mo<br>いつか空に羽ばたく<br>itsuka sora ni habataku<br>大きな强い翼で飞ぶ<br>ookina tsuyoi tsubasa de tobu<br>谛めちゃダメなんだ<br>akiramecha dame nanda<br>その日が绝対来る<br>sono hi ga zettai kuru<br>君も感じてるよね<br>kimi mo kanjiteruyone<br>始まりの鼓动<br>hajimari no kodou<br>明日よ変われ!<br>ashitayo kaware !<br>希望に変われ!<br>kibou ni kaware !<br>眩しい光に照らされて変われ<br>mabushii hikari ni terasarete kaware<br>START!!</p>
-<p>悲しみに闭ざされて<br>kanashimi ni tozasarete<br>泣くだけの君じゃない<br>naku dakeno kimi janai<br>热い胸　きっと未来を切り开く筈さ<br>atsui mune kitto mirai wo kiri hiraku hazusa<br>悲しみに闭ざされて<br>kanashimi ni tozasarete<br>泣くだけじゃつまらない<br>naku dakeja tsumaranai<br>きっと （きっと） 君の （梦の）<br>kitto ( kitto ) kimi no ( yume no )<br>チカラ （いまを） 动かすチカラ<br>chikara ( ima wo ) ugokasu chikara<br>信じてるよ…だから START!!<br>shinjiteruyo … dakara START!!</p>
-<p>雨上がりの気分で<br>ame agari no kibun de<br>高まる期待のなか<br>takamaru kitai no naka<br>踬いたことさえも<br>tsumazuita koto saemo<br>思い出にしよう<br>omoide ni shiyou<br>明日が咲くよ!<br>ashita ga sakuyo !<br>希望が咲くよ!<br>kibou ga sakuyo !<br>楽しいメロディー口ずさみ咲いた<br>tanoshii merodei(melody)^ kuchi zusami saita<br>DASH!!</p>
-<p>喜びを受けとめて<br>yorokobi wo uketomete<br>君と仆つながろう<br>kimi to boku tsunagarou<br>迷い道　やっと外へ抜けだした筈さ<br>mayoi michi yatto soto e nuke dashita hazusa<br>喜びを受けとめて<br>yorokobi wo uketomete<br>君と仆　进むだろう<br>kimi to boku susumu darou<br>それは （それは） 远い （梦の）<br>sore wa ( sore wa ) tooi ( yume no )<br>カケラ （だけど） 爱しいカケラ<br>kakera ( dakedo ) itoshii kakera<br>彼方へと…仆は DASH!!<br>kanata eto … boku wa DASH!!<br>またひとつ　梦が生まれ…</p>
-<p>mata hitotsu yume ga umare …<br>悲しみに闭ざされて<br>kanashimi ni tozasarete<br>泣くだけの君じゃない<br>naku dakeno kimi janai<br>热い胸　きっと未来を切り开く筈さ<br>atsui mune kitto mirai wo kiri hiraku hazusa<br>喜びを受けとめて<br>yorokobi wo uketomete<br>君と仆つながろう<br>kimi to boku tsunagarou<br>迷い道　やっと外へ抜けだした筈さ<br>mayoi michi yatto soto e nuke dashita hazusa<br>喜びを受けとめて<br>yorokobi wo uketomete<br>君と仆　进むだろう<br>kimi to boku susumu darou<br>それは （それは） 远い （梦の）<br>sore wa ( sore wa ) tooi ( yume no )<br>カケラ （だけど） 爱しいカケラ<br>kakera ( dakedo ) itoshii kakera<br>彼方へと…仆は DASH!!<br>kanata eto … boku wa DASH!!</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>KTV小助手</category>
-        <category>LoveLive</category>
-      </categories>
-      <tags>
-        <tag>karaoke</tag>
-        <tag>LL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>硝子の花園</title>
-    <url>/2021/07/08/karaoke/karaoke15/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=28341947&auto=1&height=66"></iframe>
-
-<span id="more"></span>
-
-<p>ユメの迷路…ユリの迷路…<br>Yume no meiro… Yuri no meiro…<br>憧れを語る目が<br>Akogare o kataru me ga<br>遠くを探してる時<br>Tōku o sagashi teru toki<br>寂しくなる私は<br>Sabishiku naru Watashi wa <br>ここにいると言いたいの<br>koko ni iru to iitai no<br>Ah!ふたりきりで硝子の花園へと<br>Ah! Futari kiri de   garasu no hanazono e to<br>誰もいない 誰もいらない<br>Dare mo inai   dare mo iranai<br>そっと＿（こ）われそうに咲きたい<br>Sotto koware-sō ni sakitai</p>
-<p>秘密のブランコ<br>Himitsu no buranko<br>あなたと揺られながら今<br>Anata to yurenagara ima<br>ただ優しく見つめあうの<br>Tada yasashiku mitsume au no<br>恋に恋する少女の静かな溜息は<br>Koi ni koisuru shōjo no shizukana tameiki wa<br>Lonely…満ち足りたLonely<br>Lonely… Michitarita Lonely…</p>
-<p>閉じこめたい心を<br>Tojikometai kokoro o<br>どこにも行かない様に<br>Dokoni mo ikanai yō ni<br>寂しいのよ<br>Sabishī no yo<br>私と＿＿（ここ）にいてよいつまでも<br>Watashi to koko ni iteyo itsu made mo<br>Ah!ユメの迷路 硝子の蝶々たちは<br>Ah! Yume no meiro garasu no chōchō-tachi wa<br>誘いながら 誘われてる<br>Sasoinagara sasowa re teru<br>指で＿（こ）われそうな羽ばたき<br>Yubi de koware-sōna habataki</p>
-<p>内緒のロマンス<br>Naisho no romansu<br>あなたを感じたいのに<br>Anata o kanjitai noni<br>まだ切なく見つめるだけ<br>Mada setsunaku mitsumeru dake<br>恋を恋する少女でいられない気持ちに<br>Koi o koisuru shōjo de i rarenai kimochi ni<br>なぜ…苦しくなるの？<br>Naze… Kurushiku naru no?<br>ふたりきりの花園で眠りにつく<br>Futari kiri no hanazono de nemurini tsuku<br>髪を撫でるその手が好き もっと…<br>Kami o naderu sono-te ga suki motto…</p>
-<p>内緒のロマンス<br>Naisho no romansu<br>あなたを感じたいのに<br>Anata o kanjitainoni<br>まだ切なく見つめるだけ<br>Mada setsunaku mitsumeru dake<br>恋を恋する少女でいられない気持ちに<br>Koi o koisuru shōjo de i rarenai kimochi ni<br>なぜ…苦しくなるの？<br>Naze… Kurushiku naru no?</p>
-<p>秘密のブランコ<br>Himitsu no buranko<br>あなたと揺られながら今<br>Anata to yurenagara ima<br>ただ優しく見つめあうの<br>Tada yasashiku mitsume au no<br>恋に恋する少女の静かな溜息は<br>Koi ni koisuru shōjo no shizukana tameiki wa<br>Lonely…満ち足りたLonely<br>Lonely… Michitarita Lonely…<br>ユメの迷路…ユリの迷路…<br>Yume no meiro… Yuri no meiro…</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>KTV小助手</category>
-        <category>LoveLive</category>
-      </categories>
-      <tags>
-        <tag>karaoke</tag>
-        <tag>LL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>美しきもの</title>
-    <url>/2021/07/08/karaoke/karaoke16/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=1384973305&auto=1&height=66"></iframe>
-<span id="more"></span>
-
-<p>君(きみ)の大好(だいす)きな<br>kimi no daisukina<br>この旋律(Melodie)…<br>kono Melodie…<br>大空(おおぞら)へと<br>oosora e to<br>响(ひび)け口风琴(Harmonica)…<br>hibi ke Haramonica…</p>
-<p>*天使(てんし)が抱(いだ)いた<br>*tenshi ga idaita<br>まどわくの画布(Tolie)…<br>mado waku no Tolie(toiwa)…<br>ねえ…その风景画(Paysage)…<br>nee…sono Paysage…<br>绮丽(きれい)かしら?<br>kirei kashira?</p>
-<p>(C’est)——<br>C’est–<br>风(かぜ)が运(はこ)んだ…<br>kaze ga hakonda…<br>淡(あわ)い花弁(はなびら)…<br>awai hanabira…<br>春(はる)の追想(ついそう)…<br>haru no tsui sou…</p>
-<p>绮丽(きれい)な音(ね)…<br>kirei na ne…<br>呗(うた)うモニカ…<br>uta u Monica…<br>鸟(とり)の啭(さえず)り…<br>tori no saezuri…<br>针(はり)は进(すす)んだ<br>hari wa susunda</p>
-<p>(C’est)——<br>C’est–<br>苍(あお)が繋(つな)いで…<br>ao ga tsunaide…<br>流(なが)れる云(くも)…<br>nagareru kumo…<br>夏(なつ)の追想(ついそう)…<br>natsu no tsuisou…<br>绮丽(きれい)な音(ね)…<br>kirei na ne…<br>谣(うた)うモニカ…<br>utau Monica<br>蝉(せみ)の时雨(しぐれ)…<br>semi no shigure…<br>针(はり)は进(すす)んだ<br>hari wa susun da</p>
-<p>绮丽(きれい)だと…<br>kireidato…<br>君(きみ)が言(い)った景色(けしき)…<br>kimi ga itta keshiki…<br>きつと忘(わす)れない…<br>kitsuto wasurenai…</p>
-<p>『美(うつく)しきもの』…<br>『utsuku shi kimono』…<br>集(あつ)める为(ため)に…<br>atsu meru tameni…<br>生命(ひと)はやあって来(く)る … …<br>hito wa yaatekuru</p>
-<p>君(きみ)が抱(だ)きしめた<br>kimi ga dakishimeta<br>短(みじか)い季节(Saison)…<br>mijikai Saison…<br>痛(いた)みの雨(あめ)に<br>itami no ame ni<br>打(う)たれながら…<br>utare nagara…</p>
-<p>「心配(しんぱい)ないよ」…<br>「shinbai naiyo」…<br>笑(わら)って言(い)った…<br>warate itta…<br>君(きみ)の様相(Visage)<br>kimi no Visage<br>忘(わす)れないよ… …<br>wasurenaiyo……</p>
-<p>(C’est)——<br>C’est–<br>夜(よる)の窓(まど)边(べ)に…<br>yoru no madobe ni…<br>微笑(ほほえ)む月(つき)…<br>hohoemu tsuki…<br>秋(あき)の追想(ついそう)…<br>aki no tsuisou…</p>
-<p>绮丽(きれい)な音(ね)<br>kireina ne<br>咏(うた)うモニカ…<br>utau Monica<br>虫(むし)の羽音(はおと)…<br>mushi no haoto<br>针(はり)は进(すす)んだ<br>hari wa susunda</p>
-<p>(C’est)——<br>C’est–<br>大地(だいち)を包(つつ)み…<br>daichi wo tsutsumi…<br>微睡(まどろ)む雪(ゆき) …<br>madoro mu yuki…<br>冬(ふゆ)の追想(ついそう)<br>fuyu no tsuisou</p>
-<p>绮丽(きれい)な音(ね)…<br>kirei na ne…<br>讴(うた)うモニカ…<br>utau Monica…<br>时(とき)の木枯(こが)らし…<br>toki no kogarashi…<br>针(はり)は进(すす)んだ →<br>hari wa susunda →</p>
-<p>绮丽(きれい)だね…<br>kirei dane…<br>君(きみ)が生(い)きた景色(けしき)…<br>kimi ga ikita keshiki…<br>ずつと忘(わす)れない…<br>zutto wasure nai…</p>
-<p>『美(うつく)しきもの』…<br>『utsuku shi kimono』…<br>集(あつ)める为(ため)に…<br>atsumeru tameni…<br>生命(いの)は过(す)ぎて行(ゆ)く…<br>ino wa sugiteyuku…</p>
-<p>君(きみ)が駆(か)け抜(ぬ)けた<br>kimi ga kakenuketa<br>眩(まばゆ)い季节(Saison)…<br>mabayui Saison…<br>病(やまい)の焔(ほむら)に<br>tamai no homura ni<br>焼(や)かれながら…<br>yakarenagara…</p>
-<p>「呜呼(ああ)…绮丽(きれい)だね」…<br>「aa…kirei dane」…<br>笑(わら)って逝(い)った<br>waratte itta<br>君(きみ)の面影(Image)<br>kimi no Image<br>忘(わす)れないよ…<br>wasurenaiyo…</p>
-<p>君(きみ)が生(う)まれた朝(あさ)…<br>kimi ga umare ta asa…<br>泣(な)き虫(むし)だつた私(わたし)は…<br>naki mushi datsuta watashi wa…<br>小(ちい)さくても姉(あね)となつた——<br>chiisa ku temo ane to natsuta–</p>
-<p>嬉(うれ)しくて<br>ureshikute<br>少(すこ)し照(て)れくさくて…<br>sukoshi tereku sakute…<br>とても夸(ほこ)らしかった… …<br>totemo hokorashi katta……</p>
-<p>苦(くる)しみに摇荡(ゆうか)う<br>kuru shimi ni yukau<br>生(なま)の荒野(あらの)を<br>nama no arano wo<br>「美(うつく)しきもの」探(さが)すように<br>「utsuku shi kimo 」saga suyouni<br>駆(か)け抜(ぬ)けた<br>kake nu keta</p>
-<p>果(は)てしなき地平(ちへい)へ<br>hateshi naki chiei e<br>旅立(たびだ)つ君(きみ)の<br>tabi da tsu kimi no<br>寝颜(ねがお)何(なに)より<br>negeo nani yori<br>美(うつく)しいと思(おも)ったよ… …<br>utsuku shii to omo tsu tayo……</p>
-<p>君(きみ)の大好(だいす)きな<br>kimi no daisukina<br>この旋律(Melodie)…<br>kono Melodie…<br>大空(おおぞら)へと<br>oosora e to<br>响(ひび)け口风琴(Harmonica)…<br>hibi ke Haramonica…</p>
-<p>*天使(てんし)が抱(いだ)いた<br>*tenshi ga idaita<br>まどわくの画布(Tolie)…<br>mado waku no Tolie(toiwa)…<br>ねえ…その风景画(Paysage)…<br>nee…sono Paysage…<br>绮丽(きれい)かしら?<br>kirei kashira?</p>
-<p>私(わたし)は 世界(せかい)で一番(いちばん)<br>美(うつく)しい光(ひかり)を见(みる)つた<br>watashi wa sekai de ichi ban<br>utsuku shii hikari wo miru tsuta<br>その花(はな)を胸(むね)に抱(いだ)いて<br>sono hana wo mune ni idaite<br>laurantの分(ぶん)も 咏(うた)い続(つづ)けよう<br>laurant no fun mo utaitsutsuke you<br>「其処(そのか)にロマンは在(あ)るのかしら?」<br>「sono ka ni ROMANSU wa aru no kashira?」</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>KTV小助手</category>
-      </categories>
-      <tags>
-        <tag>karaoke</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Soldier Game</title>
-    <url>/2021/07/12/karaoke/karaoke17/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=26214458&auto=1&height=66"></iframe>
-
-<span id="more"></span>
-
-<p>Three,two,one,zero!<br>Three, two, one zero<br>ここで登场<br>Koko de toujou<br>见てなさい 私の本气<br>Mite nasai watashi no honki<br>スリルと美意识で胜つのよ必ず<br>Thrill to biishiki de katsu no yo kanarazu        </p>
-<p>优しげな言叶ささやく<br>Yasashigena kotoba sasayaku<br>伪(にせ)のさじゃなくて<br>Nise no kawaisa janakute<br>冷たく强く守らなきゃ<br>Tsumetaku, tsuyoku, mamoranakya<br>切なモノ达 弱きモノ达<br>Taisetsuna monotachi, yowaki monotachi        </p>
-<p>私は谁でしょ? 知りたくなったでしょう?<br>Watashi wa dare desho, shiritaku natta deshou<br>ならば恋かも<br>Naraba koi kamo<br>私のには秘密があるとして<br>Watashi no naka ni wa himitsu ga aru to shite<br>それを君はどうするの<br>Sore wo kimi wa do suru no<br>It’s soldier game<br>It’ s soldier game<br>またえた 讯こうかな<br>Mata aeta toki, kikou ka na        </p>
-<p>Three,two,one,zero!<br>Three, two, one zero<br>つぎの作战<br>Tsugi no sakusen<br>见てなさい 私は本气<br>Mitenasai watashi wa honki<br>シグナル受けとめて未を顶く<br>Signal uketomete mirai wo itadaku        </p>
-<p>微笑みよりも甘いのは<br>Hohoemi yori mo amai no wa<br>嘘が招いた泪よ<br>Uso ga maneita namida yo<br>儚さ脆さ隐してる<br>Hakanasa, morosa kakushiteru<br>切なモノなの 弱きモノなの<br>Taisetsuna mono nano yowaki mono nano        </p>
-<p>私とるでしょ? 触れたくなったでしょう?<br>Watashi to kuru desho, furetaku natta deshou<br>すでに恋だよ<br>Sude ni koi da yo<br>私といつかは战うべき相手<br>Watashi to itsuka wa tatakaubeki aite<br>それは君の理性かも<br>Sore wa kimi no risei kamo<br>I’m soldier heart<br>I’m soldier heart<br>负けないからね It’s soldier game<br>Makenai kara ne, it’s soldier game        </p>
-<p>Come on!<br>Come on!<br>いまが胜负よ!<br>Ima ga shoubu yo<br>私は谁でしょ? 知りたくなったでしょう?<br>Watashi wa dare deshou, shiritaku natta deshou<br>ならば恋かも<br>Naraba koi kamo<br>私のには秘密があるとして<br>Watashi no naka ni wa himitsu ga aru to shite<br>それを君は?<br>Sore wo kimi wa        </p>
-<p>私とるでしょ? 触れたくなったでしょう?<br>Watashi to kuru desho, furetaku natta deshou<br>すでに恋だよ<br>Sude ni koi da yo<br>私といつかは战うべき相手<br>Watashi to itsuka wa tatakaubeki aite<br>それは君の理性かも<br>Sore wa kimi no risei kamo<br>It’s soldier game<br>It’s soldier game<br>またえたのに I’m soldier heart<br>Mata aeta no ni, I’m soldier heart        </p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>KTV小助手</category>
-        <category>LoveLive</category>
-      </categories>
-      <tags>
-        <tag>karaoke</tag>
-        <tag>LL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>トライアングラー (triangular)</title>
-    <url>/2021/07/12/karaoke/karaoke18/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=589146&auto=1&height=66"></iframe>
-
-<span id="more"></span>
-
-<p>君(きみ)は谁(だれ)とキスをする <br>kimi wa dare to kisu wo suru<br>私(わたし)それともあの子(こ)？<br>watashi soretomo watashi<br>君(きみ)は谁(だれ)とキスをする<br>kimi wa dare to kisu wo suru<br>星(ほし)を巡(めぐ)るよ纯情(じゅんじょう)<br>hoshi wo meguru yo junjou        </p>
-<p>弱虫(よわむし)泣(な)き虫(むし)连(つ)れて<br>yowamushi nakimushi tsurete<br>また行(い)くんだと思(おも)う私(わたし)<br>mada ikun da to omou watashi<br>爱(あい)するより求(もと)めるより<br>aisuru yori motomeru yori<br>疑(うたが)う饱和(ほうわ)がずっと<br>utagau hou ga zutto<br>容易(たやす)い 自分(じぶん)が悔(くや)しい<br>tayasui jibun ga kuyashii        </p>
-<p>痛(いた)いよ<br>itai yo<br>味方(みかた)だけど  爱(あい)してないとか<br>mikata dakedo aishitenai toka<br>守(まも)るけど 傍(そば)に居(い)れないとか<br>mamoru dakedo soba ni irenai toka<br>二律背反(にりつはいはん) <br>nigai niritsuhaihan<br>今(いま)すぐ Touch me<br>imasugu tacchimi-<br>运命(うんめい)ならば 繋(つな)がせて<br>unmei naraba tsunagasete        </p>
-<p>君(きみ)は谁(だれ)とキスをする <br>kimi wa dare to kisu wo suru<br>私(わたし)それともあの子(こ)？<br>watashi soretomo watashi<br>心(こころ)揺(ゆ)らす言叶(ことば)より<br>kokoro yurasu kotoba yori<br>无责任(むせきにん)に抱(だ)いて限界(げんかい)<br>musekinin ni daite genkai        </p>
-<p>妄想(もうそう)の砂漠(さばく)をきって <br>mousou wo sabaku okite<br>后(うし)ろから蹴(け)り上(あ)げたら<br>ushiro kara keriagetara<br>むき出(だ)しの恋(こい)によろけた<br>mukidashi no koi ni yoroketa<br>呼吸(こきゅう)だけで精一杯(せいいっぱい)<br>kokyuu dake de seiippai<br>迎(むか)えに来(き)て  覚(おぼ)えてるから<br>mukae ni kite oboreteru kara        </p>
-<p>痛(いた)いよ<br>itai yo<br>前向(まえむ)きな嘘(うそ)  真(まな)に受(う)けるのは<br>maemuki na uso ma ni ukeru nowa<br>笑(わら)ってると 正解(せいかい)が无(な)いから<br>waratteru koe segamenai kara<br>持(も)て余(あま)して <br>mirai moteamashita<br>今(いま)すぐ Hold me<br>imasugu hold me<br>理性(りせい)なんて 押(お)し倒(たお)して<br>risei nante oshitaoshite        </p>
-<p>君(きみ)は谁(だれ)とキスをする <br>kimi wa dare to kisu wo suru<br>私(わたし)それともあの子(こ)？<br>watashi soretomo watashi<br>涙(なみだ)まるで役立(やくだ)たず<br>namida marude yakutatazu<br>星(ほし)を翔(かけ)けるよ纯情(じゅんじょう)<br>hoshi wo kakeru yo junjou        </p>
-<p>君は誰とキスをする<br>kimi wa dare to kisu wo suru<br>君は誰とキスをする<br>kimi wa dare to kisu wo suru<br>私それともあの子？<br>watashi soretomo watashi<br>たった一つ命を盾に<br>tatta hitotsu inochi wo tate ni<br>今振りかざす感傷<br>ima furikazasu kanshou        </p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>KTV小助手</category>
-      </categories>
-      <tags>
-        <tag>karaoke</tag>
-        <tag>Macross</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>snow halation</title>
-    <url>/2021/07/08/karaoke/karaoke2/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=28768036&auto=1&height=66"></iframe>
-<span id="more"></span>
-
-<p>不思议だね いまの気持ち<br>fushigi dane    imano kimochi<br>空から降ってきたみたい<br>sora ka ra   futte kita mitai–<br>特别な季节の色が ときめきを见せるよ<br>tokubetsu na kisetsu no iro ga    tokimekiwo mise ruyo<br>初めて出会った时から<br>hajimete deatta toki kara<br>予感に騒ぐ心のMelody<br>yokan ni sawagu    kokoro no Melody<br>とめられないとまらない な??ぜ<br>tomerarenai tomaranai    naze</p>
-<p>届けて<br>todoke te<br>切なさには名前をつけようか“Snow halation”<br>setsuna saniwa    namae wo    tsukeyouka “ Snow halation “<br>想いが重なるまで待てずに<br>omoi ga    kasana rumade    mate zuni<br>悔しいけど好きって纯情<br>kuyashi ikedo    suki tte junjou<br>微热の中 ためらってもダメだね<br>binetsu no naka    tamerattemo dame dane<br>飞び込む勇気に賛成 まもなくStart!!<br>tobikomu yuuki ni sansei    mamonaku Start!!</p>
-<p>音もなく 気配もなく<br>oto monaku    kehai- monaku<br>静かに运命は変わる<br>shizuka ni un-mei wa kawa ru<br>これからの未来に胸の 鼓动が早くなる<br>korekarano mirai ni mune no    kodou ga hayaku naru<br>例えば困った时には<br>tatoeba    komatta tokini wa<br>すぐ駆けつけて抱きしめたくて<br>sugu kake tsukete    daki shimetakute<br>どこにいてもどこでも Fly high<br>dokoniitemo dokodemo    Fly high</p>
-<p>急いで<br>isoi de<br>いつの间にか大きくなりすぎた“True emotion”<br>itsuno mani ka    ookiku narisugita “ True emotion “<br>梦だけみてる様じゃつらいよ<br>yume dake miteru you ja    tsuraiyo<br>恋人は君って言いたい<br>koibito wa kimi tte ii tai<br>优しい目が とまどってるイヤだよ<br>yasashii me ga    tomadotteru iya dayo<br>このまま一気に爱情 あずけて Please!!<br>konomama ikki ni aijou azukete Please!!</p>
-<p>届けて<br>todoke te<br>切なさには名前をつけようか“Snow halation”<br>setsuna saniwa    namae wo    tsukeyouka “ Snow halation “<br>想いが重なるまで待てずに<br>omoi ga kasana rumade     mate zuni<br>悔しいけど好きって纯情<br>kuyashi ikedo    suki tte junjou<br>微热の中 ためらってもダメだね<br>binetsu no naka    tamerattemo dame dane<br>飞び込む勇気に賛成 まもなくStart!!<br>tobikomu yuuki ni sansei    mamonaku Start!!</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>KTV小助手</category>
-        <category>LoveLive</category>
-      </categories>
-      <tags>
-        <tag>karaoke</tag>
-        <tag>LL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>cutie panther</title>
-    <url>/2021/07/08/karaoke/karaoke3/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=28592856&auto=1&height=66"></iframe>
-<span id="more"></span>
-
-<p>捕まえちゃう!<br>Tsukamae chau !<br>(どこにいるの? ムリよムリよ どこにいたってムリよ)<br>( dokoni iruno?    muriyo muriyo    dokoni itatte muriyo )<br>捕まえちゃう!<br>Tsukamae chau !<br>(だれといるの? ダメよダメよ わたし外はダメよ)<br>( dareto iruno?    dameyo dameyo    watashi igai wa dameyo )</p>
-<p>甘いよ甘い そんな装备じゃ<br>amai yo amai    sonna sōbija<br>逃げられるわけいじゃないか<br>nigera reru wake nai janai ka<br>狙いをつけて密かに背后から<br>nerai o tsukete hisokani    haigo kara</p>
-<p>I love you 私のことをきになるはず<br>I love you    watashi no kotoo    sukini naru hazu<br>I love you そこに义があるの<br>I love you    sokoni seigi ga aruno</p>
-<p>Hi,hi!(何度も言わせるつもりなの?)おやおや<br>Hi , hi !( nandomo iwaseru tsumori nano ?) o ya o ya<br>Hi,hi!(抵抗するならしてごらん!)いがいと<br>Hi , hi !( teikō surunara shite goran !) i ga i to<br>我が尽だと知ってるけれど<br>wagamama dato    shitteru keredo<br>私のが手(うわて)なようね<br>watashino hōga uwatena yō ne<br>冷たい言叶 优しい视线 获物は…君だよ!<br>tsumetai kotoba yasashii shisen    emono wa? kimi dayo !</p>
-<p>Cutie Panther 私どこでも行くよ<br>Cutie Panther watashi    dokodemo ikuyo<br>君の君の盗んでみせるよ<br>Kimino kimino    kokoro nusunde  miseru yo<br>Cutie Panther 私どこでも行くよ<br>Cutie Panther watashi    dokodemo ikuyo<br>君の君のを离さない<br>kimino kimino    kokoro o hanasa nai</p>
-<p>热いよ热い のルールは<br>atsui yo  atsui    ai no rūru wa<br>破られるためるんだよ<br>yaburareru tame arun- dayo<br>ずるい罠へと诱(いざな)う微笑みは<br>zurui wana eto izanau    hohoemiwa</p>
-<p>I miss you きのせいだし悪くないでしょ<br>I miss you    suki no seidashi    waruku nai desho<br>I miss you それが重度の恋よ<br>I miss you    sorega jūdo no koi yo</p>
-<p>Hi,hi(绝対全てをいただくよ?)おやおや<br>Hi , hi ( zettai subete    oitadakuyo ?) o ya o ya<br>Hi,hi(反抗するならしてごらん!)てごわい<br>Hi , hi ( hankōsuruna    rashite goran !) te go wa i<br>伪りだって疑うよりも<br>itsuwari datte    utagau yorimo<br>私の事信じてみてよ<br>watashi no koto    shinjite miteyo<br>优しい言叶 冷たい视线 获物は…君だよ!<br>yasashii kotoba    tsumetai shisen    emono wa? kimi dayo !</p>
-<p>Cutie Panther 君の瞳が欲しい<br>Cutie Panther kimino    hitomi ga hoshii<br>私きっときっと盗んでみせるよ<br>watashi kiitto    kitto nusunde miseru yo<br>Cutie Panther 君の瞳が欲しい<br>Cutie Panther kimino     hitomi ga hoshii<br>私きっと素早く逃さない<br>watashi kiitto    subayaku nogasa nai</p>
-<p>Hi,hi!(何度も言わせるつもりなの?)おやおや<br>Hi , hi !( nandomo iwaseru tsumori nano ?) o ya o ya<br>Hi,hi!(抵抗するならしてごらん!)いがいと<br>Hi , hi !( teikōsuru nara shite goran !) i ga i to<br>我が尽だと知ってるけれど<br>wagamama dato    shitteru keredo<br>私のが手(うわて)なようね<br>watashino hōga uwatena yō ne<br>冷たい言叶 优しい视线 获物は…君だよ!<br>tsumetai kotoba yasashii shisen    emono wa? kimi dayo !</p>
-<p>Cutie Panther 私どこでも行くよ<br>Cutie Panther watashi    dokodemo ikuyo<br>君の君の盗んでみせるよ<br>Kimino kimino    kokoro nusunde  miseru yo<br>Cutie Panther 私どこでも行くよ<br>Cutie Panther watashi    dokodemo ikuyo<br>君の君のを离さない<br>kimino kimino    kokoro o hanasa nai</p>
-<p>捕まえちゃう!<br>Tsukamae chau !<br>(どこにいるの? ムリよムリよ どこにいたってムリよ)<br>( dokoni iruno?    muriyo muriyo    dokoni itatte muriyo )<br>捕まえちゃう!<br>Tsukamae chau !<br>(だれといるの? ダメよダメよ わたし外はダメよ)<br>( dareto iruno?    dameyo dameyo    watashi igai wa dameyo )</p>
-<p>捕まえちゃう!<br>Tsukamae chau !<br>(どこにいるの? ムリよムリよ どこにいたってムリよ)<br>( dokoni iruno?    muriyo muriyo    dokoni itatte muriyo )<br>捕まえちゃう!<br>Tsukamae chau !<br>(だれといるの? ダメよダメよ わたし外はダメよ)<br>( dareto iruno?    dameyo dameyo    watashi igai wa dameyo )</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>KTV小助手</category>
-        <category>LoveLive</category>
-      </categories>
-      <tags>
-        <tag>karaoke</tag>
-        <tag>LL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>辉夜の城で踊りたい</title>
-    <url>/2021/07/08/karaoke/karaoke4/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=26279806&auto=1&height=66"></iframe>
-<span id="more"></span>
-
-<p>おいで!おいで!诱惑のDance again<br>oide! oide! yuuwaku no Dance again<br>おいでよおいで!辉夜(かぐや)の城へ<br>oide yo oide! kaguya no shiro e<br>出逢いがあやつるミステリー<br>deai ga ayatsuru misuteri-<br>危険なペルソナ<br>kikenna perusona</p>
-<p>踊ろう!踊ろう!终わらないDance beat<br>odorou! odorou! owaranai Dance beat<br>踊ろうよ踊ろう!辉夜の城で<br>odorou yo odorou! kaguya no shiro de<br>夜空を切りとるレーザービーム<br>yozora wo kiritoru re-za-bi-mu<br>私と见てよ?<br>watashi to mite yo?</p>
-<p>まばゆい星が照らす想い<br>mabayui hoshi ga terasu omoi<br>今宵の梦よ永远(とわ)に<br>koyoi no yume yo towa ni<br>明日(あす)のことは忘れたいの<br>asu no    koto wa    wasuretai no</p>
-<p>私は红い蔷薇の姫よ 优しくさらわれたい<br>watashi wa akai bara no hime yo yasashiku sarawaretai<br>そっと嗫いて意味ありげに目をそらす<br>sotto sasayaite imiarige ni me wo sorasu<br>あなたは白い月の骑士(ナイト) 触れた手がまだ热い<br>anata wa shiroi tsuki no naito fureta te ga mada atsui<br>のがさずに抱きしめて<br>nogasazu ni dakishimete<br>この奇迹を恋と呼ぶのね<br>kono kiseki wo koi to yobu no ne</p>
-<p>おいで!おいで!情热でDance again<br>oide! oide! jounetsu de Dance again<br>おいでよおいで!辉夜の城へ<br>oide yo oide! kaguya no shiro e<br>迷いを饮みこむエナジー<br>mayoi wo nomikomu enaji-<br>眠らぬパッショネイト<br>nemuranu passhoneito</p>
-<p>踊ろう!踊ろう!止まらないDance beat<br>odorou! odorou! tomaranai Dance beat<br>踊ろうよ踊ろう!辉夜の城で<br>odorou yo odorou! kaguya no shiro de<br>星座が织りなすディスコティーク<br>seiza ga orinasu disukoti-ku<br>私も混ぜて?<br>watashi mo    mazete?</p>
-<p>きらめく星に誓う心<br>kirameku hoshi ni chikau kokoro<br>儚い梦でいいわ<br>hakanai yume de ii wa<br>明日は明日の风が吹くの<br>asu wa asu no kaze ga fuku no<br>私は黒い蔷薇の姫よ 激しくさらわれたい<br>watashi wa kuroi bara no hime yo hageshiku sarawaretai<br>だから微笑んで追いかけてと目が诱う<br>dakara hohoende oikakete to me ga sasou<br>あなたも黒い月の骑士 瞳の奥は热い<br>anata mo kuroi tsuki no naito hitomi no oku wa atsui<br>つかまえて抱きしめて<br>tsukamaete dakishimete<br>この奇迹は恋を呼ぶのね<br>kono kiseki wa koi wo yobu no ne</p>
-<p>私は红い蔷薇の姫よ 优しくさらわれたい<br>watashi wa akai bara no hime yo yasashiku sarawaretai<br>そっと嗫いて意味ありげに目をそらす<br>sotto sasayaite imiarige ni me wo sorasu<br>あなたは白い月の骑士 触れた手がまだ热い<br>anata wa shiroi tsuki no naito fureta te ga mada atsui<br>のがさずに抱きしめて<br>nogasazu ni dakishimete<br>この奇迹を恋と呼ぶのね<br>kono kiseki wo koi to yobu no ne</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>KTV小助手</category>
-        <category>LoveLive</category>
-      </categories>
-      <tags>
-        <tag>karaoke</tag>
-        <tag>LL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>星間飛行</title>
-    <url>/2021/07/08/karaoke/karaoke5/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=589160&auto=1&height=66"></iframe>
-<span id="more"></span>
-
-<p>Su i men ga yu ra gu<br>Ka ze no wa ga hi ro ga ru<br>Fu re a tta yu bi sa ki no<br>A o i den ryuu<br>Mi tsu me a u da ke de<br>Ko do ku na ka so ku do ga<br>I sshu n ni ku da ke chi ru<br>A na ta ga su ki yo</p>
-<p>To u me i na shi n ju no yo u ni<br>Chuu ni u ku na mi da<br>Hi ge ki da tte ka ma wa na i<br>A na ta to i ki ta i<br>Ki ra !</p>
-<p>Ryuu se i ni ma ta ga tte<br>A na ta ni kyuu ko u ka ah ah<br>No u ko n no ho shi zo ra ni<br>Wa ta shi ta chi ha na bi mi ta i<br>Ko ko ro ga hi ka ri no ya wo ha na tsu</p>
-<p>Ka i wa na do na shi ni<br>U chi ga wa ni mo gu tte<br>Ka n ga e ga yo mi to re ru<br>Fu shi gi na yo ru<br>A na ta no na Ju mo n mi ta i ni<br>Mu ge n no ri pī to*<br>Ni ku ra shi ku te te no ko u ni<br>Tsu me wo ta te te mi ru<br>Ki ra !</p>
-<p>Ka ra da go to su ki to o ri<br>E no yo u ni ta da yo u uh uh<br>Ke shi tsu bu no i no chi* de mo<br>Wa ta shi ta chi Ma ta ta i te ru<br>Ta ma shi i ni gi n ga Na da re te ku<br>Ryuu se i ni ma ta ga tte<br>A na ta wa kyuu jou shou oh oh<br>No u ko n no ho shi zo ra ni<br>Wa ta shi ta chi ha na bi mi ta i<br>Ko ko ro ga hi ka ri no ya wo ha na tsu<br>Ke shi tsu bu no i no chi de mo<br>Wa ta shi ta chi ma ta i te ru<br>Ta ma shi i ni gi n ga Na da re te ku<br>Ta ma shi i ni gi n ga Na da re te ku</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>KTV小助手</category>
-      </categories>
-      <tags>
-        <tag>karaoke</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>and I&#39;m home</title>
-    <url>/2021/07/08/karaoke/karaoke6/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=496902073&auto=1&height=66"></iframe>
-<span id="more"></span>
-
-<p>【红】<br>锖びつbaiいた心、音もない世界du、何を见てるの？<br>Sabitsuita kokoro, otomonai sekai, nani o miteruno?</p>
-<p>またzhiねを言える颜を探すよそdaoれを缲り返すだけ<br>Matanewo ieru kaoo sagasuyo sore o kurikaesu dake</p>
-<p>【蓝】<br>気づけばそこには　ひとりきりで泣く後ろ姿<br>Kizukeba soko niwa     hitorikiri de naku ushiro sugata</p>
-<p>【红】辛いような、【蓝】寂しいような、<br>Tsurai youna, sabishii youna, </p>
-<p>【合】<br>场所　手を繋いでいたいんだ<br>basho    te o tsunaide itainda</p>
-<p>何度目の気持ちだろう　ここにある温もりは<br>Nandome no kimochi darou    koko ni aru nukumori wa</p>
-<p>间违いでも构わない、傍にいること<br>Machigai demo kamawanai, soba ni iru koto</p>
-<p>涙の音、ため息の色　今、确かめる现在地<br>Namida no oto , tameiki no iro    ima, tashika meru genzaichi</p>
-<p>冗谈みたいな毎日　见たい、见たい、未来<br>Joudan mitai na mainichi    mitai, mitai, mirai</p>
-<p>【蓝】<br>强がりの声も掠れたな、と梦に落ちるの<br>Tsuyogari no koe mo kasureta nato    yume ni ochiru no</p>
-<p>抱えた膝、目を落とすとすぐに崩れてしまいそうで<br>Dakaeta hiza, me o otosu to sugu ni    kuzurete shimai soude</p>
-<p>【红】<br>このまま、このまま　ふたりきり駆け込む远い出口<br>Konomama, konomama   futarikiri kakekomu tooi deguchi</p>
-<p>【蓝】<br>まだ、期待しているの。<br>Mada, kitai shiteiru no. </p>
-<p>【合】<br>さあ　笑って见つめ合うんだ<br>Saa waratte mitsume aunda</p>
-<p>単纯で无邪気な颜　くしゃくしゃの思い抱いて<br>Tanjun de mujaki na kao    kushakusha no omoi daite</p>
-<p>迷い込んだ场所さえ优しすぎて<br>Mayoikonda basho sae    yasashi sugite</p>
-<p>何度でも名前を呼ぶよ　不确かな未来でも<br>Nando demo namae o yobu yo futashika na mirai demo</p>
-<p>离せないもの、思うだけ心が痛いよ<br>Hanasenai mono, omou dake kokoro ga itai yo</p>
-<p>ここにいるよ<br>Koko ni iru yo</p>
-<p>ここにいるよ<br>Koko ni iru yo</p>
-<p>帰る场所はここだよ？<br>kaeru basho wa koko da yo?</p>
-<p>いつだって変わらない　思いを残すの<br>Itsudatte kawaranai omoi o nokosu no</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>KTV小助手</category>
-      </categories>
-      <tags>
-        <tag>karaoke</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Magnet</title>
-    <url>/2021/07/08/karaoke/karaoke7/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=33916400&auto=1&height=66"></iframe>
-<span id="more"></span>
-
-<p>【MIKU】<br>か细い火が 心の端にbai灯る<br>ka hosoi hi ga kokoro no hashini tomoru<br>いつの间にか燃え広がるdu热情zhi<br>itsuno manika moe hirogaru netsujou<br>私の蝶 不规则に飞び回り<br>watashi no chou fukisoku ni tobi mawari<br>あなたの手に鳞粉daoを付けた<br>anata no te ni rinpun wo duketa</p>
-<p>【LUKA】<br>络み合う指ほどいて 唇から舌へと<br>karami au yubi hodo ite kuchibiru kara shitahe to<br>许されない事ならば 尚更燃え上がるの<br>yurusarenai koto naraba naosara moe agaruno</p>
-<p>【合唱】<br>抱き寄せて欲しい 确かめて欲しい<br>dakiyosete hoshii tashikame te hoshii<br>间违いなど无いんだと 思わせて<br>machiga i na do nai<del>n da</del>to omo wase te<br>キスをして 涂り替えて欲しい<br>kisu wo shite nuri kaete hoshii<br>魅惑の时に酔いしれ溺れていたいの<br>miwaku no toki ni yoi shire oborete~itaino</p>
-<p>【LUKA】<br>束缚して もっと必要として<br>sokubaku shi te motto hitsuyou to shi te<br>爱しいなら执着を见せつけて<br>i to shii nara shuu chaku wo mise tsukete<br>「おかしい」のが たまらなく好きになる<br>(o ka shi i) noga tamara na ku suki ninaru<br>行けるトコまで行けばいいよ<br>ikeru toko made    ikeba iiyo<br>【MIKU】<br>迷い込んだ心なら 简単に融けてゆく<br>mayoikon da kokoro nara kantan ni tokete yuku<br>优しさなんて感じる暇など 无い位に<br>yasashi sa nante kanjiru hima nado nai kurai ni<br>【合唱】<br>缲り返したのは あの梦じゃなくて<br>kurikae shi ta no ha    ano yume ja naku te<br>纷れも无い现実の私达<br>magire mo nai genjitsu no watashi tachi<br>触れてから 戻れないと知る それでいいの…<br>furete kara modore nai to shiru    sore de iino…<br>谁よりも大切なあなた<br>dare yori mo taisetsu na anata</p>
-<p>【MIKU】<br>夜明けが来ると不安で 泣いてしまう私に<br>yo a ke ga ku ru to fu an de na i te shi ma u wa ta shi ni<br>「大丈夫」と嗫いたあなたも 泣いていたの？<br>(dai jou bu) to sa sa ga i ta a na ta mo na i te i ta no?</p>
-<p>【合唱】<br>抱き寄せて欲しい 确かめて欲しい<br>daki yosete hoshii    tashika me te hoshii<br>间违いなど无いんだと 思わせて<br>machi ga i nado nai<del>n da</del>to omo wasete<br>キスをして 涂り替えて欲しい 魅惑の时に<br>kisu wo shite    nurika e te hoshii    miwaku no toki ni<br>酔いしれ溺れたい<br>yoi shi re obo re tai<br>引き寄せて マグネットのように<br>biki yo sete    magunetto no you ni<br>例えいつか离れても巡り会う<br>tatoe itsuka hanarete mo meguri a u<br>触れていて 戻れなくていい それでいいの<br>furete i te    modore naku te ii    sorede ii no<br>谁よりも大切なあなた<br>dare yori mo taisetsu na anata</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>KTV小助手</category>
-      </categories>
-      <tags>
-        <tag>karaoke</tag>
+        <tag>front end</tag>
       </tags>
   </entry>
   <entry>
@@ -772,12 +326,29 @@
 <li><p>hasOwnProperty()</p>
 <ul>
 <li><p>属性<strong>存在于实例</strong>，返回true，存在于原型或继承的false</p>
-</li>
-<li><p>&#96;&#96;&#96;js<br>person1.hasOwnProperty(‘name’); &#x2F;&#x2F;true<br>person1.hasOwnProperty(‘toString’); &#x2F;&#x2F;false</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">### 03 原型和in操作符 *</span><br><span class="line"></span><br><span class="line">in操作符两种使用方式：</span><br><span class="line"></span><br><span class="line">- 单独：可以通过对象访问指定的属性时，返回true</span><br><span class="line"></span><br><span class="line">- **for in**循环：返回可以**通过对象访问**且**可以被枚举** 的属性</span><br><span class="line">  - 实例属性和原型属性都可以</span><br><span class="line">  - 可枚举就表示属性的[[enumberable]]特性为true</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">获得对象上的所有属性名称（字符串）：</span><br><span class="line"></span><br><span class="line">- **Object.keys()** 返回对象**自身**所有可枚举属性</span><br><span class="line">- sObject.getOwnPropertyNames() 返回对象**自身**所有属性</span><br><span class="line">- Object.getOwnPropertySymbols() ES6新增，返回对象**自身**所有符号属性（见[Symbol](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Symbol)）</span><br><span class="line"></span><br><span class="line">``` js</span><br><span class="line">let keys = Object.keys(Person.prototype);</span><br><span class="line">console.log(keys); </span><br><span class="line">// &quot;[name,age,job,sayName]&quot;</span><br><span class="line"></span><br><span class="line">let keys = Object.getOwnPropertyNames(Person.prototype);</span><br><span class="line">console.log(keys); </span><br><span class="line">// &quot;[constructor,name,age,job,sayName]&quot;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">person1.hasOwnProperty(‘name’); <span class="comment">//true</span></span><br><span class="line">person1.hasOwnProperty(‘toString’); <span class="comment">//false</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
 </ul>
+<h3 id="03-原型和in操作符"><a href="#03-原型和in操作符" class="headerlink" title="03 原型和in操作符 *"></a>03 原型和in操作符 *</h3><p>in操作符两种使用方式：</p>
+<ul>
+<li><p>单独：可以通过对象访问指定的属性时，返回true</p>
+</li>
+<li><p><strong>for in</strong>循环：返回可以<strong>通过对象访问</strong>且<strong>可以被枚举</strong> 的属性</p>
+<ul>
+<li>实例属性和原型属性都可以</li>
+<li>可枚举就表示属性的[[enumberable]]特性为true</li>
+</ul>
+</li>
+</ul>
+<p>获得对象上的所有属性名称（字符串）：</p>
+<ul>
+<li><strong>Object.keys()</strong> 返回对象<strong>自身</strong>所有可枚举属性</li>
+<li>sObject.getOwnPropertyNames() 返回对象<strong>自身</strong>所有属性</li>
+<li>Object.getOwnPropertySymbols() ES6新增，返回对象<strong>自身</strong>所有符号属性（见<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Symbol">Symbol</a>）</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> keys = <span class="built_in">Object</span>.keys(Person.prototype);</span><br><span class="line"><span class="built_in">console</span>.log(keys); </span><br><span class="line"><span class="comment">// &quot;[name,age,job,sayName]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> keys = <span class="built_in">Object</span>.getOwnPropertyNames(Person.prototype);</span><br><span class="line"><span class="built_in">console</span>.log(keys); </span><br><span class="line"><span class="comment">// &quot;[constructor,name,age,job,sayName]&quot;</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="04-枚举顺序"><a href="#04-枚举顺序" class="headerlink" title="04 枚举顺序"></a>04 枚举顺序</h3><p>for in 和 Object.keys() 顺序不确定 见p384</p>
 <h2 id="对象迭代"><a href="#对象迭代" class="headerlink" title="对象迭代"></a>对象迭代</h2><p>ES2017新增 迭代对象的静态方法</p>
 <ul>
@@ -816,9 +387,13 @@
 <li><p><strong><code>A instanceof B</code> 运算符</strong></p>
 <ul>
 <li><p>检测构造函数的 <code>prototype</code> 属性是否出现在某个实例对象的原型链上</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(instance <span class="keyword">instanceof</span> <span class="built_in">Object</span>); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(instance <span class="keyword">instanceof</span> SuperType); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(instance <span class="keyword">instanceof</span> SubType); <span class="comment">// true</span></span><br></pre></td></tr></table></figure></li>
+</ul>
 </li>
-<li><p>&#96;&#96;&#96; js<br>console.log(instance instanceof Object); &#x2F;&#x2F; true<br>console.log(instance instanceof SuperType); &#x2F;&#x2F; true<br>console.log(instance instanceof SubType); &#x2F;&#x2F; true</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- **`isPrototypeOf()` 方法**</span><br><span class="line"></span><br><span class="line">  - 检测原型对象和实例的关系</span><br><span class="line"></span><br><span class="line">  - ``` js</span><br><span class="line">    console.log(Object.prototype.isPrototypeOf(instance)); // true</span><br><span class="line">    console.log(SuperType.prototype.isPrototypeOf(instance)); // true</span><br><span class="line">    console.log(SubType.prototype.isPrototypeOf(instance)); // true</span><br></pre></td></tr></table></figure></li>
+<li><p><strong><code>isPrototypeOf()</code> 方法</strong></p>
+<ul>
+<li><p>检测原型对象和实例的关系</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.isPrototypeOf(instance)); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(SuperType.prototype.isPrototypeOf(instance)); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(SubType.prototype.isPrototypeOf(instance)); <span class="comment">// true</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
 </ul>
@@ -1050,103 +625,10 @@
         <category>JavaScript笔记</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
         <tag>front end</tag>
+        <tag>JavaScript</tag>
         <tag>对象</tag>
         <tag>继承</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>フリージア 希望之花</title>
-    <url>/2021/07/08/karaoke/karaoke8/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=459925524&auto=1&height=66"></iframe>
-<span id="more"></span>
-
-<p>漂う宇宙(そら)のどこか遠く<br>tada you sorano    dokoka too ku</p>
-<p>祈り通ずる惑星(ほし)があるとしたら<br>inori tsuuzuru    hoshiga aru toshitara</p>
-<p>僕らはそこへ向かうだろうか<br>bokuraha sokoe    mukau darou- ka</p>
-<p>そして何を祈るのだろう<br>soshite naniwo inoru no darou-</p>
-<p>果たせなかった約束や<br>hatase nakatta    yakusoku ya</p>
-<p>犠牲になった高潔の光<br>gisei ni na-tta    kouketsu no hikari</p>
-<p>残る物など何もないとしても<br>nokoru mono nado    nanimo nai toshitemo</p>
-<p>今は信じた道をただ進め<br>ima wa shinjita michi wo  tada susume</p>
-<p>希望の花 繋いだ絆が<br>kibou no hana    tsunaida kizuna ga</p>
-<p>今僕らの胸の中にあるから<br>ima bokura no    muneno naka    ni aru kara</p>
-<p>決して散ることはない<br>keshite chiru koto wa nai</p>
-<p>生きる力<br>ikiru chikara</p>
-<p>希望の花 繋いだ絆を<br>kibou no hana    tsunaida kizuna wo</p>
-<p>力にして明日を強く咲き誇れ<br>chikara ni shite    asu wo tsuyoku    sakiho kore</p>
-<p>戻る場所なんてない辿り着くべき場所<br>motoru basho nante nai    tadori tsuku beki basho heto</p>
-<p>迷いのない旗を高く掲げて<br>mayoi no nai    hata wo takaku kakagete</p>
-<p>今を生きていく<br>ima wo ikite i ku</p>
-<p>見えないものに 怯えていた<br>mie nai mono ni     obiete i ta</p>
-<p>弛むことない この世界の中<br>tayumu koto nai     kono sekai no naka</p>
-<p>それでも一つ 心の波間に<br>sore demo hitotsu     kokoro no namima ni</p>
-<p>変わらないもの 浮かべながら<br>kawara nai mono     ukabe nagara</p>
-<p>希望の花 繋いだ絆が<br>kibou no hana    tsunaida kizuna ga</p>
-<p>今僕らの胸の中にあるから<br>ima bokura no    muneno naka    ni aru kara</p>
-<p>綻びを縫い合い<br>hokorobi wo    nui a i</p>
-<p>強くなれる<br>tsuyoku  nareru</p>
-<p>希望の花 繋いだ絆を<br>kibou no hana    tsunai da kizuna wo</p>
-<p>力にして 明日を強く咲き誇れ<br>chikara ni shite    asu wo tsuyoku    saki hokore</p>
-<p>何の為向かうのか見失いそうな時に<br>nan nno tame muka unoka    miushi nai souna tokini</p>
-<p>守り抜きたいものがあること<br>mamori nuki tai     mono ga aru koto-</p>
-<p>気付いたんだ<br>kitsui tan nda</p>
-<p>傷を隠し 一人泣いた夜に<br>ki zu wo    ka ku shi     hitori naita yoru ni</p>
-<p>くれた優しさ 溢れ出したのは<br>kureta yasashisa     afureda shita no wa</p>
-<p>未来を誓った「決意の涙」<br>mirai wo chika-tta     ketsui no    namita</p>
-<p>希望の花 繋いだ絆が<br>kibou no hana    tsunaida kizuna ga</p>
-<p>今僕らの胸の中にあるから<br>ima bokura no    muneno naka    ni aru kara</p>
-<p>決して散ることはない<br>keshite chiru koto wa nai</p>
-<p>生きる力<br>ikiru chikara</p>
-<p>希望の花 繋いだ絆を<br>kibou no hana    tsunaida kizuna wo</p>
-<p>力にして明日を強く咲き誇れ<br>chikara ni shite    asu wo tsuyoku    sakiho kore</p>
-<p>戻る場所なんてない辿り着くべき場所<br>motoru basho nante nai    tadori tsuku beki basho heto</p>
-<p>迷いのない旗を高く掲げて<br>mayoi no nai    hata wo takaku kakagete</p>
-<p>今を生きていく<br>ima wo ikite i ku</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>KTV小助手</category>
-      </categories>
-      <tags>
-        <tag>karaoke</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>3年目の浮気</title>
-    <url>/2021/07/08/karaoke/karaoke9/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=4902185&auto=1&height=66"></iframe>
-<span id="more"></span>
-
-<p>（男）马鹿いってんじゃないよ お前と俺は<br>baka ittenjanaiyo o mae to ore wa<br>（男）ケンカzhiもしたけどひとつ屋根の下暮らして来たんだぜ<br>kenka mo shita kedo hitotsu yane no shita kurashi te kitan daze<br>（男）马鹿いってんじゃないよ お前の事だけは<br>baka ittenjanaiyo o mae no koto dakewa<br>（男）一日たりとも 忘れた事など无かった俺だぜ<br>ichinichi taritomo wasure ta koto nado naka tta ore daze</p>
-<p>（女）よくいうわ いつもだましてばかりで<br>yokuiuwa itsumodamashitebakaride<br>（女）私が何にも知らないとでも思っているのね<br>watashi ga nani nimo shira naitodemo omotte irunone</p>
-<p>（男）よくいうよ 惚れたお前の负けだよ<br>yokuiuyo hore tao mae no make dayo<br>（男）もてない男が好きなら 俺も考えなおすぜ<br>motenai otoko ga suki nara ore mo kangae naosuze</p>
-<p>（女）马鹿いってんじゃないわ<br>baka ittenjanaiwa<br>（男）马鹿いってんじゃないよ<br>baka ittenjanaiyo<br>（女）あそばれてるのわからないなんてかわいそうだわ<br>asobareterunowakaranainantekawaisoudawa<br>（男）3年目の浮気ぐらい大目にみろよ<br>3 nenme no uwaki gurai oome nimiroyo<br>（女）ひらきなおるその态度が気にいらないのよ<br>hirakinaorusono taido ga kini iranainoyo<br>（男）3年目の浮気ぐらい大目にみてよ<br>3 nenme no uwaki gurai oome nimiteyo<br>（女）両手をついてあやまったって 许してあげない<br>ryoute wotsuiteayamattatte yurushi teagenai</p>
-<p>（男）马鹿やってんじゃないよ 本気でそんな<br>baka yattenjanaiyo    honki desonna<br>（男）荷物をまとめて 涙もみせずに旅だてるのかよ<br>nimotsu wo matome te    namida mo misezu ni tabi da teru no ka yo<br>（男）马鹿やってんじゃないよ 男はそれなりに<br>baka yattenjanaiyo    otoko wa sore narini<br>（男）浮気もするけど 本気になれない可爱いもんだぜ<br>uwaki mo suru kedo    honki ni narenai    kawaii mondaze</p>
-<p>（女）よくいうわ そんな胜手なことばが<br>yokuiuwa sonna katte nakotobaga<br>（女）あなたの口から出てくるなんて 心うたがうわ<br>anatano kuchi kara dete kurunante kokoro utagauwa</p>
-<p>（男）よくいうよ いつもあまえてばかりで<br>yokuiuyo itsumo amaete bakari de<br>（男）やきもちやいても可爱くないぜ 大人になりなよ<br>yakimochi yaitemo kawai ku    naize otona ni narinayo</p>
-<p>（女）马鹿やってんじゃないわ<br>baka yattenjanaiwa<br>（男）马鹿やってんじゃないよ<br>baka yattenjanaiyo<br>（女）私にだってその気になれば 相手はいるのよ<br>watashi nidattesono kini nareba aite wairunoyo<br>（男）3年目の浮気ぐらい大目にみろよ<br>3 nenme no uwaki gurai oome nimi ro yo<br>（女）ひらきなおるその态度が気にいらないのよ<br>hirakinaorusono taido ga kini iranainoyo<br>（男）3年目の浮気ぐらい大目にみてよ<br>3 nenme no uwaki gurai oome nimi te yo<br>（女）両手をついてあやまったって 许してあげない<br>ryoute wotsuiteayamattatte yurushi teagenai</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>KTV小助手</category>
-      </categories>
-      <tags>
-        <tag>karaoke</tag>
-        <tag>演歌</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>web前端学习路线</title>
-    <url>/2021/07/14/frontend/frontEnd1/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h1><div class="markmap-container" style="height:700px;"><svg class="markmap-svg">{"t":"heading","d":1,"v":"前端技能","c":[{"t":"heading","d":2,"v":"交互/设计"},{"t":"heading","d":2,"v":"语言","c":[{"t":"list_item","d":3,"v":"HTML"},{"t":"list_item","d":3,"v":"CSS"},{"t":"list_item","d":3,"v":"JavaScript"},{"t":"list_item","d":3,"v":"PHP"}]},{"t":"heading","d":2,"v":"行业标准","c":[{"t":"list_item","d":3,"v":"DOM"},{"t":"list_item","d":3,"v":"ES2015"},{"t":"list_item","d":3,"v":"HTTP"},{"t":"list_item","d":3,"v":"JSON"},{"t":"list_item","d":3,"v":"XML"}]},{"t":"heading","d":2,"v":"框架","c":[{"t":"list_item","d":3,"v":"React.js"},{"t":"list_item","d":3,"v":"Angular.js"},{"t":"list_item","d":3,"v":"jQuery"},{"t":"list_item","d":3,"v":"Vue.js"},{"t":"list_item","d":3,"v":"lodash"}]},{"t":"heading","d":2,"v":"兼容性","c":[{"t":"list_item","d":3,"v":"IE"},{"t":"list_item","d":3,"v":"CSS3新特性"},{"t":"list_item","d":3,"v":"HTML5新特性"},{"t":"list_item","d":3,"v":"ES2015"},{"t":"list_item","d":3,"v":"移动端"}]},{"t":"heading","d":2,"v":"前端工程","c":[{"t":"list_item","d":3,"v":"npm"},{"t":"list_item","d":3,"v":"webpack"},{"t":"list_item","d":3,"v":"postcss"}]},{"t":"heading","d":2,"v":"调试","c":[{"t":"list_item","d":3,"v":"浏览器调试工具"},{"t":"list_item","d":3,"v":"Fiddler"}]},{"t":"heading","d":2,"v":"团队协作","c":[{"t":"list_item","d":3,"v":"Git/SVN"},{"t":"list_item","d":3,"v":"编码规范"},{"t":"list_item","d":3,"v":"文档管理"}]},{"t":"heading","d":2,"v":"性能","c":[{"t":"list_item","d":3,"v":"优化规则"},{"t":"list_item","d":3,"v":"开发者工具"},{"t":"list_item","d":3,"v":"浏览器管理"}]},{"t":"heading","d":2,"v":"安全性","c":[{"t":"list_item","d":3,"v":"XSS"},{"t":"list_item","d":3,"v":"CSRF"},{"t":"list_item","d":3,"v":"加密解密"},{"t":"list_item","d":3,"v":"编码解码"}]},{"t":"heading","d":2,"v":"编程思想","c":[{"t":"list_item","d":3,"v":"函数式编程"},{"t":"list_item","d":3,"v":"面向对象"},{"t":"list_item","d":3,"v":"设计模式"}]}]}</svg></div>
-
-<h1 id="浏览器架构"><a href="#浏览器架构" class="headerlink" title="浏览器架构"></a>浏览器架构</h1><p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/front-end-notes/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9E%B6%E6%9E%84.png"></p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>web前端汇总</category>
-      </categories>
-      <tags>
-        <tag>front end</tag>
       </tags>
   </entry>
   <entry>
@@ -1618,9 +1100,676 @@
         <category>JavaScript笔记</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
         <tag>front end</tag>
+        <tag>JavaScript</tag>
         <tag>笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>DL笔记1：Linear Regression</title>
+    <url>/2021/07/14/deeplearning/dl1/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p><strong>参考资料：</strong><br><a href="https://cuijiahua.com/blog/2018/10/dl-7.html">感知器</a><br><a href="https://cuijiahua.com/blog/2018/11/dl-8.html">线性单元</a><br><a href="https://www.bilibili.com/video/BV1JE411g7XF?p=3">李宏毅2020:Regression</a><br><a href="https://datawhalechina.github.io/leeml-notes/#/chapter3/chapter3">李宏毅2020:Regression-文字版</a></p>
+<h1 id="感知器"><a href="#感知器" class="headerlink" title="感知器"></a>感知器</h1><p>感知器，激活函数是阶跃函数，和神经元的本质上一样，只是激活函数不同<br>上世纪提出的感知器的概念，现在<br><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/DL/pics/regression/1.png"></p>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><ul>
+<li>输入<ul>
+<li>特征向量 $x&#x3D;(x_1,x_2,…x_n)$</li>
+<li>权值 $w&#x3D;(w_1,w_2,…,w_n)$</li>
+<li>偏置项 $b$</li>
+</ul>
+</li>
+<li>激活函数<ul>
+<li>$f(z)&#x3D;\left{\begin{array}{lr}<br>1 &amp; z&gt;0 \<br>0 &amp; \text { otherwise }<br>\end{array}\right.$</li>
+</ul>
+</li>
+<li>输出<ul>
+<li>$y&#x3D;f(wx+b)$</li>
+</ul>
+</li>
+</ul>
+<h3 id="二分类问题"><a href="#二分类问题" class="headerlink" title="二分类问题"></a>二分类问题</h3><p>感知器模型可以用于解决二分类问题：对给定输入，输出0或1</p>
+<h4 id="例-感知器实现布尔运算"><a href="#例-感知器实现布尔运算" class="headerlink" title="例 感知器实现布尔运算"></a>例 感知器实现布尔运算</h4><p>输入: $x&#x3D;(x_1,  x_2)$<br>输出: $y&#x3D;f(w·x+b)$</p>
+<p>激励函数: 阶跃函数 实现二分类</p>
+<ol>
+<li><p>and 与运算<br>$w 1&#x3D;0.5, \quad w 2&#x3D;0.5, \quad b&#x3D;-0.8$<br>$f(z)&#x3D;\left{\begin{array}{l}1 &amp; z&gt;0 \ 0 &amp; \text { otherwise }\end{array}\right.$</p>
+</li>
+<li><p>or 或运算<br>$w 1&#x3D;0.5, \quad w 2&#x3D;0.5, \quad b&#x3D;-0.3$<br>$f(z)&#x3D;\left{\begin{array}{l}1 &amp; z&gt;0 \ 0 &amp; \text { otherwise }\end{array}\right.$</p>
+</li>
+</ol>
+<p>上述例子是线性可分的问题<br>如图 and 用线性函数可以把true和false分开<br><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/DL/pics/regression/2.png"></p>
+<h2 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h2><p>优化目标：使损失最小的输入权值w和偏置项b</p>
+<h3 id="感知器训练算法"><a href="#感知器训练算法" class="headerlink" title="感知器训练算法"></a>感知器训练算法</h3><ol>
+<li>初始化<br> $w$和$b$初始化为0</li>
+<li>迭代<br> $\begin{aligned} &amp;w_{i} &amp; \leftarrow &amp;\quad w_{i}+\Delta w_{i} \ &amp;b &amp; \leftarrow &amp;\quad b+\Delta b \end{aligned}$<br> 其中<br> $\begin{aligned} &amp;\Delta w_{i} &amp; &#x3D;&amp;\quad \eta (t-y)x_i \ &amp;\Delta b &amp; &#x3D;&amp;\quad \eta (t-y) \end{aligned}$</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>数学表达</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$y$</td>
+<td>感知器的输出值</td>
+</tr>
+<tr>
+<td>$t$</td>
+<td>target&#x2F;label，训练样本的真实值</td>
+</tr>
+<tr>
+<td>$\eta $</td>
+<td>学习速率</td>
+</tr>
+</tbody></table>
+<h1 id="线性单元"><a href="#线性单元" class="headerlink" title="线性单元"></a>线性单元</h1><link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>DeepLearning</category>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>DeepLearning</tag>
+        <tag>LHY2020</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>爱してるばんざーい</title>
+    <url>/2021/07/08/karaoke/karaoke1/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=26111167&auto=1&height=66"></iframe>
+<span id="more"></span>
+
+<p>爱してるばんざーい!<br>aishiteru banzai!<br>ここでよかった　私たちの今がここにある<br>koko de yokatta    watashitachi no ima ga koko ni aru<br>爱してるばんざーい!<br>aishiteru banzai!<br>始まったばかり　明日もよろしくね　<br>hajimatta bakari     ashita mo yoroshikune </p>
+<p>笑ってよ　悲しいなら吹きとばそうよ<br>waratteyo kanashii- nara    fukitoba sou–yo<br>笑えたら変わる景色　晴れ间がのぞく<br>warae tara kawaru keshiki    harema ga nozoku<br>不安でもしあわせへと繋がる道が<br>fuan demo shiawase eto tsunagaru michi ga<br>见えてきたよな青空<br>mietekita yona aozora<br>时々雨が降るけど水がなくちゃたいへん<br>tokidoki ame ga furukedo mizu ga nakucha taihen<br>乾いちゃだめだよ　みんなの梦の木よ育て<br>kawaicha damedayo    minna no yume no kiyo sodate—</p>
+<p>さあ!<br>saa!<br>大好きだばんざーい!<br>daisukida banzai!<br>まけないゆうき　私たちは今を楽しもう<br>makenai yuuki    watashitachi wa ima o tanoshimou–<br>大好きだばんざーい!<br>daisukida banzai!<br>顽张れるから　昨日に手をふって　<br>ganbareru kara    kinou ni te o futte<br>ほら前向いて<br>hora    mae muite</p>
+<p>进んでよ　苦しくても隣にいてよ<br>susundeyo kurushiku temo    tonari ni iteyo<br>进んだら燃える太阳　东を照らす<br>susundara moeru taiyou     higashi o terasu<br>迷ってた答えがない先への道は<br>mayotteta kokotae ga nai saki eno michi wa<br>谁も知らない言えない<br>dare mo shiranai ienai<br>突然岚のなかへ落ちる银のひかり<br>totsuzen arashi no naka e     ochiru gin no hikari<br>怯えちゃだめだよみんなの梦の木は强い<br>obiecha damedayo minna no yume no ki wa tsuyoi</p>
+<p>さあ!<br>saa!<br>爱してるばんざーい!<br>aishiteru banzai!<br>ここでよかった　私たちの今がここにある<br>koko de yokatta watashitachi no ima ga koko ni aru</p>
+<p>爱してるばんざーい!<br>aishiteru banzai!<br>始まったばかり　明日もよろしくね　<br>hajimatta bakari    ashita mo yoroshikune<br>まだゴールじゃない<br>mada GOORU janai</p>
+<p>时々雨が降るんだ　风で干が揺れる<br>tokidoki ame ga furunda    kaze de miki ga yureru<br>一绪にいくんだ　みんなの梦の木よ育て<br>issho ni ikunda minna no yume no ki yo sodate</p>
+<p>さあ!<br>saa<br>大好きだばんざーい!<br>daisukida banzai<br>まけないゆうき　私たちは今を楽しもう<br>makenai yuuki    watashitachi wa ima wo    tanoshi mou–<br>大好きだばんざーい!<br>daisukida banzai<br>顽张れるから　昨日に手をふって　<br>ganbareru kara   kinou ni te wofutte<br>ほら前向いて<br>hora    mae mui te</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+        <category>LoveLive</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+        <tag>LL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>残酷な天使のテーゼ</title>
+    <url>/2021/07/08/karaoke/karaoke10/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=657666&auto=1&height=66"></iframe>
+<span id="more"></span>
+
+<p>残酷な天使のように 少年よ 神话になれ<br>zankoku na tenshi no youni    shounen yo shinwa ni na re</p>
+<p>苍い风がいま 胸のドアを叩いても<br>aoi kaze ga ima    mune no doa wo tatai temo<br>私だけを ただ见つめて 微笑んでるあなた<br>watashi dake wo    tada mitsume te    hohoen deru anata<br>そっとふれるもの もとめることに梦中で<br>sotto fureru mono    motomeru koto ni muchuu de<br>运命さえ まだ知らない いたいけな瞳<br>unmei sae    mada shiranai    itai ke na hi to mi</p>
+<p>だけどいつか气付くでしょう その背中には<br>dakedo itsuka kitsuku deshyou    sono senaka ni wa<br>遥か未来 めざすための 羽根があること<br>haruka mirai mezasu tame no hane ga aru koto</p>
+<p>残酷な天使のテ－ゼ 窗边からやがて飞び立つ<br>zankoku na tenshi no teeze    madobe kara yagate tobitatsu<br>ほとばしる热いパトスで 思い出を里切るなら<br>hotoba shiru atsui patosu de    omoide wo uragiru nara<br>この宇宙を抱いて辉く 少年よ 神话になれ<br>kono sora wo daite kagayaku    shounen yo shinwa ni na re</p>
+<hr>
+<p>ずっと眠ってる 私の爱の摇りかご<br>tsutto nemu u teru    watashi no ai no yurikago<br>あなただけが 梦の使者に 呼ばれる朝がくる<br>anata dake ga    yume no shisha ni    yobareru asa ga kuru<br>细い首筋を 月あかりが映してる<br>hosoi kubisuji wo    tsuki akari ga utsushi te ru<br>世界中の时を止めて 闭じこめたいけど<br>sekai chu u no toki wo tomete    tojikome tai ke do</p>
+<p>もしもふたり逢えたことに 意味があるなら<br>moshimo futari aeta koto ni    imi ga aru na ra<br>私はそう 自由を知る ためのバイブル<br>watashi wa sou jiyuu wo shiru tame no baiburu</p>
+<p>残酷な天使のテ－ゼ 悲しみがそしてはじまる<br>zankoku na tenshi no teeze    kanashimi ga soshite hajimaru<br>抱きしめた命のかたち その梦に目觉めたとき<br>dakishime ta inochi no katachi    so no yume ni mezameta toki<br>谁よりも光を放つ 少年よ 神话になれ<br>dare yori mo hikari wo hanatsu shounen yo shinwa ni na re</p>
+<p>人は爱をつむぎながら 历史をつくる<br>hito wa ai wo tsumugi na ga ra    rekishi wo tsukuru<br>女神なんてなれないまま 私は生きる<br>megami nante nare nai mama    watashi wa ikiru</p>
+<p>残酷な天使のテ－ゼ 窗边からやがて飞び立つ<br>zankoku na tenshi no teeze    madobe kara yagate tobitatsu<br>ほとばしる热いパトスで 思い出を里切るなら<br>hotoba shiru atsui patosu de    omoide wo uragiru nara<br>この宇宙を抱いて辉く 少年よ 神话になれ<br>kono sora wo daite kagayaku    shounen yo shinwa ni na re</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+        <tag>EVA</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Komm, süsser Tod</title>
+    <url>/2021/07/08/karaoke/karaoke11/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=1483488615&auto=1&height=66"></iframe>
+<span id="more"></span>
+
+<p>I know, I know I’ve let you down<br>我知道 我知道 是我让你失望了<br>I’ve been a fool to myself<br>对自己来说我不过是傻瓜<br>I thought that I could live for no one else<br>我一直以为我只能是为你而活<br>But now, through all the hurt and pain<br>但是现在却只是通过伤害和苦痛<br>It’s time for me to respect<br>到了我该有所敬畏的时候了<br>the ones you love mean more than anything<br>你爱的人比什么都重要<br>So with sadness in my heart<br>这真让我感觉满心苦楚<br>feel the best thing I could do<br>我想我真的该做<br>Is end it all and leave forever<br>结束了所有的一切 再永远地离开<br>What’s done is done it feels so bad<br>应该做的都已经做完 那是多么浩大的伤感<br>What once was happy now is sad<br>曾经的快乐现在成了悲伤<br>I’ll never love again my world is ending<br>我失去了再爱的心 我的世界已经完了<br>I wish that I could turn back time<br>我希望我能让时间倒转<br>‘Cos now the guilt is all mine<br>因为这都是我的罪孽<br>Can’t live without the trust from those you love<br>倘若是没有了你爱的信任我会无法生存<br>I know we can’t forget the past<br>我知道我们无法遗忘那些过去<br>You can’t forget love and pride<br>你也不能忘却爱和骄傲<br>Because of that it’s killing me inside<br>因为这样 这将把我扼杀</p>
+<p>It all returns to nothing<br>一切化为乌有<br>It all comes tumbling down<br>所有的一切都倒下来吧<br>Tumbling down, tumbling down<br>倒下来 倒下来<br>It all returns to nothing<br>一切都化为了乌有<br>I just keep letting me down<br>我也让自己让我失望<br>Letting me down, letting me down<br>让我失望 让我失望<br>In my heart of hearts<br>在我内心深处<br>I know that I could never love again<br>我知道我再也不会有爱<br>I’ve lost everything, everything<br>我已经失去了所有<br>Everything that matters to me, matters in this world<br>一切与我有关的与这个世界有关的麻烦<br>I wish that I could turn back time<br>我希望我能让时间倒转<br>Cause now the guilt is all mine<br>因为这都是我的罪孽<br>Can’t live without the trust from those you love<br>倘若是没有了你爱的信任我会无法生存<br>I know we can’t forget the past<br>我知道我们无法遗忘那些过去<br>You can’t forget love and pride<br>你也不能忘却爱和骄傲<br>Because of that it’s killing me inside<br>因为这样 这将把我扼杀</p>
+<p>It all returns to nothing<br>一切化为乌有<br>It just keeps tumbling down<br>所有的一切都倒下来吧<br>Tumbling down, tumbling down<br>倒下来 倒下来<br>It all returns to nothing<br>一切都化为了乌有<br>I just keep letting me down<br>我也让自己让我失望<br>Letting me down, letting me down<br>让我失望 让我失望</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+        <tag>EVA</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>VOYAGER～日付のない墓標</title>
+    <url>/2021/07/08/karaoke/karaoke12/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=1854433633&auto=1&height=66"></iframe>
+<span id="more"></span>
+
+<p>傷ついた友達さえ<br>Kizutsuita tomodachi sae<br>置き去りにできるソルジャー<br>Okizari ni dekiru sorujā(soldier)<br>あなたの苦しさを私だけに<br>Anata no kurushi-sa o watashi dakeni<br>つたえていってほしい<br>Tsutaete i  tte hoshī<br>忘れない<br>Wasurenai<br>自分のためだけに<br>Jibun no tame dake ni<br>生きられなかった淋さみしいひと<br>Iki rarenakatta Samishī hito</p>
+<p>私があなたと知り合えたことを<br>Watashi ga anata to shiriaeta koto o<br>私があなたを愛してたことを<br>Watashi ga anata o aishi teta koto o<br>死ぬまで死ぬまで誇りにしたいから<br>Shinu made shinu made hokori ni shitaikara</p>
+<p>冷い夢に乗り込んで<br>Tsumetai yume ni norikonde<br>宇宙に消えるヴォイジャー<br>aosora ni kieru vu~oijā(voyager)<br>いつでも人々を変えるものに<br>Itsu demo hitobito o kaeru mono ni<br>人々は気づかない<br>Hitobito wa kidzukanai<br>行く先は どれくらい遠いの<br>Yukusaki wa dore kurai tōi no<br>もう二度と戻れないの<br>Mō nidoto modorenai no</p>
+<p>私があなたと知り合えたことを<br>Watashi ga anata to shiriaeta koto o<br>私があなたを愛してたことを<br>Watashi ga anata o aishi teta koto o<br>死ぬまで死ぬまで誇りにしたいから<br>Shinu made shinu made hokori ni shitaikara</p>
+<p>私があなたと知り合えたことを<br>Watashi ga anata to shiriaeta koto o<br>私があなたを愛してたことを<br>Watashi ga anata o aishi teta koto o<br>死ぬまで死ぬまで誇りにしたいから<br>Shinu made shinu made hokori ni shitaikara<br>私があなたと知り合えたことを<br>Watashi ga anata to shiriaeta koto o<br>私があなたを愛してたことを<br>Watashi ga anata o aishi teta koto o<br>死ぬまで死ぬまで誇りにしたいから<br>Shinu made shinu made hokori ni shitaikara</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+        <tag>EVA</tag>
+        <tag>演歌</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>START:DASH!!</title>
+    <url>/2021/07/08/karaoke/karaoke14/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=26218091&auto=1&height=66"></iframe>
+
+<span id="more"></span>
+
+<p>I say…<br>Hey,hey,hey,START:DASH!!<br>Hey,hey,hey,START:DASH!!<br>うぶ毛の小鸟たちも<br>ubuke no kotoritachi mo<br>いつか空に羽ばたく<br>itsuka sora ni habataku<br>大きな强い翼で飞ぶ<br>ookina tsuyoi tsubasa de tobu<br>谛めちゃダメなんだ<br>akiramecha dame nanda<br>その日が绝対来る<br>sono hi ga zettai kuru<br>君も感じてるよね<br>kimi mo kanjiteruyone<br>始まりの鼓动<br>hajimari no kodou<br>明日よ変われ!<br>ashitayo kaware !<br>希望に変われ!<br>kibou ni kaware !<br>眩しい光に照らされて変われ<br>mabushii hikari ni terasarete kaware<br>START!!</p>
+<p>悲しみに闭ざされて<br>kanashimi ni tozasarete<br>泣くだけの君じゃない<br>naku dakeno kimi janai<br>热い胸　きっと未来を切り开く筈さ<br>atsui mune kitto mirai wo kiri hiraku hazusa<br>悲しみに闭ざされて<br>kanashimi ni tozasarete<br>泣くだけじゃつまらない<br>naku dakeja tsumaranai<br>きっと （きっと） 君の （梦の）<br>kitto ( kitto ) kimi no ( yume no )<br>チカラ （いまを） 动かすチカラ<br>chikara ( ima wo ) ugokasu chikara<br>信じてるよ…だから START!!<br>shinjiteruyo … dakara START!!</p>
+<p>雨上がりの気分で<br>ame agari no kibun de<br>高まる期待のなか<br>takamaru kitai no naka<br>踬いたことさえも<br>tsumazuita koto saemo<br>思い出にしよう<br>omoide ni shiyou<br>明日が咲くよ!<br>ashita ga sakuyo !<br>希望が咲くよ!<br>kibou ga sakuyo !<br>楽しいメロディー口ずさみ咲いた<br>tanoshii merodei(melody)^ kuchi zusami saita<br>DASH!!</p>
+<p>喜びを受けとめて<br>yorokobi wo uketomete<br>君と仆つながろう<br>kimi to boku tsunagarou<br>迷い道　やっと外へ抜けだした筈さ<br>mayoi michi yatto soto e nuke dashita hazusa<br>喜びを受けとめて<br>yorokobi wo uketomete<br>君と仆　进むだろう<br>kimi to boku susumu darou<br>それは （それは） 远い （梦の）<br>sore wa ( sore wa ) tooi ( yume no )<br>カケラ （だけど） 爱しいカケラ<br>kakera ( dakedo ) itoshii kakera<br>彼方へと…仆は DASH!!<br>kanata eto … boku wa DASH!!<br>またひとつ　梦が生まれ…</p>
+<p>mata hitotsu yume ga umare …<br>悲しみに闭ざされて<br>kanashimi ni tozasarete<br>泣くだけの君じゃない<br>naku dakeno kimi janai<br>热い胸　きっと未来を切り开く筈さ<br>atsui mune kitto mirai wo kiri hiraku hazusa<br>喜びを受けとめて<br>yorokobi wo uketomete<br>君と仆つながろう<br>kimi to boku tsunagarou<br>迷い道　やっと外へ抜けだした筈さ<br>mayoi michi yatto soto e nuke dashita hazusa<br>喜びを受けとめて<br>yorokobi wo uketomete<br>君と仆　进むだろう<br>kimi to boku susumu darou<br>それは （それは） 远い （梦の）<br>sore wa ( sore wa ) tooi ( yume no )<br>カケラ （だけど） 爱しいカケラ<br>kakera ( dakedo ) itoshii kakera<br>彼方へと…仆は DASH!!<br>kanata eto … boku wa DASH!!</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+        <category>LoveLive</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+        <tag>LL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>銀の龍の背に乗って</title>
+    <url>/2021/07/08/karaoke/karaoke13/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=28661544&auto=1&height=66"></iframe>
+<span id="more"></span>
+
+<p>あの苍（あお）ざめた海の彼方で<br>ano aozameta umi no kanata de<br>今まさに谁かが伤んでいる<br>ima masani dareka ga itande iru<br>まだ飞べない雏たちみたいに<br>mada tobenai hina-tachi mitai ni<br>仆はこの非力を叹いている<br>boku wa kono hiriki o nageite iru</p>
+<p>急げ悲しみ 翼に変われ<br>isoge kanashimi tsubasa ni kaware<br>急げ伤迹 罗针盤になれ<br>isoge kizuato rashinban ni nare<br>まだ飞べない雏たちみたいに<br>mada tobenai hina-tachi mitai ni<br>仆はこの非力を叹いている<br>boku wa kono hiriki o nageite iru</p>
+<p>梦が迎えに来てくれるまで<br>yume ga mukae ni kite kureru made<br>震えて待ってるだけだった昨日<br>furuete matte rudakeda  tta kinō<br>明日 仆は龙の足元へ崖を登り<br>ashita boku wa ryū no ashimoto e gake o nobori<br>呼ぶよ「さあ、行（い）こうぜ」<br>yobu yo &#96;sā, ikou ze’</p>
+<p>银の龙の背に乗って<br>gin’no ryū no seni notte<br>届けに行こう 命の砂漠へ<br>todoke ni ikou inochi no sabaku e<br>银の龙の背に乗って<br>gin’no ryū no seni notte<br>运んで行こう 雨云の涡を<br>hakonde ikou amagumo no uzu o</p>
+<p>失うものさえ失ってなお<br>ushinau mono sae ushinatte nao<br>人はまだ谁かの指にすがる<br>hito wa mada dareka no yubi ni sugaru<br>柔らかな皮肤しかない理由（わけ）は<br>yawarakana hifu shika nai wake wa<br>人が人の伤みを聴くためだ<br>hito ga hito no itami o kiku tameda</p>
+<p>急げ悲しみ 翼に変われ<br>isoge kanashimi tsubasa ni kaware<br>急げ伤迹 罗针盤になれ<br>isoge kizuato rashinban ni nare<br>まだ飞べない雏たちみたいに<br>mada tobenai hina-tachi mitai ni<br>仆はこの非力を叹いている<br>boku wa kono hiriki o nageite iru</p>
+<p>わたボコリみたいな翼でも<br>wata bokori mitaina tsubasa demo<br>木の芽みたいな頼りない爪でも<br>kinome mitaina tayorinai tsume demo<br>明日 仆は龙の足元へ崖を登り<br>ashita boku wa ryū no ashimoto e gake o nobori<br>呼ぶよ「さあ、行（い）こうぜ」<br>yobu yo &#96;sā, ikou ze’</p>
+<p>银の龙の背に乗って<br>gin’no ryū no seni notte<br>届けに行こう 命の砂漠へ<br>todoke ni ikou inochi no sabaku e<br>银の龙の背に乗って<br>gin’no ryū no seni notte<br>运んで行こう 雨云の涡を<br>hakonde ikou amagumo no uzu o</p>
+<p>银の龙の背に乗って<br>gin’no ryū no seni notte<br>运んで行こう 雨云の涡を<br>hakonde ikou amagumo no uzu o</p>
+<p>银の龙の背に乗って<br>gin’no ryū no seni notte<br>银の龙の背に乗って<br>gin’no ryū no seni notte</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+        <tag>演歌</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>硝子の花園</title>
+    <url>/2021/07/08/karaoke/karaoke15/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=28341947&auto=1&height=66"></iframe>
+
+<span id="more"></span>
+
+<p>ユメの迷路…ユリの迷路…<br>Yume no meiro… Yuri no meiro…<br>憧れを語る目が<br>Akogare o kataru me ga<br>遠くを探してる時<br>Tōku o sagashi teru toki<br>寂しくなる私は<br>Sabishiku naru Watashi wa <br>ここにいると言いたいの<br>koko ni iru to iitai no<br>Ah!ふたりきりで硝子の花園へと<br>Ah! Futari kiri de   garasu no hanazono e to<br>誰もいない 誰もいらない<br>Dare mo inai   dare mo iranai<br>そっと＿（こ）われそうに咲きたい<br>Sotto koware-sō ni sakitai</p>
+<p>秘密のブランコ<br>Himitsu no buranko<br>あなたと揺られながら今<br>Anata to yurenagara ima<br>ただ優しく見つめあうの<br>Tada yasashiku mitsume au no<br>恋に恋する少女の静かな溜息は<br>Koi ni koisuru shōjo no shizukana tameiki wa<br>Lonely…満ち足りたLonely<br>Lonely… Michitarita Lonely…</p>
+<p>閉じこめたい心を<br>Tojikometai kokoro o<br>どこにも行かない様に<br>Dokoni mo ikanai yō ni<br>寂しいのよ<br>Sabishī no yo<br>私と＿＿（ここ）にいてよいつまでも<br>Watashi to koko ni iteyo itsu made mo<br>Ah!ユメの迷路 硝子の蝶々たちは<br>Ah! Yume no meiro garasu no chōchō-tachi wa<br>誘いながら 誘われてる<br>Sasoinagara sasowa re teru<br>指で＿（こ）われそうな羽ばたき<br>Yubi de koware-sōna habataki</p>
+<p>内緒のロマンス<br>Naisho no romansu<br>あなたを感じたいのに<br>Anata o kanjitai noni<br>まだ切なく見つめるだけ<br>Mada setsunaku mitsumeru dake<br>恋を恋する少女でいられない気持ちに<br>Koi o koisuru shōjo de i rarenai kimochi ni<br>なぜ…苦しくなるの？<br>Naze… Kurushiku naru no?<br>ふたりきりの花園で眠りにつく<br>Futari kiri no hanazono de nemurini tsuku<br>髪を撫でるその手が好き もっと…<br>Kami o naderu sono-te ga suki motto…</p>
+<p>内緒のロマンス<br>Naisho no romansu<br>あなたを感じたいのに<br>Anata o kanjitainoni<br>まだ切なく見つめるだけ<br>Mada setsunaku mitsumeru dake<br>恋を恋する少女でいられない気持ちに<br>Koi o koisuru shōjo de i rarenai kimochi ni<br>なぜ…苦しくなるの？<br>Naze… Kurushiku naru no?</p>
+<p>秘密のブランコ<br>Himitsu no buranko<br>あなたと揺られながら今<br>Anata to yurenagara ima<br>ただ優しく見つめあうの<br>Tada yasashiku mitsume au no<br>恋に恋する少女の静かな溜息は<br>Koi ni koisuru shōjo no shizukana tameiki wa<br>Lonely…満ち足りたLonely<br>Lonely… Michitarita Lonely…<br>ユメの迷路…ユリの迷路…<br>Yume no meiro… Yuri no meiro…</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+        <category>LoveLive</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+        <tag>LL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>美しきもの</title>
+    <url>/2021/07/08/karaoke/karaoke16/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=1384973305&auto=1&height=66"></iframe>
+<span id="more"></span>
+
+<p>君(きみ)の大好(だいす)きな<br>kimi no daisukina<br>この旋律(Melodie)…<br>kono Melodie…<br>大空(おおぞら)へと<br>oosora e to<br>响(ひび)け口风琴(Harmonica)…<br>hibi ke Haramonica…</p>
+<p>*天使(てんし)が抱(いだ)いた<br>*tenshi ga idaita<br>まどわくの画布(Tolie)…<br>mado waku no Tolie(toiwa)…<br>ねえ…その风景画(Paysage)…<br>nee…sono Paysage…<br>绮丽(きれい)かしら?<br>kirei kashira?</p>
+<p>(C’est)——<br>C’est–<br>风(かぜ)が运(はこ)んだ…<br>kaze ga hakonda…<br>淡(あわ)い花弁(はなびら)…<br>awai hanabira…<br>春(はる)の追想(ついそう)…<br>haru no tsui sou…</p>
+<p>绮丽(きれい)な音(ね)…<br>kirei na ne…<br>呗(うた)うモニカ…<br>uta u Monica…<br>鸟(とり)の啭(さえず)り…<br>tori no saezuri…<br>针(はり)は进(すす)んだ<br>hari wa susunda</p>
+<p>(C’est)——<br>C’est–<br>苍(あお)が繋(つな)いで…<br>ao ga tsunaide…<br>流(なが)れる云(くも)…<br>nagareru kumo…<br>夏(なつ)の追想(ついそう)…<br>natsu no tsuisou…<br>绮丽(きれい)な音(ね)…<br>kirei na ne…<br>谣(うた)うモニカ…<br>utau Monica<br>蝉(せみ)の时雨(しぐれ)…<br>semi no shigure…<br>针(はり)は进(すす)んだ<br>hari wa susun da</p>
+<p>绮丽(きれい)だと…<br>kireidato…<br>君(きみ)が言(い)った景色(けしき)…<br>kimi ga itta keshiki…<br>きつと忘(わす)れない…<br>kitsuto wasurenai…</p>
+<p>『美(うつく)しきもの』…<br>『utsuku shi kimono』…<br>集(あつ)める为(ため)に…<br>atsu meru tameni…<br>生命(ひと)はやあって来(く)る … …<br>hito wa yaatekuru</p>
+<p>君(きみ)が抱(だ)きしめた<br>kimi ga dakishimeta<br>短(みじか)い季节(Saison)…<br>mijikai Saison…<br>痛(いた)みの雨(あめ)に<br>itami no ame ni<br>打(う)たれながら…<br>utare nagara…</p>
+<p>「心配(しんぱい)ないよ」…<br>「shinbai naiyo」…<br>笑(わら)って言(い)った…<br>warate itta…<br>君(きみ)の様相(Visage)<br>kimi no Visage<br>忘(わす)れないよ… …<br>wasurenaiyo……</p>
+<p>(C’est)——<br>C’est–<br>夜(よる)の窓(まど)边(べ)に…<br>yoru no madobe ni…<br>微笑(ほほえ)む月(つき)…<br>hohoemu tsuki…<br>秋(あき)の追想(ついそう)…<br>aki no tsuisou…</p>
+<p>绮丽(きれい)な音(ね)<br>kireina ne<br>咏(うた)うモニカ…<br>utau Monica<br>虫(むし)の羽音(はおと)…<br>mushi no haoto<br>针(はり)は进(すす)んだ<br>hari wa susunda</p>
+<p>(C’est)——<br>C’est–<br>大地(だいち)を包(つつ)み…<br>daichi wo tsutsumi…<br>微睡(まどろ)む雪(ゆき) …<br>madoro mu yuki…<br>冬(ふゆ)の追想(ついそう)<br>fuyu no tsuisou</p>
+<p>绮丽(きれい)な音(ね)…<br>kirei na ne…<br>讴(うた)うモニカ…<br>utau Monica…<br>时(とき)の木枯(こが)らし…<br>toki no kogarashi…<br>针(はり)は进(すす)んだ →<br>hari wa susunda →</p>
+<p>绮丽(きれい)だね…<br>kirei dane…<br>君(きみ)が生(い)きた景色(けしき)…<br>kimi ga ikita keshiki…<br>ずつと忘(わす)れない…<br>zutto wasure nai…</p>
+<p>『美(うつく)しきもの』…<br>『utsuku shi kimono』…<br>集(あつ)める为(ため)に…<br>atsumeru tameni…<br>生命(いの)は过(す)ぎて行(ゆ)く…<br>ino wa sugiteyuku…</p>
+<p>君(きみ)が駆(か)け抜(ぬ)けた<br>kimi ga kakenuketa<br>眩(まばゆ)い季节(Saison)…<br>mabayui Saison…<br>病(やまい)の焔(ほむら)に<br>tamai no homura ni<br>焼(や)かれながら…<br>yakarenagara…</p>
+<p>「呜呼(ああ)…绮丽(きれい)だね」…<br>「aa…kirei dane」…<br>笑(わら)って逝(い)った<br>waratte itta<br>君(きみ)の面影(Image)<br>kimi no Image<br>忘(わす)れないよ…<br>wasurenaiyo…</p>
+<p>君(きみ)が生(う)まれた朝(あさ)…<br>kimi ga umare ta asa…<br>泣(な)き虫(むし)だつた私(わたし)は…<br>naki mushi datsuta watashi wa…<br>小(ちい)さくても姉(あね)となつた——<br>chiisa ku temo ane to natsuta–</p>
+<p>嬉(うれ)しくて<br>ureshikute<br>少(すこ)し照(て)れくさくて…<br>sukoshi tereku sakute…<br>とても夸(ほこ)らしかった… …<br>totemo hokorashi katta……</p>
+<p>苦(くる)しみに摇荡(ゆうか)う<br>kuru shimi ni yukau<br>生(なま)の荒野(あらの)を<br>nama no arano wo<br>「美(うつく)しきもの」探(さが)すように<br>「utsuku shi kimo 」saga suyouni<br>駆(か)け抜(ぬ)けた<br>kake nu keta</p>
+<p>果(は)てしなき地平(ちへい)へ<br>hateshi naki chiei e<br>旅立(たびだ)つ君(きみ)の<br>tabi da tsu kimi no<br>寝颜(ねがお)何(なに)より<br>negeo nani yori<br>美(うつく)しいと思(おも)ったよ… …<br>utsuku shii to omo tsu tayo……</p>
+<p>君(きみ)の大好(だいす)きな<br>kimi no daisukina<br>この旋律(Melodie)…<br>kono Melodie…<br>大空(おおぞら)へと<br>oosora e to<br>响(ひび)け口风琴(Harmonica)…<br>hibi ke Haramonica…</p>
+<p>*天使(てんし)が抱(いだ)いた<br>*tenshi ga idaita<br>まどわくの画布(Tolie)…<br>mado waku no Tolie(toiwa)…<br>ねえ…その风景画(Paysage)…<br>nee…sono Paysage…<br>绮丽(きれい)かしら?<br>kirei kashira?</p>
+<p>私(わたし)は 世界(せかい)で一番(いちばん)<br>美(うつく)しい光(ひかり)を见(みる)つた<br>watashi wa sekai de ichi ban<br>utsuku shii hikari wo miru tsuta<br>その花(はな)を胸(むね)に抱(いだ)いて<br>sono hana wo mune ni idaite<br>laurantの分(ぶん)も 咏(うた)い続(つづ)けよう<br>laurant no fun mo utaitsutsuke you<br>「其処(そのか)にロマンは在(あ)るのかしら?」<br>「sono ka ni ROMANSU wa aru no kashira?」</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Soldier Game</title>
+    <url>/2021/07/12/karaoke/karaoke17/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=26214458&auto=1&height=66"></iframe>
+
+<span id="more"></span>
+
+<p>Three,two,one,zero!<br>Three, two, one zero<br>ここで登场<br>Koko de toujou<br>见てなさい 私の本气<br>Mite nasai watashi no honki<br>スリルと美意识で胜つのよ必ず<br>Thrill to biishiki de katsu no yo kanarazu        </p>
+<p>优しげな言叶ささやく<br>Yasashigena kotoba sasayaku<br>伪(にせ)のさじゃなくて<br>Nise no kawaisa janakute<br>冷たく强く守らなきゃ<br>Tsumetaku, tsuyoku, mamoranakya<br>切なモノ达 弱きモノ达<br>Taisetsuna monotachi, yowaki monotachi        </p>
+<p>私は谁でしょ? 知りたくなったでしょう?<br>Watashi wa dare desho, shiritaku natta deshou<br>ならば恋かも<br>Naraba koi kamo<br>私のには秘密があるとして<br>Watashi no naka ni wa himitsu ga aru to shite<br>それを君はどうするの<br>Sore wo kimi wa do suru no<br>It’s soldier game<br>It’ s soldier game<br>またえた 讯こうかな<br>Mata aeta toki, kikou ka na        </p>
+<p>Three,two,one,zero!<br>Three, two, one zero<br>つぎの作战<br>Tsugi no sakusen<br>见てなさい 私は本气<br>Mitenasai watashi wa honki<br>シグナル受けとめて未を顶く<br>Signal uketomete mirai wo itadaku        </p>
+<p>微笑みよりも甘いのは<br>Hohoemi yori mo amai no wa<br>嘘が招いた泪よ<br>Uso ga maneita namida yo<br>儚さ脆さ隐してる<br>Hakanasa, morosa kakushiteru<br>切なモノなの 弱きモノなの<br>Taisetsuna mono nano yowaki mono nano        </p>
+<p>私とるでしょ? 触れたくなったでしょう?<br>Watashi to kuru desho, furetaku natta deshou<br>すでに恋だよ<br>Sude ni koi da yo<br>私といつかは战うべき相手<br>Watashi to itsuka wa tatakaubeki aite<br>それは君の理性かも<br>Sore wa kimi no risei kamo<br>I’m soldier heart<br>I’m soldier heart<br>负けないからね It’s soldier game<br>Makenai kara ne, it’s soldier game        </p>
+<p>Come on!<br>Come on!<br>いまが胜负よ!<br>Ima ga shoubu yo<br>私は谁でしょ? 知りたくなったでしょう?<br>Watashi wa dare deshou, shiritaku natta deshou<br>ならば恋かも<br>Naraba koi kamo<br>私のには秘密があるとして<br>Watashi no naka ni wa himitsu ga aru to shite<br>それを君は?<br>Sore wo kimi wa        </p>
+<p>私とるでしょ? 触れたくなったでしょう?<br>Watashi to kuru desho, furetaku natta deshou<br>すでに恋だよ<br>Sude ni koi da yo<br>私といつかは战うべき相手<br>Watashi to itsuka wa tatakaubeki aite<br>それは君の理性かも<br>Sore wa kimi no risei kamo<br>It’s soldier game<br>It’s soldier game<br>またえたのに I’m soldier heart<br>Mata aeta no ni, I’m soldier heart        </p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+        <category>LoveLive</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+        <tag>LL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>トライアングラー (triangular)</title>
+    <url>/2021/07/12/karaoke/karaoke18/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=589146&auto=1&height=66"></iframe>
+
+<span id="more"></span>
+
+<p>君(きみ)は谁(だれ)とキスをする <br>kimi wa dare to kisu wo suru<br>私(わたし)それともあの子(こ)？<br>watashi soretomo watashi<br>君(きみ)は谁(だれ)とキスをする<br>kimi wa dare to kisu wo suru<br>星(ほし)を巡(めぐ)るよ纯情(じゅんじょう)<br>hoshi wo meguru yo junjou        </p>
+<p>弱虫(よわむし)泣(な)き虫(むし)连(つ)れて<br>yowamushi nakimushi tsurete<br>また行(い)くんだと思(おも)う私(わたし)<br>mada ikun da to omou watashi<br>爱(あい)するより求(もと)めるより<br>aisuru yori motomeru yori<br>疑(うたが)う饱和(ほうわ)がずっと<br>utagau hou ga zutto<br>容易(たやす)い 自分(じぶん)が悔(くや)しい<br>tayasui jibun ga kuyashii        </p>
+<p>痛(いた)いよ<br>itai yo<br>味方(みかた)だけど  爱(あい)してないとか<br>mikata dakedo aishitenai toka<br>守(まも)るけど 傍(そば)に居(い)れないとか<br>mamoru dakedo soba ni irenai toka<br>二律背反(にりつはいはん) <br>nigai niritsuhaihan<br>今(いま)すぐ Touch me<br>imasugu tacchimi-<br>运命(うんめい)ならば 繋(つな)がせて<br>unmei naraba tsunagasete        </p>
+<p>君(きみ)は谁(だれ)とキスをする <br>kimi wa dare to kisu wo suru<br>私(わたし)それともあの子(こ)？<br>watashi soretomo watashi<br>心(こころ)揺(ゆ)らす言叶(ことば)より<br>kokoro yurasu kotoba yori<br>无责任(むせきにん)に抱(だ)いて限界(げんかい)<br>musekinin ni daite genkai        </p>
+<p>妄想(もうそう)の砂漠(さばく)をきって <br>mousou wo sabaku okite<br>后(うし)ろから蹴(け)り上(あ)げたら<br>ushiro kara keriagetara<br>むき出(だ)しの恋(こい)によろけた<br>mukidashi no koi ni yoroketa<br>呼吸(こきゅう)だけで精一杯(せいいっぱい)<br>kokyuu dake de seiippai<br>迎(むか)えに来(き)て  覚(おぼ)えてるから<br>mukae ni kite oboreteru kara        </p>
+<p>痛(いた)いよ<br>itai yo<br>前向(まえむ)きな嘘(うそ)  真(まな)に受(う)けるのは<br>maemuki na uso ma ni ukeru nowa<br>笑(わら)ってると 正解(せいかい)が无(な)いから<br>waratteru koe segamenai kara<br>持(も)て余(あま)して <br>mirai moteamashita<br>今(いま)すぐ Hold me<br>imasugu hold me<br>理性(りせい)なんて 押(お)し倒(たお)して<br>risei nante oshitaoshite        </p>
+<p>君(きみ)は谁(だれ)とキスをする <br>kimi wa dare to kisu wo suru<br>私(わたし)それともあの子(こ)？<br>watashi soretomo watashi<br>涙(なみだ)まるで役立(やくだ)たず<br>namida marude yakutatazu<br>星(ほし)を翔(かけ)けるよ纯情(じゅんじょう)<br>hoshi wo kakeru yo junjou        </p>
+<p>君は誰とキスをする<br>kimi wa dare to kisu wo suru<br>君は誰とキスをする<br>kimi wa dare to kisu wo suru<br>私それともあの子？<br>watashi soretomo watashi<br>たった一つ命を盾に<br>tatta hitotsu inochi wo tate ni<br>今振りかざす感傷<br>ima furikazasu kanshou        </p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+        <tag>Macross</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>snow halation</title>
+    <url>/2021/07/08/karaoke/karaoke2/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=28768036&auto=1&height=66"></iframe>
+<span id="more"></span>
+
+<p>不思议だね いまの気持ち<br>fushigi dane    imano kimochi<br>空から降ってきたみたい<br>sora ka ra   futte kita mitai–<br>特别な季节の色が ときめきを见せるよ<br>tokubetsu na kisetsu no iro ga    tokimekiwo mise ruyo<br>初めて出会った时から<br>hajimete deatta toki kara<br>予感に騒ぐ心のMelody<br>yokan ni sawagu    kokoro no Melody<br>とめられないとまらない な??ぜ<br>tomerarenai tomaranai    naze</p>
+<p>届けて<br>todoke te<br>切なさには名前をつけようか“Snow halation”<br>setsuna saniwa    namae wo    tsukeyouka “ Snow halation “<br>想いが重なるまで待てずに<br>omoi ga    kasana rumade    mate zuni<br>悔しいけど好きって纯情<br>kuyashi ikedo    suki tte junjou<br>微热の中 ためらってもダメだね<br>binetsu no naka    tamerattemo dame dane<br>飞び込む勇気に賛成 まもなくStart!!<br>tobikomu yuuki ni sansei    mamonaku Start!!</p>
+<p>音もなく 気配もなく<br>oto monaku    kehai- monaku<br>静かに运命は変わる<br>shizuka ni un-mei wa kawa ru<br>これからの未来に胸の 鼓动が早くなる<br>korekarano mirai ni mune no    kodou ga hayaku naru<br>例えば困った时には<br>tatoeba    komatta tokini wa<br>すぐ駆けつけて抱きしめたくて<br>sugu kake tsukete    daki shimetakute<br>どこにいてもどこでも Fly high<br>dokoniitemo dokodemo    Fly high</p>
+<p>急いで<br>isoi de<br>いつの间にか大きくなりすぎた“True emotion”<br>itsuno mani ka    ookiku narisugita “ True emotion “<br>梦だけみてる様じゃつらいよ<br>yume dake miteru you ja    tsuraiyo<br>恋人は君って言いたい<br>koibito wa kimi tte ii tai<br>优しい目が とまどってるイヤだよ<br>yasashii me ga    tomadotteru iya dayo<br>このまま一気に爱情 あずけて Please!!<br>konomama ikki ni aijou azukete Please!!</p>
+<p>届けて<br>todoke te<br>切なさには名前をつけようか“Snow halation”<br>setsuna saniwa    namae wo    tsukeyouka “ Snow halation “<br>想いが重なるまで待てずに<br>omoi ga kasana rumade     mate zuni<br>悔しいけど好きって纯情<br>kuyashi ikedo    suki tte junjou<br>微热の中 ためらってもダメだね<br>binetsu no naka    tamerattemo dame dane<br>飞び込む勇気に賛成 まもなくStart!!<br>tobikomu yuuki ni sansei    mamonaku Start!!</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+        <category>LoveLive</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+        <tag>LL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>辉夜の城で踊りたい</title>
+    <url>/2021/07/08/karaoke/karaoke4/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=26279806&auto=1&height=66"></iframe>
+<span id="more"></span>
+
+<p>おいで!おいで!诱惑のDance again<br>oide! oide! yuuwaku no Dance again<br>おいでよおいで!辉夜(かぐや)の城へ<br>oide yo oide! kaguya no shiro e<br>出逢いがあやつるミステリー<br>deai ga ayatsuru misuteri-<br>危険なペルソナ<br>kikenna perusona</p>
+<p>踊ろう!踊ろう!终わらないDance beat<br>odorou! odorou! owaranai Dance beat<br>踊ろうよ踊ろう!辉夜の城で<br>odorou yo odorou! kaguya no shiro de<br>夜空を切りとるレーザービーム<br>yozora wo kiritoru re-za-bi-mu<br>私と见てよ?<br>watashi to mite yo?</p>
+<p>まばゆい星が照らす想い<br>mabayui hoshi ga terasu omoi<br>今宵の梦よ永远(とわ)に<br>koyoi no yume yo towa ni<br>明日(あす)のことは忘れたいの<br>asu no    koto wa    wasuretai no</p>
+<p>私は红い蔷薇の姫よ 优しくさらわれたい<br>watashi wa akai bara no hime yo yasashiku sarawaretai<br>そっと嗫いて意味ありげに目をそらす<br>sotto sasayaite imiarige ni me wo sorasu<br>あなたは白い月の骑士(ナイト) 触れた手がまだ热い<br>anata wa shiroi tsuki no naito fureta te ga mada atsui<br>のがさずに抱きしめて<br>nogasazu ni dakishimete<br>この奇迹を恋と呼ぶのね<br>kono kiseki wo koi to yobu no ne</p>
+<p>おいで!おいで!情热でDance again<br>oide! oide! jounetsu de Dance again<br>おいでよおいで!辉夜の城へ<br>oide yo oide! kaguya no shiro e<br>迷いを饮みこむエナジー<br>mayoi wo nomikomu enaji-<br>眠らぬパッショネイト<br>nemuranu passhoneito</p>
+<p>踊ろう!踊ろう!止まらないDance beat<br>odorou! odorou! tomaranai Dance beat<br>踊ろうよ踊ろう!辉夜の城で<br>odorou yo odorou! kaguya no shiro de<br>星座が织りなすディスコティーク<br>seiza ga orinasu disukoti-ku<br>私も混ぜて?<br>watashi mo    mazete?</p>
+<p>きらめく星に誓う心<br>kirameku hoshi ni chikau kokoro<br>儚い梦でいいわ<br>hakanai yume de ii wa<br>明日は明日の风が吹くの<br>asu wa asu no kaze ga fuku no<br>私は黒い蔷薇の姫よ 激しくさらわれたい<br>watashi wa kuroi bara no hime yo hageshiku sarawaretai<br>だから微笑んで追いかけてと目が诱う<br>dakara hohoende oikakete to me ga sasou<br>あなたも黒い月の骑士 瞳の奥は热い<br>anata mo kuroi tsuki no naito hitomi no oku wa atsui<br>つかまえて抱きしめて<br>tsukamaete dakishimete<br>この奇迹は恋を呼ぶのね<br>kono kiseki wa koi wo yobu no ne</p>
+<p>私は红い蔷薇の姫よ 优しくさらわれたい<br>watashi wa akai bara no hime yo yasashiku sarawaretai<br>そっと嗫いて意味ありげに目をそらす<br>sotto sasayaite imiarige ni me wo sorasu<br>あなたは白い月の骑士 触れた手がまだ热い<br>anata wa shiroi tsuki no naito fureta te ga mada atsui<br>のがさずに抱きしめて<br>nogasazu ni dakishimete<br>この奇迹を恋と呼ぶのね<br>kono kiseki wo koi to yobu no ne</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+        <category>LoveLive</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+        <tag>LL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>cutie panther</title>
+    <url>/2021/07/08/karaoke/karaoke3/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=28592856&auto=1&height=66"></iframe>
+<span id="more"></span>
+
+<p>捕まえちゃう!<br>Tsukamae chau !<br>(どこにいるの? ムリよムリよ どこにいたってムリよ)<br>( dokoni iruno?    muriyo muriyo    dokoni itatte muriyo )<br>捕まえちゃう!<br>Tsukamae chau !<br>(だれといるの? ダメよダメよ わたし外はダメよ)<br>( dareto iruno?    dameyo dameyo    watashi igai wa dameyo )</p>
+<p>甘いよ甘い そんな装备じゃ<br>amai yo amai    sonna sōbija<br>逃げられるわけいじゃないか<br>nigera reru wake nai janai ka<br>狙いをつけて密かに背后から<br>nerai o tsukete hisokani    haigo kara</p>
+<p>I love you 私のことをきになるはず<br>I love you    watashi no kotoo    sukini naru hazu<br>I love you そこに义があるの<br>I love you    sokoni seigi ga aruno</p>
+<p>Hi,hi!(何度も言わせるつもりなの?)おやおや<br>Hi , hi !( nandomo iwaseru tsumori nano ?) o ya o ya<br>Hi,hi!(抵抗するならしてごらん!)いがいと<br>Hi , hi !( teikō surunara shite goran !) i ga i to<br>我が尽だと知ってるけれど<br>wagamama dato    shitteru keredo<br>私のが手(うわて)なようね<br>watashino hōga uwatena yō ne<br>冷たい言叶 优しい视线 获物は…君だよ!<br>tsumetai kotoba yasashii shisen    emono wa? kimi dayo !</p>
+<p>Cutie Panther 私どこでも行くよ<br>Cutie Panther watashi    dokodemo ikuyo<br>君の君の盗んでみせるよ<br>Kimino kimino    kokoro nusunde  miseru yo<br>Cutie Panther 私どこでも行くよ<br>Cutie Panther watashi    dokodemo ikuyo<br>君の君のを离さない<br>kimino kimino    kokoro o hanasa nai</p>
+<p>热いよ热い のルールは<br>atsui yo  atsui    ai no rūru wa<br>破られるためるんだよ<br>yaburareru tame arun- dayo<br>ずるい罠へと诱(いざな)う微笑みは<br>zurui wana eto izanau    hohoemiwa</p>
+<p>I miss you きのせいだし悪くないでしょ<br>I miss you    suki no seidashi    waruku nai desho<br>I miss you それが重度の恋よ<br>I miss you    sorega jūdo no koi yo</p>
+<p>Hi,hi(绝対全てをいただくよ?)おやおや<br>Hi , hi ( zettai subete    oitadakuyo ?) o ya o ya<br>Hi,hi(反抗するならしてごらん!)てごわい<br>Hi , hi ( hankōsuruna    rashite goran !) te go wa i<br>伪りだって疑うよりも<br>itsuwari datte    utagau yorimo<br>私の事信じてみてよ<br>watashi no koto    shinjite miteyo<br>优しい言叶 冷たい视线 获物は…君だよ!<br>yasashii kotoba    tsumetai shisen    emono wa? kimi dayo !</p>
+<p>Cutie Panther 君の瞳が欲しい<br>Cutie Panther kimino    hitomi ga hoshii<br>私きっときっと盗んでみせるよ<br>watashi kiitto    kitto nusunde miseru yo<br>Cutie Panther 君の瞳が欲しい<br>Cutie Panther kimino     hitomi ga hoshii<br>私きっと素早く逃さない<br>watashi kiitto    subayaku nogasa nai</p>
+<p>Hi,hi!(何度も言わせるつもりなの?)おやおや<br>Hi , hi !( nandomo iwaseru tsumori nano ?) o ya o ya<br>Hi,hi!(抵抗するならしてごらん!)いがいと<br>Hi , hi !( teikōsuru nara shite goran !) i ga i to<br>我が尽だと知ってるけれど<br>wagamama dato    shitteru keredo<br>私のが手(うわて)なようね<br>watashino hōga uwatena yō ne<br>冷たい言叶 优しい视线 获物は…君だよ!<br>tsumetai kotoba yasashii shisen    emono wa? kimi dayo !</p>
+<p>Cutie Panther 私どこでも行くよ<br>Cutie Panther watashi    dokodemo ikuyo<br>君の君の盗んでみせるよ<br>Kimino kimino    kokoro nusunde  miseru yo<br>Cutie Panther 私どこでも行くよ<br>Cutie Panther watashi    dokodemo ikuyo<br>君の君のを离さない<br>kimino kimino    kokoro o hanasa nai</p>
+<p>捕まえちゃう!<br>Tsukamae chau !<br>(どこにいるの? ムリよムリよ どこにいたってムリよ)<br>( dokoni iruno?    muriyo muriyo    dokoni itatte muriyo )<br>捕まえちゃう!<br>Tsukamae chau !<br>(だれといるの? ダメよダメよ わたし外はダメよ)<br>( dareto iruno?    dameyo dameyo    watashi igai wa dameyo )</p>
+<p>捕まえちゃう!<br>Tsukamae chau !<br>(どこにいるの? ムリよムリよ どこにいたってムリよ)<br>( dokoni iruno?    muriyo muriyo    dokoni itatte muriyo )<br>捕まえちゃう!<br>Tsukamae chau !<br>(だれといるの? ダメよダメよ わたし外はダメよ)<br>( dareto iruno?    dameyo dameyo    watashi igai wa dameyo )</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+        <category>LoveLive</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+        <tag>LL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>星間飛行</title>
+    <url>/2021/07/08/karaoke/karaoke5/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=589160&auto=1&height=66"></iframe>
+<span id="more"></span>
+
+<p>Su i men ga yu ra gu<br>Ka ze no wa ga hi ro ga ru<br>Fu re a tta yu bi sa ki no<br>A o i den ryuu<br>Mi tsu me a u da ke de<br>Ko do ku na ka so ku do ga<br>I sshu n ni ku da ke chi ru<br>A na ta ga su ki yo</p>
+<p>To u me i na shi n ju no yo u ni<br>Chuu ni u ku na mi da<br>Hi ge ki da tte ka ma wa na i<br>A na ta to i ki ta i<br>Ki ra !</p>
+<p>Ryuu se i ni ma ta ga tte<br>A na ta ni kyuu ko u ka ah ah<br>No u ko n no ho shi zo ra ni<br>Wa ta shi ta chi ha na bi mi ta i<br>Ko ko ro ga hi ka ri no ya wo ha na tsu</p>
+<p>Ka i wa na do na shi ni<br>U chi ga wa ni mo gu tte<br>Ka n ga e ga yo mi to re ru<br>Fu shi gi na yo ru<br>A na ta no na Ju mo n mi ta i ni<br>Mu ge n no ri pī to*<br>Ni ku ra shi ku te te no ko u ni<br>Tsu me wo ta te te mi ru<br>Ki ra !</p>
+<p>Ka ra da go to su ki to o ri<br>E no yo u ni ta da yo u uh uh<br>Ke shi tsu bu no i no chi* de mo<br>Wa ta shi ta chi Ma ta ta i te ru<br>Ta ma shi i ni gi n ga Na da re te ku<br>Ryuu se i ni ma ta ga tte<br>A na ta wa kyuu jou shou oh oh<br>No u ko n no ho shi zo ra ni<br>Wa ta shi ta chi ha na bi mi ta i<br>Ko ko ro ga hi ka ri no ya wo ha na tsu<br>Ke shi tsu bu no i no chi de mo<br>Wa ta shi ta chi ma ta i te ru<br>Ta ma shi i ni gi n ga Na da re te ku<br>Ta ma shi i ni gi n ga Na da re te ku</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>and I&#39;m home</title>
+    <url>/2021/07/08/karaoke/karaoke6/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=496902073&auto=1&height=66"></iframe>
+<span id="more"></span>
+
+<p>【红】<br>锖びつbaiいた心、音もない世界du、何を见てるの？<br>Sabitsuita kokoro, otomonai sekai, nani o miteruno?</p>
+<p>またzhiねを言える颜を探すよそdaoれを缲り返すだけ<br>Matanewo ieru kaoo sagasuyo sore o kurikaesu dake</p>
+<p>【蓝】<br>気づけばそこには　ひとりきりで泣く後ろ姿<br>Kizukeba soko niwa     hitorikiri de naku ushiro sugata</p>
+<p>【红】辛いような、【蓝】寂しいような、<br>Tsurai youna, sabishii youna, </p>
+<p>【合】<br>场所　手を繋いでいたいんだ<br>basho    te o tsunaide itainda</p>
+<p>何度目の気持ちだろう　ここにある温もりは<br>Nandome no kimochi darou    koko ni aru nukumori wa</p>
+<p>间违いでも构わない、傍にいること<br>Machigai demo kamawanai, soba ni iru koto</p>
+<p>涙の音、ため息の色　今、确かめる现在地<br>Namida no oto , tameiki no iro    ima, tashika meru genzaichi</p>
+<p>冗谈みたいな毎日　见たい、见たい、未来<br>Joudan mitai na mainichi    mitai, mitai, mirai</p>
+<p>【蓝】<br>强がりの声も掠れたな、と梦に落ちるの<br>Tsuyogari no koe mo kasureta nato    yume ni ochiru no</p>
+<p>抱えた膝、目を落とすとすぐに崩れてしまいそうで<br>Dakaeta hiza, me o otosu to sugu ni    kuzurete shimai soude</p>
+<p>【红】<br>このまま、このまま　ふたりきり駆け込む远い出口<br>Konomama, konomama   futarikiri kakekomu tooi deguchi</p>
+<p>【蓝】<br>まだ、期待しているの。<br>Mada, kitai shiteiru no. </p>
+<p>【合】<br>さあ　笑って见つめ合うんだ<br>Saa waratte mitsume aunda</p>
+<p>単纯で无邪気な颜　くしゃくしゃの思い抱いて<br>Tanjun de mujaki na kao    kushakusha no omoi daite</p>
+<p>迷い込んだ场所さえ优しすぎて<br>Mayoikonda basho sae    yasashi sugite</p>
+<p>何度でも名前を呼ぶよ　不确かな未来でも<br>Nando demo namae o yobu yo futashika na mirai demo</p>
+<p>离せないもの、思うだけ心が痛いよ<br>Hanasenai mono, omou dake kokoro ga itai yo</p>
+<p>ここにいるよ<br>Koko ni iru yo</p>
+<p>ここにいるよ<br>Koko ni iru yo</p>
+<p>帰る场所はここだよ？<br>kaeru basho wa koko da yo?</p>
+<p>いつだって変わらない　思いを残すの<br>Itsudatte kawaranai omoi o nokosu no</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>フリージア 希望之花</title>
+    <url>/2021/07/08/karaoke/karaoke8/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=459925524&auto=1&height=66"></iframe>
+<span id="more"></span>
+
+<p>漂う宇宙(そら)のどこか遠く<br>tada you sorano    dokoka too ku</p>
+<p>祈り通ずる惑星(ほし)があるとしたら<br>inori tsuuzuru    hoshiga aru toshitara</p>
+<p>僕らはそこへ向かうだろうか<br>bokuraha sokoe    mukau darou- ka</p>
+<p>そして何を祈るのだろう<br>soshite naniwo inoru no darou-</p>
+<p>果たせなかった約束や<br>hatase nakatta    yakusoku ya</p>
+<p>犠牲になった高潔の光<br>gisei ni na-tta    kouketsu no hikari</p>
+<p>残る物など何もないとしても<br>nokoru mono nado    nanimo nai toshitemo</p>
+<p>今は信じた道をただ進め<br>ima wa shinjita michi wo  tada susume</p>
+<p>希望の花 繋いだ絆が<br>kibou no hana    tsunaida kizuna ga</p>
+<p>今僕らの胸の中にあるから<br>ima bokura no    muneno naka    ni aru kara</p>
+<p>決して散ることはない<br>keshite chiru koto wa nai</p>
+<p>生きる力<br>ikiru chikara</p>
+<p>希望の花 繋いだ絆を<br>kibou no hana    tsunaida kizuna wo</p>
+<p>力にして明日を強く咲き誇れ<br>chikara ni shite    asu wo tsuyoku    sakiho kore</p>
+<p>戻る場所なんてない辿り着くべき場所<br>motoru basho nante nai    tadori tsuku beki basho heto</p>
+<p>迷いのない旗を高く掲げて<br>mayoi no nai    hata wo takaku kakagete</p>
+<p>今を生きていく<br>ima wo ikite i ku</p>
+<p>見えないものに 怯えていた<br>mie nai mono ni     obiete i ta</p>
+<p>弛むことない この世界の中<br>tayumu koto nai     kono sekai no naka</p>
+<p>それでも一つ 心の波間に<br>sore demo hitotsu     kokoro no namima ni</p>
+<p>変わらないもの 浮かべながら<br>kawara nai mono     ukabe nagara</p>
+<p>希望の花 繋いだ絆が<br>kibou no hana    tsunaida kizuna ga</p>
+<p>今僕らの胸の中にあるから<br>ima bokura no    muneno naka    ni aru kara</p>
+<p>綻びを縫い合い<br>hokorobi wo    nui a i</p>
+<p>強くなれる<br>tsuyoku  nareru</p>
+<p>希望の花 繋いだ絆を<br>kibou no hana    tsunai da kizuna wo</p>
+<p>力にして 明日を強く咲き誇れ<br>chikara ni shite    asu wo tsuyoku    saki hokore</p>
+<p>何の為向かうのか見失いそうな時に<br>nan nno tame muka unoka    miushi nai souna tokini</p>
+<p>守り抜きたいものがあること<br>mamori nuki tai     mono ga aru koto-</p>
+<p>気付いたんだ<br>kitsui tan nda</p>
+<p>傷を隠し 一人泣いた夜に<br>ki zu wo    ka ku shi     hitori naita yoru ni</p>
+<p>くれた優しさ 溢れ出したのは<br>kureta yasashisa     afureda shita no wa</p>
+<p>未来を誓った「決意の涙」<br>mirai wo chika-tta     ketsui no    namita</p>
+<p>希望の花 繋いだ絆が<br>kibou no hana    tsunaida kizuna ga</p>
+<p>今僕らの胸の中にあるから<br>ima bokura no    muneno naka    ni aru kara</p>
+<p>決して散ることはない<br>keshite chiru koto wa nai</p>
+<p>生きる力<br>ikiru chikara</p>
+<p>希望の花 繋いだ絆を<br>kibou no hana    tsunaida kizuna wo</p>
+<p>力にして明日を強く咲き誇れ<br>chikara ni shite    asu wo tsuyoku    sakiho kore</p>
+<p>戻る場所なんてない辿り着くべき場所<br>motoru basho nante nai    tadori tsuku beki basho heto</p>
+<p>迷いのない旗を高く掲げて<br>mayoi no nai    hata wo takaku kakagete</p>
+<p>今を生きていく<br>ima wo ikite i ku</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Magnet</title>
+    <url>/2021/07/08/karaoke/karaoke7/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=33916400&auto=1&height=66"></iframe>
+<span id="more"></span>
+
+<p>【MIKU】<br>か细い火が 心の端にbai灯る<br>ka hosoi hi ga kokoro no hashini tomoru<br>いつの间にか燃え広がるdu热情zhi<br>itsuno manika moe hirogaru netsujou<br>私の蝶 不规则に飞び回り<br>watashi no chou fukisoku ni tobi mawari<br>あなたの手に鳞粉daoを付けた<br>anata no te ni rinpun wo duketa</p>
+<p>【LUKA】<br>络み合う指ほどいて 唇から舌へと<br>karami au yubi hodo ite kuchibiru kara shitahe to<br>许されない事ならば 尚更燃え上がるの<br>yurusarenai koto naraba naosara moe agaruno</p>
+<p>【合唱】<br>抱き寄せて欲しい 确かめて欲しい<br>dakiyosete hoshii tashikame te hoshii<br>间违いなど无いんだと 思わせて<br>machiga i na do nai<del>n da</del>to omo wase te<br>キスをして 涂り替えて欲しい<br>kisu wo shite nuri kaete hoshii<br>魅惑の时に酔いしれ溺れていたいの<br>miwaku no toki ni yoi shire oborete~itaino</p>
+<p>【LUKA】<br>束缚して もっと必要として<br>sokubaku shi te motto hitsuyou to shi te<br>爱しいなら执着を见せつけて<br>i to shii nara shuu chaku wo mise tsukete<br>「おかしい」のが たまらなく好きになる<br>(o ka shi i) noga tamara na ku suki ninaru<br>行けるトコまで行けばいいよ<br>ikeru toko made    ikeba iiyo<br>【MIKU】<br>迷い込んだ心なら 简単に融けてゆく<br>mayoikon da kokoro nara kantan ni tokete yuku<br>优しさなんて感じる暇など 无い位に<br>yasashi sa nante kanjiru hima nado nai kurai ni<br>【合唱】<br>缲り返したのは あの梦じゃなくて<br>kurikae shi ta no ha    ano yume ja naku te<br>纷れも无い现実の私达<br>magire mo nai genjitsu no watashi tachi<br>触れてから 戻れないと知る それでいいの…<br>furete kara modore nai to shiru    sore de iino…<br>谁よりも大切なあなた<br>dare yori mo taisetsu na anata</p>
+<p>【MIKU】<br>夜明けが来ると不安で 泣いてしまう私に<br>yo a ke ga ku ru to fu an de na i te shi ma u wa ta shi ni<br>「大丈夫」と嗫いたあなたも 泣いていたの？<br>(dai jou bu) to sa sa ga i ta a na ta mo na i te i ta no?</p>
+<p>【合唱】<br>抱き寄せて欲しい 确かめて欲しい<br>daki yosete hoshii    tashika me te hoshii<br>间违いなど无いんだと 思わせて<br>machi ga i nado nai<del>n da</del>to omo wasete<br>キスをして 涂り替えて欲しい 魅惑の时に<br>kisu wo shite    nurika e te hoshii    miwaku no toki ni<br>酔いしれ溺れたい<br>yoi shi re obo re tai<br>引き寄せて マグネットのように<br>biki yo sete    magunetto no you ni<br>例えいつか离れても巡り会う<br>tatoe itsuka hanarete mo meguri a u<br>触れていて 戻れなくていい それでいいの<br>furete i te    modore naku te ii    sorede ii no<br>谁よりも大切なあなた<br>dare yori mo taisetsu na anata</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>3年目の浮気</title>
+    <url>/2021/07/08/karaoke/karaoke9/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=4902185&auto=1&height=66"></iframe>
+<span id="more"></span>
+
+<p>（男）马鹿いってんじゃないよ お前と俺は<br>baka ittenjanaiyo o mae to ore wa<br>（男）ケンカzhiもしたけどひとつ屋根の下暮らして来たんだぜ<br>kenka mo shita kedo hitotsu yane no shita kurashi te kitan daze<br>（男）马鹿いってんじゃないよ お前の事だけは<br>baka ittenjanaiyo o mae no koto dakewa<br>（男）一日たりとも 忘れた事など无かった俺だぜ<br>ichinichi taritomo wasure ta koto nado naka tta ore daze</p>
+<p>（女）よくいうわ いつもだましてばかりで<br>yokuiuwa itsumodamashitebakaride<br>（女）私が何にも知らないとでも思っているのね<br>watashi ga nani nimo shira naitodemo omotte irunone</p>
+<p>（男）よくいうよ 惚れたお前の负けだよ<br>yokuiuyo hore tao mae no make dayo<br>（男）もてない男が好きなら 俺も考えなおすぜ<br>motenai otoko ga suki nara ore mo kangae naosuze</p>
+<p>（女）马鹿いってんじゃないわ<br>baka ittenjanaiwa<br>（男）马鹿いってんじゃないよ<br>baka ittenjanaiyo<br>（女）あそばれてるのわからないなんてかわいそうだわ<br>asobareterunowakaranainantekawaisoudawa<br>（男）3年目の浮気ぐらい大目にみろよ<br>3 nenme no uwaki gurai oome nimiroyo<br>（女）ひらきなおるその态度が気にいらないのよ<br>hirakinaorusono taido ga kini iranainoyo<br>（男）3年目の浮気ぐらい大目にみてよ<br>3 nenme no uwaki gurai oome nimiteyo<br>（女）両手をついてあやまったって 许してあげない<br>ryoute wotsuiteayamattatte yurushi teagenai</p>
+<p>（男）马鹿やってんじゃないよ 本気でそんな<br>baka yattenjanaiyo    honki desonna<br>（男）荷物をまとめて 涙もみせずに旅だてるのかよ<br>nimotsu wo matome te    namida mo misezu ni tabi da teru no ka yo<br>（男）马鹿やってんじゃないよ 男はそれなりに<br>baka yattenjanaiyo    otoko wa sore narini<br>（男）浮気もするけど 本気になれない可爱いもんだぜ<br>uwaki mo suru kedo    honki ni narenai    kawaii mondaze</p>
+<p>（女）よくいうわ そんな胜手なことばが<br>yokuiuwa sonna katte nakotobaga<br>（女）あなたの口から出てくるなんて 心うたがうわ<br>anatano kuchi kara dete kurunante kokoro utagauwa</p>
+<p>（男）よくいうよ いつもあまえてばかりで<br>yokuiuyo itsumo amaete bakari de<br>（男）やきもちやいても可爱くないぜ 大人になりなよ<br>yakimochi yaitemo kawai ku    naize otona ni narinayo</p>
+<p>（女）马鹿やってんじゃないわ<br>baka yattenjanaiwa<br>（男）马鹿やってんじゃないよ<br>baka yattenjanaiyo<br>（女）私にだってその気になれば 相手はいるのよ<br>watashi nidattesono kini nareba aite wairunoyo<br>（男）3年目の浮気ぐらい大目にみろよ<br>3 nenme no uwaki gurai oome nimi ro yo<br>（女）ひらきなおるその态度が気にいらないのよ<br>hirakinaorusono taido ga kini iranainoyo<br>（男）3年目の浮気ぐらい大目にみてよ<br>3 nenme no uwaki gurai oome nimi te yo<br>（女）両手をついてあやまったって 许してあげない<br>ryoute wotsuiteayamattatte yurushi teagenai</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>KTV小助手</category>
+      </categories>
+      <tags>
+        <tag>karaoke</tag>
+        <tag>演歌</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Grayskull为何物？</title>
+    <url>/2021/07/07/shera/shera1/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>&amp;emsp;&amp;emsp;本文旨在梳理动画She-Ra and the Princess of Power中一些隐藏的背景设定，以帮助同好们更好地理解She-Ra的故事。文中大部分的信息整理自该作品的Fandom和Wikipedia页面。<br>&amp;emsp;&amp;emsp;为了更好的传达作品的本意，本文中出现的人物和势力的名称均采用英文原文。  </p>
+<hr>
+<p>&amp;emsp;&amp;emsp;下面我们正式开始探寻为什么女主人公Adora的变身台词是“<strong>For the honor of Grayskull</strong>”。<br>&amp;emsp;&amp;emsp;众所周知，新She-Ra作为一部重启类型的作品，它的很多设定确实是从前作中移植过来的，所以在解释这部作品的设定问题之前，我们先铺垫一下整个系列的背景：  </p>
+<span id="more"></span>
+
+<h1 id="He-Man-and-the-Masters-of-the-Universe"><a href="#He-Man-and-the-Masters-of-the-Universe" class="headerlink" title="He-Man and the Masters of the Universe"></a>He-Man and the Masters of the Universe</h1><p>作为系列动画的开端，这是一部1983年播出的的电视动画。</p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera1/heman.jpg"></p>
+<p>&amp;emsp;&amp;emsp;He-man讲述了一位叫Adam的王子为了保护他的星球Eternia和一座名为Grayskull的城堡，变身成为宇宙巨人He-Man，与邪恶骷髅势力战斗的故事。和所有超级英雄一样，He-Man的力量是一个秘密，所以平时Adam是一般通过王子，遇敌时就会偷偷变身，而且没有人能认出他的真实身份。而作为系列的第一个主人公，Adam的招牌动作就是在变身时，高举魔法剑并大喊“For the honor of Grayskull”。<br>&amp;emsp;&amp;emsp;回到我们的问题，什么是Grayskull呢？设定上，Grayskull是一座位于Eternia星球的神秘古堡，蕴藏着巨大的魔法力量，这种力量可以征服整个星球，所以它成为了邪恶的势力争夺的焦点。事实上He-Man的第一个画面就是定格在Grayskull上，邪恶反派干部正要打开这座城堡的大门，这时英雄He-Man从里面走出来，守卫城堡并把坏人都打跑了。而主人公的变身能力也是由守护Grayskull的女巫授予的，是以变身He-Man时需要咏唱Grayskull堡。还有个有趣的细节，动画制作之前，概念设计师认为Grayskull堡属于邪恶骷髅势力，所以做成了骷髅外型，这也是它名称的由来，但是最后这个地标被设定成主角方要守护的地点。<br>&amp;emsp;&amp;emsp;而这座城堡之所以这么重要，其核心原因是卖！玩！具！Masters of the Universe这个IP其实是由玩具制造公司Mattel打造的，之后他们联合动画公司Filmation推出了这一系列动画，而Grayskull城堡套装玩具正式当时公司玩具生产线的主打产品，动画大火，玩具也颇受欢迎，被称为是20世纪80年代男孩们最想要的圣诞礼物。  </p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera1/grayskull.jpg" alt="grayskull" title="Castle Grayskull玩具套装"></p>
+<h1 id="She-Ra-Princess-of-Power"><a href="#She-Ra-Princess-of-Power" class="headerlink" title="She-Ra: Princess of Power"></a>She-Ra: Princess of Power</h1><p>He-Man大卖之后制作方想要拓宽女性市场<br>于是就有了1985年播出的，以女性为主角的续作She-Ra。</p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera1/shera.jpg" alt="shera" title="She-Ra: Princess of Power"></p>
+<p>&amp;emsp;&amp;emsp;该作的女主人公Adora是前作男主Adam的孪生姐妹。Adora的故事发生在一个新的星球Etheria上。作为Eternia的公主，她儿时被反派Hordak（千面魔）绑架到了Etheria，Adora就此被洗脑培养为反派阵营Horde军团的小干部。<br>&amp;emsp;&amp;emsp;前作的大人气主角Adam受到Grayskull女巫的指示，带着守护之剑来找到Adora并与她相认，Adora就此解除了洗脑，并举起神剑，继承了Adam的变身台词“For the honor of Grayskull”，变身成She-Ra，成为了反抗军Great Rebellion的领袖，同Horde势力战斗。之后就是Adora和Etheria的本土英雄一起对抗邪恶的故事。顺便一提，Horde军团代表的是新兴的科技力量对传统农耕社会的侵略，所以动画中Horde使用高科技武器，而反抗军则用传统冷兵器和魔法与其搏斗（也就是魔法封建贵族带领农民打钢枪大炮的故事）。<br>&amp;emsp;&amp;emsp;She-Ra的很多设定其实都是跟He-Man的呼应，所以两个人名字相似，两颗星球的名字类似，而且两个人都有魔法剑和魔法坐骑，都会变身，都是变了身就没人能认得出的秘密英雄。为了和Adam的Grayskull堡对照（顺便推出新玩具），Adora也有她自己的专属城堡Crystal Castle，这个城堡住着Light Hope，主要负责在She-Ra遇到困难时提供帮助。至于为什么Adora变身时咏唱的是Grayskull，我想是因为希瑞的神剑来自前作的Grayskull堡女巫，并且Grayskull玩具真的很好卖……  </p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera1/crystal.jpg" alt="crystal" title="Crystal Castle玩具套装"></p>
+<h1 id="She-Ra-and-the-Princess-of-Power"><a href="#She-Ra-and-the-Princess-of-Power" class="headerlink" title="She-Ra and the Princess of Power"></a>She-Ra and the Princess of Power</h1><p>结束了关于老作品的啰嗦，让我们来到2018年推出的新She-Ra。</p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera1/shera_new.jpg" alt="shera_new" title="She-Ra and the Princess of Power"></p>
+<p>&amp;emsp;&amp;emsp;新的故事是在1985 She-Ra的基础上继承发扬的，做了很多剧情和设定上的改动，在这里我简单列举几个：  </p>
+<ul>
+<li>作品彻底摆脱了Adam的存在</li>
+<li>Adora不是被Hordak绑架的，而是被捡到的</li>
+<li>Adora的母星Eternia代表的不再是魔法势力，而是比Horde更先进更古老的科技势力</li>
+<li>角色设计更加多元化，彩虹，彩虹，更多的彩虹</li>
+<li>以及，<strong>CATRADORAAAAAAA</strong></li>
+</ul>
+<p>&amp;emsp;&amp;emsp;关于Etheria的地理环境和主线剧情的问题我将在之后的文章叙述，本文我们继续关注Grayskull。在1-4季中，我们的Adora依然继承了前作中的变身台词“For the honor of Grayskull”，并且剧集没有对这句口令作出任何解释，直到第五季才终于打上了补丁。</p>
+<h2 id="She-Ra的第一次变身"><a href="#She-Ra的第一次变身" class="headerlink" title="She-Ra的第一次变身"></a>She-Ra的第一次变身</h2><p>首先我们来回顾一下S01E01中Adora第一次见到Light Hope的场景：</p>
+<blockquote>
+<p><em>Adora无意中激活了神剑，她的面前出现了Light Hope的投影</em></p>
+<p><strong>Light Hope:</strong> 你好，Adora。我的名字是Light Hope，我等了你很久了，但是在你与这柄剑建立纽带之前，我无法与你沟通。<br><strong>Adora:</strong> 你是送来这柄剑的人？<br><strong>Light Hope:</strong> 这柄剑注定是属于你的。Etheria需要你，Adora。你愿意回应它的召唤吗？你愿意为 Grayskull的荣誉而战吗？（Will you fight for the honor of Grayskull?）<br><strong>Adora:</strong> 你在说什么？什么是Grayskull？你说的没头没尾的，我听不懂。<br><strong>Light Hope:</strong> 你会懂的。</p>
+</blockquote>
+<p>而下面是Adora第一次变身的场景：</p>
+<blockquote>
+<p><em>Adora以神剑御敌，神剑被激活。</em><br><em>闪现一些画面：Etheria星球的全景，一颗火球坠落在地表，闪耀的Crystal Castle，草原上一个被激活的传送门中传出婴儿的声音，高举神剑的女战士的背影。</em></p>
+<p>Light Hope的声音响起，她问“<strong>Adora, Will you fight for the honor of Grayskull?<strong>”<br>于是Adora顺势喊出了“</strong>For the honor of Grayskull</strong>”，并变身为She-Ra。</p>
+</blockquote>
+<p>&amp;emsp;&amp;emsp;可以看到，一开始我们的主角Adora完全不理解这个变身台词的含义，而之后不管是她还是观众们都自然而然地接受了这只是一个设定好的用于激活神剑的口令这一事实，只能说这种设计是出于情怀考虑。但是好在第五季编剧终于对这个问题作出了解释。</p>
+<h2 id="上一代She-Ra的起义"><a href="#上一代She-Ra的起义" class="headerlink" title="上一代She-Ra的起义"></a>上一代She-Ra的起义</h2><p>&amp;emsp;&amp;emsp;She-Ra之所以能变身是因为她们是守护之剑的制造者，The First Ones，任命的管理员。The First Ones是一个拥有先进科技的古老文明，随着1-4季的故事展开，我们知道这个文明在跨星系殖民扩张，他们最初生活在母星Eternia，之后殖民了我们的星球Etheria，他们利用科技吸取整个星球的魔法能量，将能量贮存在星球的核心，把星球改造成了毁灭性的武器，上述计划被称为Etheria之心计划（The Heart of Etheria Project）。而上一代She-Ra，Mara试图阻止这个把星球变成武器的可怕计划，但是她的斗争失败了，于是她只能开启传送门，将星球传送到了Despondos，一个荒凉而封闭的维度空间，这样The First Ones就无法接触到Etheria，是以能够保护整个星球。<br>&amp;emsp;&amp;emsp;在S05E10中，Bow和Glimmar找到了Bow的父亲，两位致力于研究theFirst Ones文明的学者。学者们发现Mara其实并不是孤军奋战，她与一群起义军并肩作战。Light Hope播放了数据库中的一段录音：</p>
+<blockquote>
+<p>这是我们最后一次传递信息，如果有人听到，请你认真听。<br>Etheria之心有自动防故障装置，你们可以通过它彻底摧毁Etheria之心，它就位于Arxia前哨。<br>一周前我们与Arxia失去了联络，如果那边还有幸存者，你一定要找到它，Mara给我们争取了时间，但我们已经来不及。<br><strong>我们是Grayskull起义军中队，这是我们的最后一次联络。</strong></p>
+</blockquote>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera1/grayskull_new.jpg" alt="grayskull_new" title="Grayskull的最后留言"></p>
+<p>&amp;emsp;&amp;emsp;可以看到在本作中的Grayskull是一个起义军中队的名称，这个中队找到了阻止Etheria之心计划的方法，但也就此牺牲了。虽然剧集中没有明确指出，但是我个人的推测是，Mara可能是为了纪念这一支牺牲的起义军而将守护之剑的口令设置成了 “For the honor of Grayskull”。所以Grayskull从一个虚幻的力量象征，变成了一个实实在在的革命群体的代号，体现了革命精神的传承性，这还是有很大的进步意义的。</p>
+<hr>
+<p>&amp;emsp;&amp;emsp;下一篇文章我打算探讨星球Etheria的地理特征，主要是关于各个势力的地理位置分布，以及它们与1985 She-Ra的区别，感谢你阅读到这里！</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>shera系列考据</category>
+      </categories>
+      <tags>
+        <tag>shera</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ethria地理志</title>
+    <url>/2021/07/07/shera/shera2/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>&amp;emsp;&amp;emsp;本文旨在梳理动画She-Ra and the Princess of Power中一些隐藏的背景设定，以帮助同好们更好地理解She-Ra的故事。文中大部分的信息整理自该作品相关的Fandom、Wikipedia和Reddit页面。<br>&amp;emsp;&amp;emsp;为了更好的传达作品的本意，本文中出现的人物、地名和势力的名称均采用英文原文。</p>
+<hr>
+<p>&amp;emsp;&amp;emsp;在上一篇介绍Grayskull的文章中，我们厘清了在2018 She-Ra中，故事的主要舞台是我们魔法与科技并存的星球Etheria，但是纵观新全5季，我们似乎从没有见过整个Etheria的世界地图，仅有的是远远的从太空俯瞰的星球七彩的轮廓，和一些局部的抽象化的战略地图。通过各种网上冲浪，我发现，动画制作组可能真的没怎么考虑过Etheria的全景地图到底是什么样的这件事，不过这不妨碍爱好者们寻找各种关于Etheria地理环境的蛛丝马迹。  </p>
+<span id="more"></span>
+
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/p1.png" alt="p1" title="S01中最初的Etheria，只有两个卫星，因为旧She-Ra中是这样设定的"></p>
+<p>上图展示了S01中最初的Etheria，只有两个卫星，因为旧She-Ra中是这样设定的。</p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/p2.png" alt="p2" title="S05的Etheria，有12个卫星，这也是目前的官方设定"></p>
+<p>而S05的Etheria有12个卫星，这也是目前的官方设定。</p>
+<h1 id="势力划分"><a href="#势力划分" class="headerlink" title="势力划分"></a>势力划分</h1><p>在着手处理地图的问题之前，我们先来搞清楚Etheria上到底有哪几个主要势力。</p>
+<h2 id="国家"><a href="#国家" class="headerlink" title="国家"></a>国家</h2><p>&amp;emsp;&amp;emsp;首先，根据Fandom上的星球介绍，Etheria上有着7个正式的国家。它们是Bright Moon，Plumeria，Salineas，Kingdom of Snows，Dryl，Mystacor，以及Fright Zone。<br>为了方便把这些地名对应到我们脑海里的那些角色上，我们先简单地遍历一下这几个国家和它们的统治者。  </p>
+<h3 id="Bright-Moon"><a href="#Bright-Moon" class="headerlink" title="Bright Moon"></a>Bright Moon</h3><p>明月王国，Etheria最大的国家，它是反抗军和公主联盟的总部。<br>统治者：Queen Angella &amp; Glimmer  </p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/k1.png" alt="k1"></p>
+<h3 id="Plumeria"><a href="#Plumeria" class="headerlink" title="Plumeria"></a>Plumeria</h3><p>森林植被覆盖的农业国家，居民大部分都热爱和平，远离争端，军事力量非常薄弱。<br>统治者：Perfuma  </p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/k2.png" alt="k2"></p>
+<h3 id="Salineas"><a href="#Salineas" class="headerlink" title="Salineas"></a>Salineas</h3><p>海洋之国，一道Sea Gate将它与外界隔绝起来以保护它的国民。<br>统治者：Mermista  </p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/k3.png" alt="k3"></p>
+<h3 id="Kingdom-of-Snows"><a href="#Kingdom-of-Snows" class="headerlink" title="Kingdom of Snows"></a>Kingdom of Snows</h3><p>Etheria的第二大国，位于极地，常年被冰雪覆盖。因为遥远和寒冷，它很少受到Horde的骚扰，所以最开始选择保持中立。<br>统治者：Frosta  </p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/k4.png" alt="k4"></p>
+<h3 id="Dryl"><a href="#Dryl" class="headerlink" title="Dryl"></a>Dryl</h3><p>主要发展矿业和科技的王国，是唯一一个没有魔法元素的国度，似乎没有什么居民。<br>统治者：Entrapta  </p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/k5.png" alt="k5"></p>
+<h3 id="Mystacor"><a href="#Mystacor" class="headerlink" title="Mystacor"></a>Mystacor</h3><p>巫师的国度，位于一座浮岛之上，比起国家，它更像是一个学院。<br>统治者：Castaspella  </p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/k6.png" alt="k6"></p>
+<h3 id="Fright-Zone"><a href="#Fright-Zone" class="headerlink" title="Fright Zone"></a>Fright Zone</h3><p>Horde的老巢。曾经是Scorpia的国家，但是后来Hordak登录在星球上并占领了这片区域，让它充满了科技和污染的气息。<br>统治者：Hordak  </p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/k7.png" alt="k7"></p>
+<hr>
+<p>&amp;emsp;&amp;emsp;看到这里差不多大家能建立一个初步的印象：我们有5个由公主代表的国家，其中有3个在内陆，1个在海洋，1个在极地；还有一个特殊的由巫师统治的国家，它位于一座浮空岛上；最后还有一个我们都很熟悉的反派国家，它也在大陆上，并一直试图侵占他国的领土。</p>
+<h2 id="区域和城镇"><a href="#区域和城镇" class="headerlink" title="区域和城镇"></a>区域和城镇</h2><p>除了上述的国家，还有一些值得注意的地区。</p>
+<h3 id="Whispering-Woods"><a href="#Whispering-Woods" class="headerlink" title="Whispering Woods"></a>Whispering Woods</h3><p>充满魔法力量的森林，它位于Fright Zone和Bright Moon之间，形成了一道天然屏障。森林里还有我们的Crystal Castle和Madame Razz的家。Bow的家人和他们的图书馆也位于森林中。</p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/a1.png" alt="a1"></p>
+<h3 id="Crystal-Castle"><a href="#Crystal-Castle" class="headerlink" title="Crystal Castle"></a>Crystal Castle</h3><p>The First Ones的遗迹，城堡里是我们的超级AI，Light Hope。Adora在这里获取了很多关于She-Ra的知识，不过部分都是经由Light Hope粉饰过的错误的历史。</p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/a2.png" alt="a2"></p>
+<h3 id="Thaymor"><a href="#Thaymor" class="headerlink" title="Thaymor"></a>Thaymor</h3><p>整个动画第一场战役发生的城镇，也是catradora正式分手的地点。本来Adora应该和Catra一起占领这个城镇，但是在这里Adora发现了Horde的暴行，并决心投身于反叛军。</p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/a3.png" alt="a3"></p>
+<h3 id="Crimson-Waste"><a href="#Crimson-Waste" class="headerlink" title="Crimson Waste"></a>Crimson Waste</h3><p>一片沙漠之地，也是法外之地，没有国籍的恶棍们聚集在这里。第三季中，Adora等人为了追寻有关Mara的真相来这里进行调查。这里有一座名为Valley of the Lost的城镇。</p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/a4.png" alt="a4"></p>
+<h3 id="Beast-Island"><a href="#Beast-Island" class="headerlink" title="Beast Island"></a>Beast Island</h3><p>Horde的监狱，充满野兽和未知恐怖的岛屿，岛上的精神污染信号会使人迷失，Entrapta和Glimmer的父亲Micah都曾被流放到这座岛上。这座岛的一切异常都是源于The First Ones失控的科技。</p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/a5.png" alt="a5"></p>
+<hr>
+<p><strong>那么回到我们的问题，这些地点是如何分布的呢？</strong></p>
+<p>&amp;emsp;&amp;emsp;在动画里，我们完全没有看到过完整的地图，目前唯一官方给出的地图，是在官方漫画Legendof the Fire Princess里的一张简略的大陆轮廓图。不过幸好，我们还有1985 She-Ra，为了卖玩具，他们确实有好好地画出一张完整的地图。</p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/m1.png" alt="m1" title="Legend of the Fire Princess中的地图"></p>
+<h1 id="1985-She-Ra的世界地图"><a href="#1985-She-Ra的世界地图" class="headerlink" title="1985 She-Ra的世界地图"></a>1985 She-Ra的世界地图</h1><p>以下是作为玩具配件的Ehteria地图。</p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/m2.png" alt="m2" title="1985 She-Ra的大地图"></p>
+<p>&amp;emsp;&amp;emsp;事实上这个地图还有一个更小巧的版本，它被印刷在Crystal Castle玩具套装的一个小圆桌上，想了解玩具的可以看看<a href="https://www.youtube.com/watch?v=6qpUXIG6fe0">这个视频</a>。</p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/m3.png" alt="m3" title="1985 She-Ra的小地图"></p>
+<p>&amp;emsp;&amp;emsp;因为地图的字体比较小，所以我把一部分比较重要的地点名称放大。本文主要关注比较详细的大地图的内容。</p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/m4.png" alt="m4" title="较大的字体表示国家区域，较小的表示城镇"></p>
+<p>下面我们来正式地分析一下地图。<br>&amp;emsp;&amp;emsp;在这个版本中，大陆的轮廓和新She-Ra漫画中的基本一致，所以新动画应该是参考了这张老地图的，它作为我们现在能找到的唯一官方地图，非常具有参考价值。<br>&amp;emsp;&amp;emsp;大陆的中央就是故事开始的地方——<strong>Fright Zone</strong>，Horde的老巢，它将整个大陆纵切为两块。西边的区域属于法外之地，而东边的区域则都是反抗军的领土。  </p>
+<h2 id="中部和西部"><a href="#中部和西部" class="headerlink" title="中部和西部"></a>中部和西部</h2><p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/m5.png" alt="m5" title="中西部大陆"></p>
+<p>&amp;emsp;&amp;emsp;<strong>Fright Zone</strong>的西南角落是Beast Island，它是一个被水环绕的监狱岛屿。而东北方向是Crimson Waste，在1985版本里，这里是由Scorpia统治的，而那时她也是Hordak的忠实追随者，所以这部分也算是Horde领地。</p>
+<p>&amp;emsp;&amp;emsp;西边的大陆大部分是Valley of the Lost，在老版本里，这是一个神秘黑暗的山谷，传说去的人没有一个能回来，而且山谷里还有一座神秘的图书馆。在新版本中，咱们的动画组把老设定重组了一下，Valley of the Lost和Crimson Waste变成了同一个地方，而图书馆被挪到了Whispering Woods。</p>
+<h2 id="东部、极地和海洋"><a href="#东部、极地和海洋" class="headerlink" title="东部、极地和海洋"></a>东部、极地和海洋</h2><p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/m6.png" alt="m6" title="东部大陆"></p>
+<p>&amp;emsp;&amp;emsp;东边的大陆主要的公主们的地盘。可以看到<strong>Kingdom of Snows</strong>远远的在北极，所以Horde够不到它。而这张图上并没有画出海洋王国<strong>Salineas</strong>在哪，鉴于这里只标出了一个海洋Growling Sea，我们就假设它就在那里吧。</p>
+<p>&amp;emsp;&amp;emsp;<strong>Bright Moon</strong>在大陆最东边，一条名为SingingRiver的河流把整个国家和大陆其他部分隔离开了，它的北方是Whispering Woods，勉强算是这个森林阻挡了Horde进犯的步伐吧。中间的位置还有我们的明星城市Thaymor，看这个位置确实是当之无愧是战略要塞。<strong>Mystactor</strong>在稍微西边一点的位置，鉴于它是一个飘在空中的浮岛，即使它比较靠近Horde，基本上也不会受到威胁。</p>
+<p>&amp;emsp;&amp;emsp;新She-Ra的7个国家中还剩下2个，Dryl和Plumeria。不过在1985版本中，它们并不是国家。<strong>Dryl</strong>只是一个经营矿业的城镇；而Entrapta也不是公主，她是土生土长的Horde小干部。Perfuma也不是公主，没有领地，只是会使用植物魔法；而<strong>Plumeria</strong>，那时候还不存在。</p>
+<p>&amp;emsp;&amp;emsp;以上是1985版本的世界地图，它只能解决我们的一部分问题，譬如说，Fright Zone在中间，Kingdom of Snows在北极，Salineas在海里，Bright Moon在最东边，Mystactor、Dryl和Plumeria在内陆的某个地方……剩下的地图，只能由粉丝自己在脑子里补完了。</p>
+<h1 id="粉丝制作的Etheria地图"><a href="#粉丝制作的Etheria地图" class="headerlink" title="粉丝制作的Etheria地图"></a>粉丝制作的Etheria地图</h1><p>国外的She-Ra爱好者跟我们一样好奇世界地图的问题，而且已经有不少人做了深度研究了，这里我放一张完成度最高的粉丝作品。</p>
+<p>&amp;emsp;&amp;emsp;这是由JavaRogers根据漫画地图制作的，考据真的很详细。这里放上发布这张地图的<a href="https://www.reddit.com/r/PrincessesOfPower/comments/js3z7v/doing_work_on_a_map_of_etheria/">Reddit页面</a>，这位朋友还整理了新She-Ra中出现过的<a href="https://www.reddit.com/r/PrincessesOfPower/comments/jr8d5e/list_of_location_details_from_shera_and_the/">所有地点</a>，感兴趣的可以去支持。</p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/m7.png" alt="m7" title="JavaRogers绘制的新She-Ra地图"></p>
+<p>&amp;emsp;&amp;emsp;在这张地图上，FrightZone、Bright Moon、Kingdom of Snows、Mystacor的位置都没怎么变。Crimson Waste和Valley of the lost合并了，被安排在大陆西边。Salineas被安排在Growling Sea，而且更靠近Bright Moon的海岸线。Dryl在原本Scorpian Hill的位置，Plumeria在靠近Fright Zone的内陆。Whispering Woods往南边移了一点，好让它更符合“保护Bright Moon”的设定。都蛮符合动画的内容的，很合理，<strong>谢谢你，JavaRogers！</strong></p>
+<hr>
+<p>&amp;emsp;&amp;emsp;感谢你看到这里，这篇文章地名比较多，希望没有写得太让人头晕。下一篇文章应该是关于She-Ra主线剧情的梳理，又或者是新老She-Ra的人设对比，下次见啦~</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>shera系列考据</category>
+      </categories>
+      <tags>
+        <tag>shera</tag>
       </tags>
   </entry>
   <entry>
@@ -1698,6 +1847,41 @@
       </tags>
   </entry>
   <entry>
+    <title>leetcode 27. 移除元素</title>
+    <url>/2021/07/21/leetcode/leetcode3/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p><a href="https://leetcode-cn.com/problems/remove-element/">https://leetcode-cn.com/problems/remove-element/</a></p>
+<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素，并返回移除后数组的新长度。</p>
+<p>不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并 原地 修改输入数组。</p>
+<p>元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。</p>
+<span id="more"></span>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [3,2,2,3], val = 3</span><br><span class="line">输出：2, nums = [2,2]</span><br><span class="line">解释：函数应该返回新的长度 2, 并且 nums 中的前两个元素均为 2。你不需要考虑数组中超出新长度后面的元素。例如，函数返回的新长度为 2 ，而 nums = [2,2,3,3] 或 nums = [2,2,0,0]，也会被视作正确答案。</span><br></pre></td></tr></table></figure>
+
+<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><ul>
+<li>$0 &lt;&#x3D; nums.length &lt;&#x3D; 100</li>
+<li>$0 &lt;&#x3D; nums[i] &lt;&#x3D; 50$</li>
+<li>$0 &lt;&#x3D; val &lt;&#x3D; 100$</li>
+<li>返回数组长度<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 根据你的函数返回的长度, 它会打印出数组中 该长度范围内 的所有元素。</span><br><span class="line">for (int i = 0; i &lt; len; i++) &#123;</span><br><span class="line">    print(nums[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="解一：双指针法"><a href="#解一：双指针法" class="headerlink" title="解一：双指针法"></a>解一：双指针法</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>把前面扫描到的需要删除的元素用最后的元素替换<br>双指针，指定两个指针head和tail，分别在串的首尾<br>head从头到尾扫描，找到与val相等的元素后</p>
+<ul>
+<li>tail从尾到头扫描</li>
+<li>用第一个与val不等的元素替换head指向的元素<br>当head&#x3D;tail时结束，返回head</li>
+</ul>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;number[]&#125;</span> <span class="variable">nums</span></span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;number&#125;</span> <span class="variable">val</span></span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return <span class="type">&#123;number&#125;</span></span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> removeElement = <span class="function"><span class="keyword">function</span>(<span class="params">nums, val</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> n=nums.length</span><br><span class="line">    <span class="keyword">if</span>(n===<span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//分配首尾指针</span></span><br><span class="line">    <span class="keyword">let</span> head=<span class="number">0</span>,tail=n-<span class="number">1</span>;</span><br><span class="line">    <span class="comment">//当head位于tail前面时</span></span><br><span class="line">    <span class="keyword">while</span>(head&lt;=tail)&#123;</span><br><span class="line">        <span class="comment">//如果head指针指向的值等于val</span></span><br><span class="line">        <span class="keyword">if</span>(nums[head]===val)&#123;</span><br><span class="line">            <span class="comment">//找到最后一个不等于val的元素</span></span><br><span class="line">            <span class="keyword">while</span>(tail&gt;<span class="number">0</span> &amp;&amp; nums[tail]===val) tail--;</span><br><span class="line">            <span class="comment">//如果tail在head左边了，说明没有可以替换的元素</span></span><br><span class="line">            <span class="comment">//即结束，返回处理好的数组长度head-1+1=head</span></span><br><span class="line">            <span class="keyword">if</span>(head&gt;=tail) <span class="keyword">return</span> head;</span><br><span class="line">            <span class="comment">//否则，将用tail元素替换head元素，tail左移</span></span><br><span class="line">            nums[head]=nums[tail--];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//head指向的元素处理完成，右移一位</span></span><br><span class="line">        head++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//head左边的元素都处理完成，返回长度head-1+1=head</span></span><br><span class="line">    <span class="keyword">return</span> head;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h2><p>时间复杂度$O(N)$，空间复杂度$O(1)$</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>leetcode</category>
+        <category>数组</category>
+        <category>简单</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>数组</tag>
+        <tag>双指针</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode 35. 搜索插入位置</title>
     <url>/2021/07/22/leetcode/leetcode4/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p><a href="https://leetcode-cn.com/problems/search-insert-position/">https://leetcode-cn.com/problems/search-insert-position/</a></p>
@@ -1736,41 +1920,6 @@
         <tag>leetcode</tag>
         <tag>数组</tag>
         <tag>BST</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode 27. 移除元素</title>
-    <url>/2021/07/21/leetcode/leetcode3/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p><a href="https://leetcode-cn.com/problems/remove-element/">https://leetcode-cn.com/problems/remove-element/</a></p>
-<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素，并返回移除后数组的新长度。</p>
-<p>不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并 原地 修改输入数组。</p>
-<p>元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。</p>
-<span id="more"></span>
-<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [3,2,2,3], val = 3</span><br><span class="line">输出：2, nums = [2,2]</span><br><span class="line">解释：函数应该返回新的长度 2, 并且 nums 中的前两个元素均为 2。你不需要考虑数组中超出新长度后面的元素。例如，函数返回的新长度为 2 ，而 nums = [2,2,3,3] 或 nums = [2,2,0,0]，也会被视作正确答案。</span><br></pre></td></tr></table></figure>
-
-<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><ul>
-<li>$0 &lt;&#x3D; nums.length &lt;&#x3D; 100</li>
-<li>$0 &lt;&#x3D; nums[i] &lt;&#x3D; 50$</li>
-<li>$0 &lt;&#x3D; val &lt;&#x3D; 100$</li>
-<li>返回数组长度<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 根据你的函数返回的长度, 它会打印出数组中 该长度范围内 的所有元素。</span><br><span class="line">for (int i = 0; i &lt; len; i++) &#123;</span><br><span class="line">    print(nums[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h1 id="解一：双指针法"><a href="#解一：双指针法" class="headerlink" title="解一：双指针法"></a>解一：双指针法</h1><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>把前面扫描到的需要删除的元素用最后的元素替换<br>双指针，指定两个指针head和tail，分别在串的首尾<br>head从头到尾扫描，找到与val相等的元素后</p>
-<ul>
-<li>tail从尾到头扫描</li>
-<li>用第一个与val不等的元素替换head指向的元素<br>当head&#x3D;tail时结束，返回head</li>
-</ul>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;number[]&#125;</span> <span class="variable">nums</span></span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;number&#125;</span> <span class="variable">val</span></span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return <span class="type">&#123;number&#125;</span></span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> removeElement = <span class="function"><span class="keyword">function</span>(<span class="params">nums, val</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> n=nums.length</span><br><span class="line">    <span class="keyword">if</span>(n===<span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//分配首尾指针</span></span><br><span class="line">    <span class="keyword">let</span> head=<span class="number">0</span>,tail=n-<span class="number">1</span>;</span><br><span class="line">    <span class="comment">//当head位于tail前面时</span></span><br><span class="line">    <span class="keyword">while</span>(head&lt;=tail)&#123;</span><br><span class="line">        <span class="comment">//如果head指针指向的值等于val</span></span><br><span class="line">        <span class="keyword">if</span>(nums[head]===val)&#123;</span><br><span class="line">            <span class="comment">//找到最后一个不等于val的元素</span></span><br><span class="line">            <span class="keyword">while</span>(tail&gt;<span class="number">0</span> &amp;&amp; nums[tail]===val) tail--;</span><br><span class="line">            <span class="comment">//如果tail在head左边了，说明没有可以替换的元素</span></span><br><span class="line">            <span class="comment">//即结束，返回处理好的数组长度head-1+1=head</span></span><br><span class="line">            <span class="keyword">if</span>(head&gt;=tail) <span class="keyword">return</span> head;</span><br><span class="line">            <span class="comment">//否则，将用tail元素替换head元素，tail左移</span></span><br><span class="line">            nums[head]=nums[tail--];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//head指向的元素处理完成，右移一位</span></span><br><span class="line">        head++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//head左边的元素都处理完成，返回长度head-1+1=head</span></span><br><span class="line">    <span class="keyword">return</span> head;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h2><p>时间复杂度$O(N)$，空间复杂度$O(1)$</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>leetcode</category>
-        <category>数组</category>
-        <category>简单</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
-        <tag>数组</tag>
-        <tag>双指针</tag>
       </tags>
   </entry>
   <entry>
@@ -1946,6 +2095,23 @@
       </tags>
   </entry>
   <entry>
+    <title>leetcode 数组总结</title>
+    <url>/2021/07/23/leetcode/leetcodeSum1/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><span id="more"></span>
+<h1 id="数组常用方法"><a href="#数组常用方法" class="headerlink" title="数组常用方法"></a>数组常用方法</h1><h2 id="创建数组"><a href="#创建数组" class="headerlink" title="创建数组"></a>创建数组</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//创建空数组</span></span><br><span class="line"><span class="keyword">const</span> arr=[];</span><br><span class="line"><span class="keyword">const</span> arr=<span class="keyword">new</span> <span class="built_in">Array</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建长度为l的全0数组</span></span><br><span class="line"><span class="keyword">const</span> arr=<span class="keyword">new</span> <span class="built_in">Array</span>(l).fill(<span class="number">0</span>); </span><br></pre></td></tr></table></figure>
+
+<h2 id="增删查改"><a href="#增删查改" class="headerlink" title="增删查改"></a>增删查改</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">arr.push(item,item,...)     <span class="comment">//在数组末尾加</span></span><br><span class="line">arr.unshift(item,item,...) <span class="comment">//在数组开头加</span></span><br><span class="line"></span><br><span class="line">arr.pop()   <span class="comment">//删除最后一个元素</span></span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>leetcode</category>
+        <category>数组</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>数组</tag>
+        <tag>总结</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>leetcode 219. 存在重复元素 II</title>
     <url>/2021/07/29/leetcode/leetcode8/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p><a href="https://leetcode-cn.com/problems/contains-duplicate-ii/">https://leetcode-cn.com/problems/contains-duplicate-ii/</a></p>
@@ -1974,151 +2140,6 @@
         <tag>leetcode</tag>
         <tag>数组</tag>
         <tag>哈希</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>leetcode 数组总结</title>
-    <url>/2021/07/23/leetcode/leetcodeSum1/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><span id="more"></span>
-<h1 id="数组常用方法"><a href="#数组常用方法" class="headerlink" title="数组常用方法"></a>数组常用方法</h1><h2 id="创建数组"><a href="#创建数组" class="headerlink" title="创建数组"></a>创建数组</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//创建空数组</span></span><br><span class="line"><span class="keyword">const</span> arr=[];</span><br><span class="line"><span class="keyword">const</span> arr=<span class="keyword">new</span> <span class="built_in">Array</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建长度为l的全0数组</span></span><br><span class="line"><span class="keyword">const</span> arr=<span class="keyword">new</span> <span class="built_in">Array</span>(l).fill(<span class="number">0</span>); </span><br></pre></td></tr></table></figure>
-
-<h2 id="增删查改"><a href="#增删查改" class="headerlink" title="增删查改"></a>增删查改</h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">arr.push(item,item,...)     <span class="comment">//在数组末尾加</span></span><br><span class="line">arr.unshift(item,item,...) <span class="comment">//在数组开头加</span></span><br><span class="line"></span><br><span class="line">arr.pop()   <span class="comment">//删除最后一个元素</span></span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>leetcode</category>
-        <category>数组</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
-        <tag>数组</tag>
-        <tag>总结</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Ethria地理志</title>
-    <url>/2021/07/07/shera/shera2/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>&amp;emsp;&amp;emsp;本文旨在梳理动画She-Ra and the Princess of Power中一些隐藏的背景设定，以帮助同好们更好地理解She-Ra的故事。文中大部分的信息整理自该作品相关的Fandom、Wikipedia和Reddit页面。<br>&amp;emsp;&amp;emsp;为了更好的传达作品的本意，本文中出现的人物、地名和势力的名称均采用英文原文。</p>
-<hr>
-<p>&amp;emsp;&amp;emsp;在上一篇介绍Grayskull的文章中，我们厘清了在2018 She-Ra中，故事的主要舞台是我们魔法与科技并存的星球Etheria，但是纵观新全5季，我们似乎从没有见过整个Etheria的世界地图，仅有的是远远的从太空俯瞰的星球七彩的轮廓，和一些局部的抽象化的战略地图。通过各种网上冲浪，我发现，动画制作组可能真的没怎么考虑过Etheria的全景地图到底是什么样的这件事，不过这不妨碍爱好者们寻找各种关于Etheria地理环境的蛛丝马迹。  </p>
-<span id="more"></span>
-
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/p1.png" alt="p1" title="S01中最初的Etheria，只有两个卫星，因为旧She-Ra中是这样设定的"></p>
-<p>上图展示了S01中最初的Etheria，只有两个卫星，因为旧She-Ra中是这样设定的。</p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/p2.png" alt="p2" title="S05的Etheria，有12个卫星，这也是目前的官方设定"></p>
-<p>而S05的Etheria有12个卫星，这也是目前的官方设定。</p>
-<h1 id="势力划分"><a href="#势力划分" class="headerlink" title="势力划分"></a>势力划分</h1><p>在着手处理地图的问题之前，我们先来搞清楚Etheria上到底有哪几个主要势力。</p>
-<h2 id="国家"><a href="#国家" class="headerlink" title="国家"></a>国家</h2><p>&amp;emsp;&amp;emsp;首先，根据Fandom上的星球介绍，Etheria上有着7个正式的国家。它们是Bright Moon，Plumeria，Salineas，Kingdom of Snows，Dryl，Mystacor，以及Fright Zone。<br>为了方便把这些地名对应到我们脑海里的那些角色上，我们先简单地遍历一下这几个国家和它们的统治者。  </p>
-<h3 id="Bright-Moon"><a href="#Bright-Moon" class="headerlink" title="Bright Moon"></a>Bright Moon</h3><p>明月王国，Etheria最大的国家，它是反抗军和公主联盟的总部。<br>统治者：Queen Angella &amp; Glimmer  </p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/k1.png" alt="k1"></p>
-<h3 id="Plumeria"><a href="#Plumeria" class="headerlink" title="Plumeria"></a>Plumeria</h3><p>森林植被覆盖的农业国家，居民大部分都热爱和平，远离争端，军事力量非常薄弱。<br>统治者：Perfuma  </p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/k2.png" alt="k2"></p>
-<h3 id="Salineas"><a href="#Salineas" class="headerlink" title="Salineas"></a>Salineas</h3><p>海洋之国，一道Sea Gate将它与外界隔绝起来以保护它的国民。<br>统治者：Mermista  </p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/k3.png" alt="k3"></p>
-<h3 id="Kingdom-of-Snows"><a href="#Kingdom-of-Snows" class="headerlink" title="Kingdom of Snows"></a>Kingdom of Snows</h3><p>Etheria的第二大国，位于极地，常年被冰雪覆盖。因为遥远和寒冷，它很少受到Horde的骚扰，所以最开始选择保持中立。<br>统治者：Frosta  </p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/k4.png" alt="k4"></p>
-<h3 id="Dryl"><a href="#Dryl" class="headerlink" title="Dryl"></a>Dryl</h3><p>主要发展矿业和科技的王国，是唯一一个没有魔法元素的国度，似乎没有什么居民。<br>统治者：Entrapta  </p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/k5.png" alt="k5"></p>
-<h3 id="Mystacor"><a href="#Mystacor" class="headerlink" title="Mystacor"></a>Mystacor</h3><p>巫师的国度，位于一座浮岛之上，比起国家，它更像是一个学院。<br>统治者：Castaspella  </p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/k6.png" alt="k6"></p>
-<h3 id="Fright-Zone"><a href="#Fright-Zone" class="headerlink" title="Fright Zone"></a>Fright Zone</h3><p>Horde的老巢。曾经是Scorpia的国家，但是后来Hordak登录在星球上并占领了这片区域，让它充满了科技和污染的气息。<br>统治者：Hordak  </p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/k7.png" alt="k7"></p>
-<hr>
-<p>&amp;emsp;&amp;emsp;看到这里差不多大家能建立一个初步的印象：我们有5个由公主代表的国家，其中有3个在内陆，1个在海洋，1个在极地；还有一个特殊的由巫师统治的国家，它位于一座浮空岛上；最后还有一个我们都很熟悉的反派国家，它也在大陆上，并一直试图侵占他国的领土。</p>
-<h2 id="区域和城镇"><a href="#区域和城镇" class="headerlink" title="区域和城镇"></a>区域和城镇</h2><p>除了上述的国家，还有一些值得注意的地区。</p>
-<h3 id="Whispering-Woods"><a href="#Whispering-Woods" class="headerlink" title="Whispering Woods"></a>Whispering Woods</h3><p>充满魔法力量的森林，它位于Fright Zone和Bright Moon之间，形成了一道天然屏障。森林里还有我们的Crystal Castle和Madame Razz的家。Bow的家人和他们的图书馆也位于森林中。</p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/a1.png" alt="a1"></p>
-<h3 id="Crystal-Castle"><a href="#Crystal-Castle" class="headerlink" title="Crystal Castle"></a>Crystal Castle</h3><p>The First Ones的遗迹，城堡里是我们的超级AI，Light Hope。Adora在这里获取了很多关于She-Ra的知识，不过部分都是经由Light Hope粉饰过的错误的历史。</p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/a2.png" alt="a2"></p>
-<h3 id="Thaymor"><a href="#Thaymor" class="headerlink" title="Thaymor"></a>Thaymor</h3><p>整个动画第一场战役发生的城镇，也是catradora正式分手的地点。本来Adora应该和Catra一起占领这个城镇，但是在这里Adora发现了Horde的暴行，并决心投身于反叛军。</p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/a3.png" alt="a3"></p>
-<h3 id="Crimson-Waste"><a href="#Crimson-Waste" class="headerlink" title="Crimson Waste"></a>Crimson Waste</h3><p>一片沙漠之地，也是法外之地，没有国籍的恶棍们聚集在这里。第三季中，Adora等人为了追寻有关Mara的真相来这里进行调查。这里有一座名为Valley of the Lost的城镇。</p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/a4.png" alt="a4"></p>
-<h3 id="Beast-Island"><a href="#Beast-Island" class="headerlink" title="Beast Island"></a>Beast Island</h3><p>Horde的监狱，充满野兽和未知恐怖的岛屿，岛上的精神污染信号会使人迷失，Entrapta和Glimmer的父亲Micah都曾被流放到这座岛上。这座岛的一切异常都是源于The First Ones失控的科技。</p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/a5.png" alt="a5"></p>
-<hr>
-<p><strong>那么回到我们的问题，这些地点是如何分布的呢？</strong></p>
-<p>&amp;emsp;&amp;emsp;在动画里，我们完全没有看到过完整的地图，目前唯一官方给出的地图，是在官方漫画Legendof the Fire Princess里的一张简略的大陆轮廓图。不过幸好，我们还有1985 She-Ra，为了卖玩具，他们确实有好好地画出一张完整的地图。</p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/m1.png" alt="m1" title="Legend of the Fire Princess中的地图"></p>
-<h1 id="1985-She-Ra的世界地图"><a href="#1985-She-Ra的世界地图" class="headerlink" title="1985 She-Ra的世界地图"></a>1985 She-Ra的世界地图</h1><p>以下是作为玩具配件的Ehteria地图。</p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/m2.png" alt="m2" title="1985 She-Ra的大地图"></p>
-<p>&amp;emsp;&amp;emsp;事实上这个地图还有一个更小巧的版本，它被印刷在Crystal Castle玩具套装的一个小圆桌上，想了解玩具的可以看看<a href="https://www.youtube.com/watch?v=6qpUXIG6fe0">这个视频</a>。</p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/m3.png" alt="m3" title="1985 She-Ra的小地图"></p>
-<p>&amp;emsp;&amp;emsp;因为地图的字体比较小，所以我把一部分比较重要的地点名称放大。本文主要关注比较详细的大地图的内容。</p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/m4.png" alt="m4" title="较大的字体表示国家区域，较小的表示城镇"></p>
-<p>下面我们来正式地分析一下地图。<br>&amp;emsp;&amp;emsp;在这个版本中，大陆的轮廓和新She-Ra漫画中的基本一致，所以新动画应该是参考了这张老地图的，它作为我们现在能找到的唯一官方地图，非常具有参考价值。<br>&amp;emsp;&amp;emsp;大陆的中央就是故事开始的地方——<strong>Fright Zone</strong>，Horde的老巢，它将整个大陆纵切为两块。西边的区域属于法外之地，而东边的区域则都是反抗军的领土。  </p>
-<h2 id="中部和西部"><a href="#中部和西部" class="headerlink" title="中部和西部"></a>中部和西部</h2><p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/m5.png" alt="m5" title="中西部大陆"></p>
-<p>&amp;emsp;&amp;emsp;<strong>Fright Zone</strong>的西南角落是Beast Island，它是一个被水环绕的监狱岛屿。而东北方向是Crimson Waste，在1985版本里，这里是由Scorpia统治的，而那时她也是Hordak的忠实追随者，所以这部分也算是Horde领地。</p>
-<p>&amp;emsp;&amp;emsp;西边的大陆大部分是Valley of the Lost，在老版本里，这是一个神秘黑暗的山谷，传说去的人没有一个能回来，而且山谷里还有一座神秘的图书馆。在新版本中，咱们的动画组把老设定重组了一下，Valley of the Lost和Crimson Waste变成了同一个地方，而图书馆被挪到了Whispering Woods。</p>
-<h2 id="东部、极地和海洋"><a href="#东部、极地和海洋" class="headerlink" title="东部、极地和海洋"></a>东部、极地和海洋</h2><p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/m6.png" alt="m6" title="东部大陆"></p>
-<p>&amp;emsp;&amp;emsp;东边的大陆主要的公主们的地盘。可以看到<strong>Kingdom of Snows</strong>远远的在北极，所以Horde够不到它。而这张图上并没有画出海洋王国<strong>Salineas</strong>在哪，鉴于这里只标出了一个海洋Growling Sea，我们就假设它就在那里吧。</p>
-<p>&amp;emsp;&amp;emsp;<strong>Bright Moon</strong>在大陆最东边，一条名为SingingRiver的河流把整个国家和大陆其他部分隔离开了，它的北方是Whispering Woods，勉强算是这个森林阻挡了Horde进犯的步伐吧。中间的位置还有我们的明星城市Thaymor，看这个位置确实是当之无愧是战略要塞。<strong>Mystactor</strong>在稍微西边一点的位置，鉴于它是一个飘在空中的浮岛，即使它比较靠近Horde，基本上也不会受到威胁。</p>
-<p>&amp;emsp;&amp;emsp;新She-Ra的7个国家中还剩下2个，Dryl和Plumeria。不过在1985版本中，它们并不是国家。<strong>Dryl</strong>只是一个经营矿业的城镇；而Entrapta也不是公主，她是土生土长的Horde小干部。Perfuma也不是公主，没有领地，只是会使用植物魔法；而<strong>Plumeria</strong>，那时候还不存在。</p>
-<p>&amp;emsp;&amp;emsp;以上是1985版本的世界地图，它只能解决我们的一部分问题，譬如说，Fright Zone在中间，Kingdom of Snows在北极，Salineas在海里，Bright Moon在最东边，Mystactor、Dryl和Plumeria在内陆的某个地方……剩下的地图，只能由粉丝自己在脑子里补完了。</p>
-<h1 id="粉丝制作的Etheria地图"><a href="#粉丝制作的Etheria地图" class="headerlink" title="粉丝制作的Etheria地图"></a>粉丝制作的Etheria地图</h1><p>国外的She-Ra爱好者跟我们一样好奇世界地图的问题，而且已经有不少人做了深度研究了，这里我放一张完成度最高的粉丝作品。</p>
-<p>&amp;emsp;&amp;emsp;这是由JavaRogers根据漫画地图制作的，考据真的很详细。这里放上发布这张地图的<a href="https://www.reddit.com/r/PrincessesOfPower/comments/js3z7v/doing_work_on_a_map_of_etheria/">Reddit页面</a>，这位朋友还整理了新She-Ra中出现过的<a href="https://www.reddit.com/r/PrincessesOfPower/comments/jr8d5e/list_of_location_details_from_shera_and_the/">所有地点</a>，感兴趣的可以去支持。</p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera2/m7.png" alt="m7" title="JavaRogers绘制的新She-Ra地图"></p>
-<p>&amp;emsp;&amp;emsp;在这张地图上，FrightZone、Bright Moon、Kingdom of Snows、Mystacor的位置都没怎么变。Crimson Waste和Valley of the lost合并了，被安排在大陆西边。Salineas被安排在Growling Sea，而且更靠近Bright Moon的海岸线。Dryl在原本Scorpian Hill的位置，Plumeria在靠近Fright Zone的内陆。Whispering Woods往南边移了一点，好让它更符合“保护Bright Moon”的设定。都蛮符合动画的内容的，很合理，<strong>谢谢你，JavaRogers！</strong></p>
-<hr>
-<p>&amp;emsp;&amp;emsp;感谢你看到这里，这篇文章地名比较多，希望没有写得太让人头晕。下一篇文章应该是关于She-Ra主线剧情的梳理，又或者是新老She-Ra的人设对比，下次见啦~</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>shera系列考据</category>
-      </categories>
-      <tags>
-        <tag>shera</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Grayskull为何物？</title>
-    <url>/2021/07/07/shera/shera1/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>&amp;emsp;&amp;emsp;本文旨在梳理动画She-Ra and the Princess of Power中一些隐藏的背景设定，以帮助同好们更好地理解She-Ra的故事。文中大部分的信息整理自该作品的Fandom和Wikipedia页面。<br>&amp;emsp;&amp;emsp;为了更好的传达作品的本意，本文中出现的人物和势力的名称均采用英文原文。  </p>
-<hr>
-<p>&amp;emsp;&amp;emsp;下面我们正式开始探寻为什么女主人公Adora的变身台词是“<strong>For the honor of Grayskull</strong>”。<br>&amp;emsp;&amp;emsp;众所周知，新She-Ra作为一部重启类型的作品，它的很多设定确实是从前作中移植过来的，所以在解释这部作品的设定问题之前，我们先铺垫一下整个系列的背景：  </p>
-<span id="more"></span>
-
-<h1 id="He-Man-and-the-Masters-of-the-Universe"><a href="#He-Man-and-the-Masters-of-the-Universe" class="headerlink" title="He-Man and the Masters of the Universe"></a>He-Man and the Masters of the Universe</h1><p>作为系列动画的开端，这是一部1983年播出的的电视动画。</p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera1/heman.jpg"></p>
-<p>&amp;emsp;&amp;emsp;He-man讲述了一位叫Adam的王子为了保护他的星球Eternia和一座名为Grayskull的城堡，变身成为宇宙巨人He-Man，与邪恶骷髅势力战斗的故事。和所有超级英雄一样，He-Man的力量是一个秘密，所以平时Adam是一般通过王子，遇敌时就会偷偷变身，而且没有人能认出他的真实身份。而作为系列的第一个主人公，Adam的招牌动作就是在变身时，高举魔法剑并大喊“For the honor of Grayskull”。<br>&amp;emsp;&amp;emsp;回到我们的问题，什么是Grayskull呢？设定上，Grayskull是一座位于Eternia星球的神秘古堡，蕴藏着巨大的魔法力量，这种力量可以征服整个星球，所以它成为了邪恶的势力争夺的焦点。事实上He-Man的第一个画面就是定格在Grayskull上，邪恶反派干部正要打开这座城堡的大门，这时英雄He-Man从里面走出来，守卫城堡并把坏人都打跑了。而主人公的变身能力也是由守护Grayskull的女巫授予的，是以变身He-Man时需要咏唱Grayskull堡。还有个有趣的细节，动画制作之前，概念设计师认为Grayskull堡属于邪恶骷髅势力，所以做成了骷髅外型，这也是它名称的由来，但是最后这个地标被设定成主角方要守护的地点。<br>&amp;emsp;&amp;emsp;而这座城堡之所以这么重要，其核心原因是卖！玩！具！Masters of the Universe这个IP其实是由玩具制造公司Mattel打造的，之后他们联合动画公司Filmation推出了这一系列动画，而Grayskull城堡套装玩具正式当时公司玩具生产线的主打产品，动画大火，玩具也颇受欢迎，被称为是20世纪80年代男孩们最想要的圣诞礼物。  </p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera1/grayskull.jpg" alt="grayskull" title="Castle Grayskull玩具套装"></p>
-<h1 id="She-Ra-Princess-of-Power"><a href="#She-Ra-Princess-of-Power" class="headerlink" title="She-Ra: Princess of Power"></a>She-Ra: Princess of Power</h1><p>He-Man大卖之后制作方想要拓宽女性市场<br>于是就有了1985年播出的，以女性为主角的续作She-Ra。</p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera1/shera.jpg" alt="shera" title="She-Ra: Princess of Power"></p>
-<p>&amp;emsp;&amp;emsp;该作的女主人公Adora是前作男主Adam的孪生姐妹。Adora的故事发生在一个新的星球Etheria上。作为Eternia的公主，她儿时被反派Hordak（千面魔）绑架到了Etheria，Adora就此被洗脑培养为反派阵营Horde军团的小干部。<br>&amp;emsp;&amp;emsp;前作的大人气主角Adam受到Grayskull女巫的指示，带着守护之剑来找到Adora并与她相认，Adora就此解除了洗脑，并举起神剑，继承了Adam的变身台词“For the honor of Grayskull”，变身成She-Ra，成为了反抗军Great Rebellion的领袖，同Horde势力战斗。之后就是Adora和Etheria的本土英雄一起对抗邪恶的故事。顺便一提，Horde军团代表的是新兴的科技力量对传统农耕社会的侵略，所以动画中Horde使用高科技武器，而反抗军则用传统冷兵器和魔法与其搏斗（也就是魔法封建贵族带领农民打钢枪大炮的故事）。<br>&amp;emsp;&amp;emsp;She-Ra的很多设定其实都是跟He-Man的呼应，所以两个人名字相似，两颗星球的名字类似，而且两个人都有魔法剑和魔法坐骑，都会变身，都是变了身就没人能认得出的秘密英雄。为了和Adam的Grayskull堡对照（顺便推出新玩具），Adora也有她自己的专属城堡Crystal Castle，这个城堡住着Light Hope，主要负责在She-Ra遇到困难时提供帮助。至于为什么Adora变身时咏唱的是Grayskull，我想是因为希瑞的神剑来自前作的Grayskull堡女巫，并且Grayskull玩具真的很好卖……  </p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera1/crystal.jpg" alt="crystal" title="Crystal Castle玩具套装"></p>
-<h1 id="She-Ra-and-the-Princess-of-Power"><a href="#She-Ra-and-the-Princess-of-Power" class="headerlink" title="She-Ra and the Princess of Power"></a>She-Ra and the Princess of Power</h1><p>结束了关于老作品的啰嗦，让我们来到2018年推出的新She-Ra。</p>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera1/shera_new.jpg" alt="shera_new" title="She-Ra and the Princess of Power"></p>
-<p>&amp;emsp;&amp;emsp;新的故事是在1985 She-Ra的基础上继承发扬的，做了很多剧情和设定上的改动，在这里我简单列举几个：  </p>
-<ul>
-<li>作品彻底摆脱了Adam的存在</li>
-<li>Adora不是被Hordak绑架的，而是被捡到的</li>
-<li>Adora的母星Eternia代表的不再是魔法势力，而是比Horde更先进更古老的科技势力</li>
-<li>角色设计更加多元化，彩虹，彩虹，更多的彩虹</li>
-<li>以及，<strong>CATRADORAAAAAAA</strong></li>
-</ul>
-<p>&amp;emsp;&amp;emsp;关于Etheria的地理环境和主线剧情的问题我将在之后的文章叙述，本文我们继续关注Grayskull。在1-4季中，我们的Adora依然继承了前作中的变身台词“For the honor of Grayskull”，并且剧集没有对这句口令作出任何解释，直到第五季才终于打上了补丁。</p>
-<h2 id="She-Ra的第一次变身"><a href="#She-Ra的第一次变身" class="headerlink" title="She-Ra的第一次变身"></a>She-Ra的第一次变身</h2><p>首先我们来回顾一下S01E01中Adora第一次见到Light Hope的场景：</p>
-<blockquote>
-<p><em>Adora无意中激活了神剑，她的面前出现了Light Hope的投影</em></p>
-<p><strong>Light Hope:</strong> 你好，Adora。我的名字是Light Hope，我等了你很久了，但是在你与这柄剑建立纽带之前，我无法与你沟通。<br><strong>Adora:</strong> 你是送来这柄剑的人？<br><strong>Light Hope:</strong> 这柄剑注定是属于你的。Etheria需要你，Adora。你愿意回应它的召唤吗？你愿意为 Grayskull的荣誉而战吗？（Will you fight for the honor of Grayskull?）<br><strong>Adora:</strong> 你在说什么？什么是Grayskull？你说的没头没尾的，我听不懂。<br><strong>Light Hope:</strong> 你会懂的。</p>
-</blockquote>
-<p>而下面是Adora第一次变身的场景：</p>
-<blockquote>
-<p><em>Adora以神剑御敌，神剑被激活。</em><br><em>闪现一些画面：Etheria星球的全景，一颗火球坠落在地表，闪耀的Crystal Castle，草原上一个被激活的传送门中传出婴儿的声音，高举神剑的女战士的背影。</em></p>
-<p>Light Hope的声音响起，她问“<strong>Adora, Will you fight for the honor of Grayskull?<strong>”<br>于是Adora顺势喊出了“</strong>For the honor of Grayskull</strong>”，并变身为She-Ra。</p>
-</blockquote>
-<p>&amp;emsp;&amp;emsp;可以看到，一开始我们的主角Adora完全不理解这个变身台词的含义，而之后不管是她还是观众们都自然而然地接受了这只是一个设定好的用于激活神剑的口令这一事实，只能说这种设计是出于情怀考虑。但是好在第五季编剧终于对这个问题作出了解释。</p>
-<h2 id="上一代She-Ra的起义"><a href="#上一代She-Ra的起义" class="headerlink" title="上一代She-Ra的起义"></a>上一代She-Ra的起义</h2><p>&amp;emsp;&amp;emsp;She-Ra之所以能变身是因为她们是守护之剑的制造者，The First Ones，任命的管理员。The First Ones是一个拥有先进科技的古老文明，随着1-4季的故事展开，我们知道这个文明在跨星系殖民扩张，他们最初生活在母星Eternia，之后殖民了我们的星球Etheria，他们利用科技吸取整个星球的魔法能量，将能量贮存在星球的核心，把星球改造成了毁灭性的武器，上述计划被称为Etheria之心计划（The Heart of Etheria Project）。而上一代She-Ra，Mara试图阻止这个把星球变成武器的可怕计划，但是她的斗争失败了，于是她只能开启传送门，将星球传送到了Despondos，一个荒凉而封闭的维度空间，这样The First Ones就无法接触到Etheria，是以能够保护整个星球。<br>&amp;emsp;&amp;emsp;在S05E10中，Bow和Glimmar找到了Bow的父亲，两位致力于研究theFirst Ones文明的学者。学者们发现Mara其实并不是孤军奋战，她与一群起义军并肩作战。Light Hope播放了数据库中的一段录音：</p>
-<blockquote>
-<p>这是我们最后一次传递信息，如果有人听到，请你认真听。<br>Etheria之心有自动防故障装置，你们可以通过它彻底摧毁Etheria之心，它就位于Arxia前哨。<br>一周前我们与Arxia失去了联络，如果那边还有幸存者，你一定要找到它，Mara给我们争取了时间，但我们已经来不及。<br><strong>我们是Grayskull起义军中队，这是我们的最后一次联络。</strong></p>
-</blockquote>
-<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/shera1/grayskull_new.jpg" alt="grayskull_new" title="Grayskull的最后留言"></p>
-<p>&amp;emsp;&amp;emsp;可以看到在本作中的Grayskull是一个起义军中队的名称，这个中队找到了阻止Etheria之心计划的方法，但也就此牺牲了。虽然剧集中没有明确指出，但是我个人的推测是，Mara可能是为了纪念这一支牺牲的起义军而将守护之剑的口令设置成了 “For the honor of Grayskull”。所以Grayskull从一个虚幻的力量象征，变成了一个实实在在的革命群体的代号，体现了革命精神的传承性，这还是有很大的进步意义的。</p>
-<hr>
-<p>&amp;emsp;&amp;emsp;下一篇文章我打算探讨星球Etheria的地理特征，主要是关于各个势力的地理位置分布，以及它们与1985 She-Ra的区别，感谢你阅读到这里！</p>
-<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
-      <categories>
-        <category>shera系列考据</category>
-      </categories>
-      <tags>
-        <tag>shera</tag>
       </tags>
   </entry>
 </search>
