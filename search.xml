@@ -2206,4 +2206,89 @@
         <tag>shera</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Redux学习笔记1：原理及基本使用</title>
+    <url>/2022/04/07/redux/redux1_intro/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h1><p>本节主要包含</p>
+<ul>
+<li>Redux的核心概念</li>
+<li>如何在React中使用Redux</li>
+</ul>
+<h1 id="Redux核心概念"><a href="#Redux核心概念" class="headerlink" title="Redux核心概念"></a>Redux核心概念</h1><p><a href="http://cn.redux.js.org/tutorials/essentials/part-1-overview-concepts/">http://cn.redux.js.org/tutorials/essentials/part-1-overview-concepts/</a></p>
+<p>Redux本质上是一个状态管理工具，由三个核心概念：</p>
+<ul>
+<li><strong>state</strong>：驱动应用的真实数据源头</li>
+<li><strong>view</strong>：基于当前状态的 UI 声明性描述</li>
+<li><strong>actions</strong>：根据用户输入在应用程序中发生的事件，并触发状态更新</li>
+</ul>
+<h2 id="store-action-reducer"><a href="#store-action-reducer" class="headerlink" title="store action reducer"></a>store action reducer</h2><p>store：状态树</p>
+<ul>
+<li>state：store的一个快照</li>
+<li>state改变会引起view的变化</li>
+</ul>
+<p>action：事件派发</p>
+<ul>
+<li>view接收到事件，派发action</li>
+</ul>
+<p>reducer：接收state和action</p>
+<ul>
+<li><p>类似于事件监听器</p>
+</li>
+<li><p>根据以前的state和接收到的action，改变state</p>
+</li>
+</ul>
+<h2 id="Redux数据流"><a href="#Redux数据流" class="headerlink" title="Redux数据流"></a>Redux数据流</h2><p>具体来说，对于 Redux，我们可以将这些步骤分解为更详细的内容：</p>
+<ul>
+<li>初始启动：<ul>
+<li>使用最顶层的 root reducer 函数创建 Redux store</li>
+<li>store 调用一次 root reducer，并将返回值保存为它的初始 <code>state</code></li>
+<li>当 UI 首次渲染时，UI 组件访问 Redux store 的当前 state，并使用该数据来决定要呈现的内容。同时监听 store 的更新，以便他们可以知道 state 是否已更改。</li>
+</ul>
+</li>
+<li>更新环节：<ul>
+<li>应用程序中发生了某些事情，例如用户单击按钮</li>
+<li>dispatch 一个 action 到 Redux store，例如 <code>dispatch(&#123;type: &#39;counter/increment&#39;&#125;)</code></li>
+<li>store 用之前的 <code>state</code> 和当前的 <code>action</code> 再次运行 reducer 函数，并将返回值保存为新的 <code>state</code></li>
+<li>store 通知所有订阅过的 UI，通知它们 store 发生更新</li>
+<li>每个订阅过 store 数据的 UI 组件都会检查它们需要的 state 部分是否被更新。</li>
+<li>发现数据被更新的每个组件都强制使用新数据重新渲染，紧接着更新网页</li>
+</ul>
+</li>
+</ul>
+<h1 id="在React中使用Redux"><a href="#在React中使用Redux" class="headerlink" title="在React中使用Redux"></a>在React中使用Redux</h1><h2 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm install --save redux</span><br><span class="line">npm install --save react-redux</span><br><span class="line">npm install --save-dev redux-devtools-extension</span><br></pre></td></tr></table></figure>
+
+<p>chrome插件：Redux DevTools</p>
+<h2 id="reducer"><a href="#reducer" class="headerlink" title="reducer"></a>reducer</h2><p>创建reducer，传入的参数是state和action</p>
+<ul>
+<li>state要有默认值</li>
+<li>根据action.type判断怎样修改state</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> defaultState= &#123;</span><br><span class="line">    <span class="attr">cityName</span>: <span class="string">&quot;北京&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> city= <span class="function">(<span class="params">state=defaultState,action</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">switch</span>(action.type)&#123;</span><br><span class="line">        <span class="keyword">case</span> INIT_CITY:</span><br><span class="line">            <span class="keyword">return</span> &#123;</span><br><span class="line">                <span class="attr">cityName</span>: action.cityName</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">case</span> CHANGE_CITY:</span><br><span class="line">            <span class="keyword">return</span> &#123;</span><br><span class="line">                <span class="attr">cityName</span>: action.cityName</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="attr">default</span>:</span><br><span class="line">            <span class="keyword">return</span> state</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> city</span><br></pre></td></tr></table></figure>
+
+<p>用 <a href="http://cn.redux.js.org/api/combinereducers"><code>combineReducers</code></a> 来把多个 reducer 创建成一个rootReducer</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; combineReducers &#125; <span class="keyword">from</span> <span class="string">&quot;redux&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> city <span class="keyword">from</span> <span class="string">&quot;./city&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> rootReducer= combineReducers(&#123;</span><br><span class="line">    city</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> rootReducer</span><br></pre></td></tr></table></figure>
+
+<h2 id="store"><a href="#store" class="headerlink" title="store"></a>store</h2><p>创建store，应用中只创建一个 store！接收rootReducer</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">&quot;redux&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; composeWithDevTools &#125; <span class="keyword">from</span> <span class="string">&quot;redux-devtools-extension&quot;</span></span><br><span class="line"><span class="keyword">import</span> rootReducer <span class="keyword">from</span> <span class="string">&quot;../reducers&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store= createStore(rootReducer, composeWithDevTools())</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> store</span><br></pre></td></tr></table></figure>
+
+<p>用Provider传递store</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span></span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">&#x27;react-dom&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; Provider &#125; <span class="keyword">from</span> <span class="string">&#x27;react-redux&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">&#x27;./App&#x27;</span></span><br><span class="line"><span class="keyword">import</span> store <span class="keyword">from</span> <span class="string">&#x27;./store&#x27;</span></span><br><span class="line"></span><br><span class="line">ReactDOM.render(</span><br><span class="line">  <span class="comment">// Render a `&lt;Provider&gt;` around the entire `&lt;App&gt;`,</span></span><br><span class="line">  <span class="comment">// and pass the Redux store to as a prop</span></span><br><span class="line">  <span class="xml"><span class="tag">&lt;<span class="name">React.StrictMode</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">Provider</span> <span class="attr">store</span>=<span class="string">&#123;store&#125;</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">App</span> /&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">Provider</span>&gt;</span></span></span><br><span class="line"><span class="xml">  <span class="tag">&lt;/<span class="name">React.StrictMode</span>&gt;</span></span>,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">&#x27;root&#x27;</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h2 id="action"><a href="#action" class="headerlink" title="action"></a>action</h2><p>创建action creator函数，每次调用会返回一个action对象</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">changeCity</span>(<span class="params">cityName</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span>&#123;</span><br><span class="line">        <span class="attr">type</span>: INIT_CITY,</span><br><span class="line">        cityName</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>派发action，在DOM中useDispatch派发action对象</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useSelector, useDispatch &#125; <span class="keyword">from</span> <span class="string">&quot;react-redux&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> City=<span class="function">()=&gt;</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> city=useSelector(<span class="function"><span class="params">state</span> =&gt;</span> state.city)</span><br><span class="line">    <span class="keyword">const</span> dispatch=useDispatch()</span><br><span class="line">    <span class="built_in">console</span>.log(city);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">onCityEvent</span>(<span class="params">city</span>)</span>&#123;       </span><br><span class="line">        dispatch(changeCity(city))</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span>=&gt;</span>onCityEvent(city)&#125;&gt;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="问题：reducer互相影响"><a href="#问题：reducer互相影响" class="headerlink" title="问题：reducer互相影响"></a>问题：reducer互相影响</h2><p><a href="https://segmentfault.com/q/1010000012062981">https://segmentfault.com/q/1010000012062981</a></p>
+<p>注意default应该返回传入的state快照</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>Redux学习笔记</category>
+      </categories>
+      <tags>
+        <tag>Redux</tag>
+        <tag>React</tag>
+      </tags>
+  </entry>
 </search>
