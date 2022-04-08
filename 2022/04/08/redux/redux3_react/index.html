@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"luryzhu.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言参考 视频：Redux Fundamentals | 课件  官方文档：Redux API   探究的问题：  将React和Redux绑定的两种方式  react-redux中的useSelector、useDispatch钩子 Connect API，mapStateToProps，mapDispatchToProps">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redux学习笔记3：React和Redux的2种连接方法">
+<meta property="og:url" content="https://luryzhu.github.io/2022/04/08/redux/redux3_react/index.html">
+<meta property="og:site_name" content="Lury的世界尽头">
+<meta property="og:description" content="前言参考 视频：Redux Fundamentals | 课件  官方文档：Redux API   探究的问题：  将React和Redux绑定的两种方式  react-redux中的useSelector、useDispatch钩子 Connect API，mapStateToProps，mapDispatchToProps">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/redux/image-20220408153532536.png">
+<meta property="og:image" content="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/redux/image-20220408194425171.png">
+<meta property="article:published_time" content="2022-04-08T12:48:16.000Z">
+<meta property="article:modified_time" content="2022-04-08T13:21:31.357Z">
+<meta property="article:author" content="Lury">
+<meta property="article:tag" content="Redux">
+<meta property="article:tag" content="React">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/redux/image-20220408153532536.png">
+
+<link rel="canonical" href="https://luryzhu.github.io/2022/04/08/redux/redux3_react/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Redux学习笔记3：React和Redux的2种连接方法 | Lury的世界尽头</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lury的世界尽头</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://luryzhu.github.io/2022/04/08/redux/redux3_react/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Lury">
+      <meta itemprop="description" content="前端学习中...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lury的世界尽头">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Redux学习笔记3：React和Redux的2种连接方法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-08 20:48:16 / 修改时间：21:21:31" itemprop="dateCreated datePublished" datetime="2022-04-08T20:48:16+08:00">2022-04-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">Redux学习笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1RF411v7cE">视频：Redux Fundamentals</a> | <a target="_blank" rel="noopener" href="https://stevekinney.github.io/redux-fundamentals/">课件</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.redux.org.cn/docs/api/">官方文档：Redux API</a></p>
+</li>
+</ul>
+<p>探究的问题：</p>
+<ul>
+<li><p>将React和Redux绑定的两种方式</p>
+<ul>
+<li>react-redux中的useSelector、useDispatch钩子</li>
+<li>Connect API，mapStateToProps，mapDispatchToProps</li>
+</ul>
+</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="将React和Redux绑定"><a href="#将React和Redux绑定" class="headerlink" title="将React和Redux绑定"></a>将React和Redux绑定</h1><p>两种方法，</p>
+<ul>
+<li><p>新的技术栈，Hook API：useSelector、useDispatch</p>
+</li>
+<li><p>旧的技术栈，Connect API：mapStateToProps，mapDispatchToProps</p>
+</li>
+</ul>
+<p>这两种方法的Connect API和Hook API都由react-redux库提供</p>
+<h2 id="React-Redux"><a href="#React-Redux" class="headerlink" title="React Redux"></a>React Redux</h2><p>文档：<a target="_blank" rel="noopener" href="https://react-redux.js.org/api/">https://react-redux.js.org/api/</a></p>
+<p>翻译版：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/81569230">https://zhuanlan.zhihu.com/p/81569230</a></p>
+<p>添加依赖</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cnpm install --save redux</span><br><span class="line">cnpm install --save react-redux</span><br><span class="line">cnpm install --save-dev redux-devtools-extension</span><br></pre></td></tr></table></figure>
+
+<p>react-redux库中提供了useSelector、useDispatch钩子和connect API</p>
+<p>redux-devtools-extension库可以激活redux devtools插件，对redux进行调试</p>
+<h2 id="Hooks-API"><a href="#Hooks-API" class="headerlink" title="Hooks API"></a>Hooks API</h2><p>基本理念：在React中，不直接操作store对象，而是通过钩子获取state派发事件</p>
+<h3 id="Provider"><a href="#Provider" class="headerlink" title="Provider"></a>Provider</h3><p>要在应用中获取store，需要使用Provider将应用包起来，使store暴露在组件树中，之后才能用其他Hooks管理Redux store</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">&quot;redux&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; Provider &#125; <span class="keyword">from</span> <span class="string">&#x27;react-redux&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = createStore(rootReducer)</span><br><span class="line"></span><br><span class="line">ReactDOM.render(</span><br><span class="line">  <span class="xml"><span class="tag">&lt;<span class="name">Provider</span> <span class="attr">store</span>=<span class="string">&#123;store&#125;</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">App</span> /&gt;</span></span></span><br><span class="line"><span class="xml">  <span class="tag">&lt;/<span class="name">Provider</span>&gt;</span></span>,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">&#x27;root&#x27;</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="useSelector"><a href="#useSelector" class="headerlink" title="useSelector"></a>useSelector</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> result : any = useSelector(selector : <span class="built_in">Function</span>, equalityFn? : <span class="built_in">Function</span>)</span><br></pre></td></tr></table></figure>
+
+<p>入参</p>
+<ul>
+<li>selector，回调函数，输入为state树，输出为想要获取的state树的一部分</li>
+</ul>
+<p>返回值</p>
+<ul>
+<li>回调的输出</li>
+</ul>
+<p>原理</p>
+<ul>
+<li>监听原理：每一个useSelector都对store创建了一个独立的subscription（store.subscribe），监听了state变化</li>
+<li>渲染时机：函数组件渲染时，执行selector，useSelector存储了上一次selector的返回值，与这一次的比较，不同才触发重新渲染<ul>
+<li>此处的比较是<code>===</code>严格引用比较</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useSelector &#125; <span class="keyword">from</span> <span class="string">&#x27;react-redux&#x27;</span></span><br><span class="line"><span class="comment">// 获取state.count，count改变重新渲染</span></span><br><span class="line"><span class="keyword">const</span> Counter=<span class="function">()=&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">const</span> count = useSelector(<span class="function"><span class="params">state</span>=&gt;</span>state.count)</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        <span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>&#123;count&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="useDispatch"><a href="#useDispatch" class="headerlink" title="useDispatch"></a>useDispatch</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> dispatch = useDispatch()</span><br></pre></td></tr></table></figure>
+
+<p>返回 Redux store 的 分发(dispatch) 函数的引用。等价于：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// react redux里不会这么用，只是意会一下</span></span><br><span class="line"><span class="keyword">const</span> dispatch=store.diapatch</span><br></pre></td></tr></table></figure>
+
+<p>调用dispatch函数派发action</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;increment, decrement, set&#125; <span class="keyword">from</span> <span class="string">&#x27;./actions&#x27;</span></span><br><span class="line">dispatch(increment())</span><br><span class="line">dispatch(decrement())</span><br><span class="line">dispatch(set())</span><br></pre></td></tr></table></figure>
+
+<p>在这里同样可以用redux中的bindActionCreators来集成action creator，上面的语法和下面的等价</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> actions=bindActionCreators(</span><br><span class="line">  &#123; increment, decrement, reset &#125;,</span><br><span class="line">  dispatch</span><br><span class="line">);</span><br><span class="line">actions.increment()</span><br><span class="line">actions.decrement()</span><br><span class="line">actions.set()</span><br></pre></td></tr></table></figure>
+
+<h3 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h3><h4 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h4><p>原sandbox：<a target="_blank" rel="noopener" href="https://codesandbox.io/s/uo1rb">https://codesandbox.io/s/uo1rb</a></p>
+<blockquote>
+<p>需求：</p>
+<p>按钮：按下按钮改变count的值</p>
+<ul>
+<li>INCREMENT，+1</li>
+<li>DECREMENT，-1</li>
+<li>RESET，-&gt; 0</li>
+</ul>
+<p>输入框：</p>
+<ul>
+<li>count改变时输入框的值也改变</li>
+<li>按下提交后将count值置为输入框的值</li>
+</ul>
+</blockquote>
+<img src="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/redux/image-20220408153532536.png" alt="image-20220408153532536" style="zoom:50%;" />
+
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><p>mysandbox：<a target="_blank" rel="noopener" href="https://codesandbox.io/s/redux-counter-zbtugj">https://codesandbox.io/s/redux-counter-zbtugj</a></p>
+<p>使用useCounter封装获取dispatch，action和state的操作</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useSelector, useDispatch &#125; <span class="keyword">from</span> <span class="string">&#x27;react-redux&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; increment, decrement, set &#125; <span class="keyword">from</span> <span class="string">&#x27;../redux/actions&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; bindActionCreators &#125; <span class="keyword">from</span> <span class="string">&#x27;redux&#x27;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> useCounter = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> dispatch = useDispatch();</span><br><span class="line">  <span class="keyword">const</span> count = useSelector(<span class="function">(<span class="params">state</span>) =&gt;</span> state.count);</span><br><span class="line">  <span class="keyword">const</span> actions = bindActionCreators(&#123; increment, decrement, set &#125;, dispatch);</span><br><span class="line">  <span class="keyword">return</span> &#123; count, actions &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>表单组件中，表单、输入框、store的state、组件的state、输入框的value的绑定逻辑</p>
+<ul>
+<li>store的state、组件的state互相影响<ul>
+<li>store的state改变引起组件state改变（useEffect）</li>
+<li>表单提交时使用组件state改变store的state（onSubmit）</li>
+</ul>
+</li>
+<li>组件的state、输入框的value双向绑定<ul>
+<li>组件state改变引起输入框value改变（value&#x3D;{value}）</li>
+<li>输入框value被用户改写时引起state改变（onChange）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useEffect, useState &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useCounter &#125; <span class="keyword">from</span> <span class="string">&#x27;./utils/useCounter&#x27;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> SetCounter = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// count 与 val 相互影响</span></span><br><span class="line">  <span class="comment">// count改变引起val改变，val提交引起count改变</span></span><br><span class="line">  <span class="comment">// val 和 input.value 双向绑定</span></span><br><span class="line">  <span class="comment">// val改变引起input.value改变，input.value改变引起val改变</span></span><br><span class="line">  <span class="keyword">const</span> &#123; count, actions &#125; = useCounter();</span><br><span class="line">  <span class="keyword">const</span> [val, setVal] = useState(count);</span><br><span class="line">  useEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    setVal(count);</span><br><span class="line">  &#125;, [count]);</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">section</span> <span class="attr">className</span>=<span class="string">&quot;controls&quot;</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">form</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">        <span class="attr">onSubmit</span>=<span class="string">&#123;(e)</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="xml">          e.preventDefault();</span></span><br><span class="line"><span class="xml">          actions.set(val);</span></span><br><span class="line"><span class="xml">        &#125;&#125;</span></span><br><span class="line"><span class="xml">      &gt;</span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">htmlFor</span>=<span class="string">&quot;set-to&quot;</span>&gt;</span>Set Count<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">input</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">          <span class="attr">id</span>=<span class="string">&quot;set-to&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">          <span class="attr">type</span>=<span class="string">&quot;number&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">          <span class="attr">value</span>=<span class="string">&#123;val&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">          <span class="attr">onChange</span>=<span class="string">&#123;(e)</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="xml">            setVal(e.target.value);</span></span><br><span class="line"><span class="xml">          &#125;&#125;</span></span><br><span class="line"><span class="xml">        /&gt;</span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">section</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Connect-API"><a href="#Connect-API" class="headerlink" title="Connect API"></a>Connect API</h2><h3 id="connect"><a href="#connect" class="headerlink" title="connect"></a>connect</h3><p><a target="_blank" rel="noopener" href="https://www.redux.org.cn/docs/react-redux/api.html#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options"><code>connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])</code></a></p>
+<p>连接 React 组件与 Redux store。</p>
+<p><code>const NewComponent=connect(...)(OldComponent)</code></p>
+<p>连接操作不会改变原来的组件类。<br>反而<strong>返回</strong>一个新的已与 Redux store 连接的组件类。</p>
+<p>一般只会用到前两个参数：mapStateToProps，mapDispatchToProps</p>
+<p>注* 如果一个参数都不传，默认会把dispatch传入到组件中作为参数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> NewComponent = connect()(OldComponent);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> OldComponent=<span class="function">(<span class="params">&#123;dispatch&#125;</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="comment">// 原组件里可以接收dispatch</span></span><br><span class="line">    dispatch(&#123;<span class="comment">//todo&#125;)</span></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        <span class="comment">// todo...</span></span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="mapStateToProps"><a href="#mapStateToProps" class="headerlink" title="mapStateToProps"></a>mapStateToProps</h3><p><code>mapStateToProps(state, [ownProps]): stateProps</code> (<em>Function</em>)</p>
+<p>作为connect函数的第一个参数，如果不传这个参数，或者传入null，组件就不会监听store</p>
+<p>如果定义该参数，组件将会监听 Redux store 的变化。任何时候，只要 Redux store 发生改变，<code>mapStateToProps</code> 函数就会被调用。</p>
+<p>入参：</p>
+<ul>
+<li>state，值为store中存储的state树</li>
+<li>ownProps，可省略，值为传递到组件的 props，<ul>
+<li>，如果传了ownProps，那么只要组件接收到新的 props，<code>mapStateToProps</code> 也会被调用（例如，当 props 接收到来自父组件一个小小的改动，那么你所使用的 ownProps 参数，mapStateToProps 都会被重新计算）</li>
+</ul>
+</li>
+</ul>
+<p>返回值：</p>
+<ul>
+<li>stateProps，必须返回一个纯对象，这个对象会与组件的 props 合并</li>
+</ul>
+<p>例子：</p>
+<p>MenuItems需要接收store中的state.items作为输入参数</p>
+<p>在不改变原组件的基础上，使用connect返回一个新组件，新组建能够监听store的变化，并将state.items输入到原组件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; connect &#125; <span class="keyword">from</span> <span class="string">&#x27;react-redux&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; MenuItems &#125; <span class="keyword">from</span> <span class="string">&#x27;../components/MenuItems&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapStateToProps = <span class="function">(<span class="params">state</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">items</span>: state.items</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> MenuItemsContainer = connect(mapStateToProps)(MenuItems);</span><br></pre></td></tr></table></figure>
+
+<h3 id="mapDispatchToProps"><a href="#mapDispatchToProps" class="headerlink" title="mapDispatchToProps"></a>mapDispatchToProps</h3><p><code>mapDispatchToProps(dispatch, [ownProps]): dispatchProps</code> (<em>Object</em> or <em>Function</em>)</p>
+<p>mapStateToProps可以是一个<strong>对象</strong>：</p>
+<ul>
+<li>每个定义在该对象的函数都将被当作 Redux action creator，对象所定义的方法名将作为属性名；</li>
+<li>每个方法将返回一个新的函数，函数中<code>dispatch</code>方法会将action creator的返回值作为参数执行。</li>
+<li>这些属性会被合并到组件的 props 中。</li>
+</ul>
+<p>mapStateToProps可以是一个<strong>函数</strong>：</p>
+<p>入参：</p>
+<ul>
+<li><code>dispatch</code>，函数，就是useDispatch产生的dispatch函数</li>
+<li><code>ownProps</code>，可省略，该参数的值为传递到组件的 props，<ul>
+<li>如果传了ownProps，只要组件接收到新 props，<code>mapDispatchToProps</code> 也会被调用。</li>
+</ul>
+</li>
+</ul>
+<p>返回值：对象，</p>
+<ul>
+<li>这个对象通过 <code>dispatch</code> 函数与 action creator 以某种方式绑定在一起</li>
+<li>（提示：你也许会用到 Redux 的辅助函数 <a target="_blank" rel="noopener" href="http://rackt.github.io/redux/docs/api/bindActionCreators.html"><code>bindActionCreators()</code></a>）。</li>
+</ul>
+<p>如果省略这个 <code>mapDispatchToProps</code> 参数，默认情况下，<code>dispatch</code> 会自动注入到组件 props 中。</p>
+<p>例子：</p>
+<p>NewItemForm需要一个函数submitHandler作为它的输入参数，</p>
+<ul>
+<li>并且这个 submitHandler 要跟 dispatch 绑定，调用即可派发action</li>
+<li>需要派发的 action 由 addNewItem 生成</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; connect &#125; <span class="keyword">from</span> <span class="string">&#x27;react-redux&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapDispatchToProps = <span class="function">(<span class="params">dispatch</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">submitHandler</span>: <span class="function">(<span class="params">name, price</span>) =&gt;</span> dispatch(addNewItem(name, price))</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> NewItemFormContainer = connect(</span><br><span class="line">  <span class="literal">null</span>,</span><br><span class="line">  mapDispatchToProps</span><br><span class="line">)(NewItemForm);</span><br></pre></td></tr></table></figure>
+
+<p>也可以简写，只传对象，connect会自动把dispatch包到对象外面（bindActionCreators）：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> mapDispatchToProps = &#123;</span><br><span class="line">  <span class="attr">submitHandler</span>: addNewItem</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="练习-1"><a href="#练习-1" class="headerlink" title="练习"></a>练习</h3><h4 id="需求-1"><a href="#需求-1" class="headerlink" title="需求"></a>需求</h4><p>原sandbox：<a target="_blank" rel="noopener" href="https://codesandbox.io/s/df1j4">https://codesandbox.io/s/df1j4</a></p>
+<p>应用实现的功能是商品价格计算器</p>
+<ul>
+<li>可以输入商品名和商品价格添加商品</li>
+<li>可以删除商品</li>
+<li>可以修改商品价格和数量</li>
+<li>可以选择小费比例</li>
+<li>最终计算出商品价格，小费价格和总价格</li>
+</ul>
+<p>state树结构：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">items</span>: [</span><br><span class="line">        &#123; <span class="attr">uuid</span>: <span class="number">1</span>, <span class="attr">name</span>: <span class="string">&quot;Tofu Roast&quot;</span>, <span class="attr">price</span>: <span class="number">14</span>, <span class="attr">quantity</span>: <span class="number">1</span> &#125;</span><br><span class="line">        &#123; <span class="attr">uuid</span>: <span class="number">2</span>, <span class="attr">name</span>: <span class="string">&quot;Vegan Ham&quot;</span>, <span class="attr">price</span>: <span class="number">12</span>, <span class="attr">quantity</span>: <span class="number">1</span> &#125;</span><br><span class="line">    ]</span><br><span class="line">	<span class="attr">tipPercentage</span>: <span class="number">20</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>给按钮绑定事件：</p>
+<ul>
+<li>add item：将表单中的item加入到state.items</li>
+<li>remove：去掉state.items中对应的item</li>
+</ul>
+<p>给每一个商品的价格和数量输入框绑定事件：</p>
+<ul>
+<li>修改后更新state.items中的对应item</li>
+</ul>
+<p>每一次产生上述修改后要重新计算总价</p>
+<img src="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/redux/image-20220408194425171.png" alt="image-20220408194425171" style="zoom:50%;" />
+
+<h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><p>我的sandbox：<a target="_blank" rel="noopener" href="https://codesandbox.io/s/redux-calculator-mqt8g8">https://codesandbox.io/s/redux-calculator-mqt8g8</a></p>
+<h5 id="商品增删改"><a href="#商品增删改" class="headerlink" title="商品增删改"></a>商品增删改</h5><p>state.items相关的action creator</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> ITEM_ADDED = <span class="string">&#x27;ITEM_ADDED&#x27;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> ITEM_DELETED = <span class="string">&#x27;ITEM_DELETED&#x27;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> ITEM_PRICE_UPDATED = <span class="string">&#x27;ITEM_PRICE_UPDATED&#x27;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> ITEM_QUANTITY_UPDATED = <span class="string">&#x27;ITEM_QUANTITY_UPDATED&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> addNewItem = <span class="function">(<span class="params">name, price</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">type</span>: ITEM_ADDED,</span><br><span class="line">    <span class="attr">payload</span>: &#123;</span><br><span class="line">      name,</span><br><span class="line">      price</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> deleteItem = <span class="function">(<span class="params">uuid</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">type</span>: ITEM_DELETED,</span><br><span class="line">    <span class="attr">payload</span>: &#123; uuid &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> updatePrice = <span class="function">(<span class="params">uuid, price</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">type</span>: ITEM_PRICE_UPDATED,</span><br><span class="line">    <span class="attr">payload</span>: &#123; uuid, price &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> updateQuantity = <span class="function">(<span class="params">uuid, quantity</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">type</span>: ITEM_QUANTITY_UPDATED,</span><br><span class="line">    <span class="attr">payload</span>: &#123; uuid, quantity &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>处理state.items部分更新的reducer</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  ITEM_ADDED,</span><br><span class="line">  ITEM_DELETED,</span><br><span class="line">  ITEM_PRICE_UPDATED,</span><br><span class="line">  ITEM_QUANTITY_UPDATED</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">&#x27;./actions&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> id = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> initialItems = [</span><br><span class="line">  &#123; <span class="attr">uuid</span>: id++, name: <span class="string">&#x27;Tofu Roast&#x27;</span>, <span class="attr">price</span>: <span class="number">14</span>, <span class="attr">quantity</span>: <span class="number">1</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">uuid</span>: id++, name: <span class="string">&#x27;Vegan Ham&#x27;</span>, <span class="attr">price</span>: <span class="number">12</span>, <span class="attr">quantity</span>: <span class="number">1</span> &#125;</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> reducer = <span class="function">(<span class="params">state = initialItems, action</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.type) &#123;</span><br><span class="line">    <span class="keyword">case</span> ITEM_ADDED:</span><br><span class="line">      <span class="keyword">const</span> item = &#123;</span><br><span class="line">        <span class="attr">uuid</span>: id++,</span><br><span class="line">        quantity: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">name</span>: action.payload.name,</span><br><span class="line">        <span class="attr">price</span>: <span class="built_in">parseInt</span>(action.payload.price, <span class="number">10</span>)</span><br><span class="line">      &#125;;</span><br><span class="line">      <span class="keyword">return</span> [...state, item];</span><br><span class="line">    <span class="keyword">case</span> ITEM_DELETED:</span><br><span class="line">      <span class="keyword">return</span> state.filter(<span class="function">(<span class="params">item</span>) =&gt;</span> item.uuid !== action.payload.uuid);</span><br><span class="line">    <span class="keyword">case</span> ITEM_PRICE_UPDATED:</span><br><span class="line">      <span class="keyword">return</span> state.map(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> item.uuid === action.payload.uuid</span><br><span class="line">          ? &#123;</span><br><span class="line">              ...item,</span><br><span class="line">              <span class="attr">price</span>: <span class="built_in">parseInt</span>(action.payload.price, <span class="number">10</span>)</span><br><span class="line">            &#125;</span><br><span class="line">          : item;</span><br><span class="line">      &#125;);</span><br><span class="line">    <span class="keyword">case</span> ITEM_QUANTITY_UPDATED:</span><br><span class="line">      <span class="keyword">return</span> state.map(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> item.uuid === action.payload.uuid</span><br><span class="line">          ? &#123;</span><br><span class="line">              ...item,</span><br><span class="line">              <span class="attr">quantity</span>: <span class="built_in">parseInt</span>(action.payload.quantity, <span class="number">10</span>)</span><br><span class="line">            &#125;</span><br><span class="line">          : item;</span><br><span class="line">      &#125;);</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">return</span> state;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> reducer;</span><br></pre></td></tr></table></figure>
+
+<p>删除、更新商品时如何派发action</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; MenuItem &#125; <span class="keyword">from</span> <span class="string">&#x27;../components/MenuItem&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; connect &#125; <span class="keyword">from</span> <span class="string">&#x27;react-redux&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  deleteItem,</span><br><span class="line">  updatePrice,</span><br><span class="line">  updateQuantity</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">&#x27;../store/items/actions&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapDispatchToProps = <span class="function">(<span class="params">dispatch, ownProps</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">remove</span>: <span class="function">() =&gt;</span> dispatch(deleteItem(ownProps.uuid)),</span><br><span class="line">    <span class="attr">updatePrice</span>: <span class="function">(<span class="params">price</span>) =&gt;</span> dispatch(updatePrice(ownProps.uuid, price)),</span><br><span class="line">    <span class="attr">updateQuantity</span>: <span class="function">(<span class="params">quantity</span>) =&gt;</span></span><br><span class="line">      dispatch(updateQuantity(ownProps.uuid, quantity))</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> MenuItemContainer = connect(<span class="literal">null</span>, mapDispatchToProps)(MenuItem);</span><br></pre></td></tr></table></figure>
+
+<p>MenuItem的API如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> MenuItem = <span class="function">(<span class="params">&#123;</span></span></span><br><span class="line"><span class="params"><span class="function">  uuid,</span></span></span><br><span class="line"><span class="params"><span class="function">  name,</span></span></span><br><span class="line"><span class="params"><span class="function">  price,</span></span></span><br><span class="line"><span class="params"><span class="function">  quantity,</span></span></span><br><span class="line"><span class="params"><span class="function">  total,</span></span></span><br><span class="line"><span class="params"><span class="function">  updatePrice = () =&gt; &#123;&#125;,</span></span></span><br><span class="line"><span class="params"><span class="function">  updateQuantity = () =&gt; &#123;&#125;,</span></span></span><br><span class="line"><span class="params"><span class="function">  remove = () =&gt; &#123;&#125;</span></span></span><br><span class="line"><span class="params"><span class="function">&#125;</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="商品价格计算"><a href="#商品价格计算" class="headerlink" title="商品价格计算"></a>商品价格计算</h5><p>商品价格的计算结果没必要放到redux store里，直接从state中取值，计算后放入组件就行了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; connect &#125; <span class="keyword">from</span> <span class="string">&#x27;react-redux&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; Summary &#125; <span class="keyword">from</span> <span class="string">&#x27;../components/Summary&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> mapStateToProps = <span class="function">(<span class="params">state</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> subtotal = state.items.reduce(<span class="function">(<span class="params">acc, cur</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> acc + cur.price * cur.quantity;</span><br><span class="line">  &#125;, <span class="number">0</span>);</span><br><span class="line">  <span class="keyword">const</span> tipAmount = (state.tipPercentage * subtotal) / <span class="number">100</span>;</span><br><span class="line">  <span class="keyword">const</span> total = subtotal + tipAmount;</span><br><span class="line">  <span class="keyword">return</span> &#123; subtotal, tipAmount, total &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> SummaryContainer = connect(mapStateToProps)(Summary);</span><br></pre></td></tr></table></figure>
+
+<p>Summary组件的API如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> Summary = <span class="function">(<span class="params">&#123; subtotal = <span class="number">0</span>, tipAmount = <span class="number">0</span>, total = <span class="number">0</span> &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+    </div>
+
+    
+    
+    
+
+      <div>
+          
+<div class="my_post_copyright">
+<div style="text-align:center;color: #ccc;font-size:14px;">------ 版权信息 ------</div>
+ <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+ 
+ <p><span>本文标题:</span><a href="/2022/04/08/redux/redux3_react/">Redux学习笔记3：React和Redux的2种连接方法</a></p>
+ <p><span>文章作者:</span><a href="/" title="访问 Lury 的个人博客">Lury</a></p>
+ <p><span>发布时间:</span>2022年04月08日 - 20:48</p>
+ <p><span>最后更新:</span>2022年04月08日 - 21:21</p>
+ <p><span>原始链接:</span><a href="/2022/04/08/redux/redux3_react/" title="Redux学习笔记3：React和Redux的2种连接方法">https://luryzhu.github.io/2022/04/08/redux/redux3_react/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://luryzhu.github.io/2022/04/08/redux/redux3_react/"  aria-label="复制成功！"></i></span>
+ </p>
+ <p><span>许可协议:</span><a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+   var clipboard = new Clipboard('.fa-clipboard');
+   $(".fa-clipboard").click(function(){
+     clipboard.on('success', function(){
+       swal({   
+         title: "",   
+         text: '复制成功',
+         icon: "success", 
+         showConfirmButton: true
+         });
+ 	 });
+   });  
+</script>
+
+      </div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Redux/" rel="tag"># Redux</a>
+              <a href="/tags/React/" rel="tag"># React</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/04/07/redux/redux2_api/" rel="prev" title="Redux学习笔记2：Redux API">
+      <i class="fa fa-chevron-left"></i> Redux学习笔记2：Redux API
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">1.1.</span> <span class="nav-text">参考</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%86React%E5%92%8CRedux%E7%BB%91%E5%AE%9A"><span class="nav-number">2.</span> <span class="nav-text">将React和Redux绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#React-Redux"><span class="nav-number">2.1.</span> <span class="nav-text">React Redux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hooks-API"><span class="nav-number">2.2.</span> <span class="nav-text">Hooks API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Provider"><span class="nav-number">2.2.1.</span> <span class="nav-text">Provider</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#useSelector"><span class="nav-number">2.2.2.</span> <span class="nav-text">useSelector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#useDispatch"><span class="nav-number">2.2.3.</span> <span class="nav-text">useDispatch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0"><span class="nav-number">2.2.4.</span> <span class="nav-text">练习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9C%80%E6%B1%82"><span class="nav-number">2.2.4.1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">2.2.4.2.</span> <span class="nav-text">代码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Connect-API"><span class="nav-number">2.3.</span> <span class="nav-text">Connect API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#connect"><span class="nav-number">2.3.1.</span> <span class="nav-text">connect</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mapStateToProps"><span class="nav-number">2.3.2.</span> <span class="nav-text">mapStateToProps</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mapDispatchToProps"><span class="nav-number">2.3.3.</span> <span class="nav-text">mapDispatchToProps</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0-1"><span class="nav-number">2.3.4.</span> <span class="nav-text">练习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9C%80%E6%B1%82-1"><span class="nav-number">2.3.4.1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81-1"><span class="nav-number">2.3.4.2.</span> <span class="nav-text">代码</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%95%86%E5%93%81%E5%A2%9E%E5%88%A0%E6%94%B9"><span class="nav-number">2.3.4.2.1.</span> <span class="nav-text">商品增删改</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%95%86%E5%93%81%E4%BB%B7%E6%A0%BC%E8%AE%A1%E7%AE%97"><span class="nav-number">2.3.4.2.2.</span> <span class="nav-text">商品价格计算</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lury"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Lury</p>
+  <div class="site-description" itemprop="description">前端学习中...</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/luryZhu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;luryZhu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:LuryZhu@outlook.com" title="E-Mail → mailto:LuryZhu@outlook.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lury</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">111k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:41</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<!-- hexo injector body_end start --><script src="https://cdn.jsdelivr.net/npm/d3@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.7.4/dist/browser/view.min.js"></script>
+  <script>
+      const mindmaps = document.querySelectorAll('.markmap-svg');
+   
+      for(const mindmap of mindmaps) {
+          markmap.markmap(mindmap, JSON.parse(mindmap.innerHTML));
+      }
+  </script> <!-- hexo injector body_end end --></body>
+</html>
