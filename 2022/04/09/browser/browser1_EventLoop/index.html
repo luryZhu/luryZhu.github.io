@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"luryzhu.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="本文主要针对浏览器渲染阶段发生的以下任务进行分析：  JS引擎线程运行js代码 异步线程处理异步代码 Event Loop 轮询任务队列 任务队列中的宏任务和微任务  参考文章 彻底明白JS线程">
+  <meta name="description" content="本文主要针对浏览器渲染阶段发生的以下任务进行分析：  JS引擎线程运行js代码 异步线程处理异步代码 Event Loop 轮询任务队列 任务队列中的宏任务和微任务">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浏览器学习笔记1：浏览器线程和Event Loop">
 <meta property="og:url" content="https://luryzhu.github.io/2022/04/09/browser/browser1_EventLoop/index.html">
 <meta property="og:site_name" content="Lury的世界尽头">
-<meta property="og:description" content="本文主要针对浏览器渲染阶段发生的以下任务进行分析：  JS引擎线程运行js代码 异步线程处理异步代码 Event Loop 轮询任务队列 任务队列中的宏任务和微任务  参考文章 彻底明白JS线程">
+<meta property="og:description" content="本文主要针对浏览器渲染阶段发生的以下任务进行分析：  JS引擎线程运行js代码 异步线程处理异步代码 Event Loop 轮询任务队列 任务队列中的宏任务和微任务">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/webp.webp">
 <meta property="og:image" content="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/image-20220327162721724-16483696469672.png">
@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/bVU9kK.png">
 <meta property="og:image" content="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/bVU9kG.png">
 <meta property="article:published_time" content="2022-04-09T13:33:16.000Z">
-<meta property="article:modified_time" content="2022-04-09T14:55:33.834Z">
+<meta property="article:modified_time" content="2022-04-09T15:03:59.814Z">
 <meta property="article:author" content="Lury">
 <meta property="article:tag" content="Event Loop">
 <meta property="article:tag" content="微任务&amp;宏任务">
@@ -221,7 +221,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-04-09 21:33:16 / 修改时间：22:55:33" itemprop="dateCreated datePublished" datetime="2022-04-09T21:33:16+08:00">2022-04-09</time>
+              <time title="创建时间：2022-04-09 21:33:16 / 修改时间：23:03:59" itemprop="dateCreated datePublished" datetime="2022-04-09T21:33:16+08:00">2022-04-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -272,10 +272,10 @@
 <li>Event Loop 轮询任务队列</li>
 <li>任务队列中的宏任务和微任务</li>
 </ul>
-<p>参考文章</p>
-<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8821c6432fe1">彻底明白JS线程</a></p>
 <span id="more"></span>
 
+<p>参考文章</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8821c6432fe1">彻底明白JS线程</a></p>
 <h1 id="浏览器如何渲染"><a href="#浏览器如何渲染" class="headerlink" title="浏览器如何渲染"></a>浏览器如何渲染</h1><p>核心问题：从浏览器获取url到渲染完页面之间经历了什么</p>
 <p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/webp.webp"></p>
 <p>三个阶段：</p>
@@ -455,7 +455,7 @@
 <h2 id="看代码说输出"><a href="#看代码说输出" class="headerlink" title="看代码说输出"></a>看代码说输出</h2><p><strong>为什么promise.then比setTimeout先执行</strong>：</p>
 <p>因为Promise.then的回调是微任务，setTimeout的回调是宏任务，微任务可以插队</p>
 <p>一般这个问题出现在看代码说输出的题型</p>
-<p>详见：看代码说输出</p>
+<p>详见：<a href="https://luryzhu.github.io/2022/04/09/interview/interview1_async/">面经整理1：异步输出——Promise，SetTimeout与async</a></p>
 <h1 id="Todo"><a href="#Todo" class="headerlink" title="Todo"></a>Todo</h1><p>Nodejs</p>
 <ul>
 <li><p>和浏览器的区别</p>
@@ -480,7 +480,7 @@
  <p><span>本文标题:</span><a href="/2022/04/09/browser/browser1_EventLoop/">浏览器学习笔记1：浏览器线程和Event Loop</a></p>
  <p><span>文章作者:</span><a href="/" title="访问 Lury 的个人博客">Lury</a></p>
  <p><span>发布时间:</span>2022年04月09日 - 21:33</p>
- <p><span>最后更新:</span>2022年04月09日 - 22:55</p>
+ <p><span>最后更新:</span>2022年04月09日 - 23:03</p>
  <p><span>原始链接:</span><a href="/2022/04/09/browser/browser1_EventLoop/" title="浏览器学习笔记1：浏览器线程和Event Loop">https://luryzhu.github.io/2022/04/09/browser/browser1_EventLoop/</a>
     <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://luryzhu.github.io/2022/04/09/browser/browser1_EventLoop/"  aria-label="复制成功！"></i></span>
  </p>

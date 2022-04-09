@@ -2897,10 +2897,10 @@
 <li>Event Loop 轮询任务队列</li>
 <li>任务队列中的宏任务和微任务</li>
 </ul>
-<p>参考文章</p>
-<p><a href="https://www.jianshu.com/p/8821c6432fe1">彻底明白JS线程</a></p>
 <span id="more"></span>
 
+<p>参考文章</p>
+<p><a href="https://www.jianshu.com/p/8821c6432fe1">彻底明白JS线程</a></p>
 <h1 id="浏览器如何渲染"><a href="#浏览器如何渲染" class="headerlink" title="浏览器如何渲染"></a>浏览器如何渲染</h1><p>核心问题：从浏览器获取url到渲染完页面之间经历了什么</p>
 <p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/webp.webp"></p>
 <p>三个阶段：</p>
@@ -3080,7 +3080,7 @@
 <h2 id="看代码说输出"><a href="#看代码说输出" class="headerlink" title="看代码说输出"></a>看代码说输出</h2><p><strong>为什么promise.then比setTimeout先执行</strong>：</p>
 <p>因为Promise.then的回调是微任务，setTimeout的回调是宏任务，微任务可以插队</p>
 <p>一般这个问题出现在看代码说输出的题型</p>
-<p>详见：看代码说输出</p>
+<p>详见：<a href="https://luryzhu.github.io/2022/04/09/interview/interview1_async/">面经整理1：异步输出——Promise，SetTimeout与async</a></p>
 <h1 id="Todo"><a href="#Todo" class="headerlink" title="Todo"></a>Todo</h1><p>Nodejs</p>
 <ul>
 <li><p>和浏览器的区别</p>
