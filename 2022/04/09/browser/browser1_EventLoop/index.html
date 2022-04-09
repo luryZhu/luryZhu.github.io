@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"luryzhu.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文主要针对浏览器渲染阶段发生的以下任务进行分析：  JS引擎线程运行js代码 异步线程处理异步代码 Event Loop 轮询任务队列 任务队列中的宏任务和微任务  参考文章 彻底明白JS线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器学习笔记1：浏览器线程和Event Loop">
+<meta property="og:url" content="https://luryzhu.github.io/2022/04/09/browser/browser1_EventLoop/index.html">
+<meta property="og:site_name" content="Lury的世界尽头">
+<meta property="og:description" content="本文主要针对浏览器渲染阶段发生的以下任务进行分析：  JS引擎线程运行js代码 异步线程处理异步代码 Event Loop 轮询任务队列 任务队列中的宏任务和微任务  参考文章 彻底明白JS线程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/webp.webp">
+<meta property="og:image" content="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/image-20220327162721724-16483696469672.png">
+<meta property="og:image" content="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/bVU9kG.png">
+<meta property="og:image" content="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/bVU9kK.png">
+<meta property="og:image" content="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/bVU9kG.png">
+<meta property="article:published_time" content="2022-04-09T13:33:16.000Z">
+<meta property="article:modified_time" content="2022-04-09T14:55:33.834Z">
+<meta property="article:author" content="Lury">
+<meta property="article:tag" content="Event Loop">
+<meta property="article:tag" content="微任务&amp;宏任务">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/webp.webp">
+
+<link rel="canonical" href="https://luryzhu.github.io/2022/04/09/browser/browser1_EventLoop/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>浏览器学习笔记1：浏览器线程和Event Loop | Lury的世界尽头</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lury的世界尽头</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://luryzhu.github.io/2022/04/09/browser/browser1_EventLoop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Lury">
+      <meta itemprop="description" content="前端学习中...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lury的世界尽头">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          浏览器学习笔记1：浏览器线程和Event Loop
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-09 21:33:16 / 修改时间：22:55:33" itemprop="dateCreated datePublished" datetime="2022-04-09T21:33:16+08:00">2022-04-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">浏览器学习笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文主要针对浏览器渲染阶段发生的以下任务进行分析：</p>
+<ul>
+<li>JS引擎线程运行js代码</li>
+<li>异步线程处理异步代码</li>
+<li>Event Loop 轮询任务队列</li>
+<li>任务队列中的宏任务和微任务</li>
+</ul>
+<p>参考文章</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8821c6432fe1">彻底明白JS线程</a></p>
+<span id="more"></span>
+
+<h1 id="浏览器如何渲染"><a href="#浏览器如何渲染" class="headerlink" title="浏览器如何渲染"></a>浏览器如何渲染</h1><p>核心问题：从浏览器获取url到渲染完页面之间经历了什么</p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/webp.webp"></p>
+<p>三个阶段：</p>
+<ul>
+<li>浏览器发送http请求</li>
+<li>服务器接收请求并发送响应报文</li>
+<li>浏览器接收响应报文并渲染</li>
+</ul>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/image-20220327162721724-16483696469672.png" alt="image-20220327162721724"></p>
+<p>解析HTML文档，生成DOM树</p>
+<p>遇到 link href css，下载解析css，生成CSSOM</p>
+<ul>
+<li><p>link 新http线程</p>
+</li>
+<li><p>在构建 CSSOM 树时，会阻塞渲染，直至 CSSOM 树构建完成。并且构建 CSSOM 树是一个十分消耗性能的过程，所以应该尽量保证层级扁平，减少过度层叠，越是具体的 CSS 选择器，执行速度越慢</p>
+</li>
+</ul>
+<p>遇到 script src，下载运行js</p>
+<ul>
+<li><p>defer&#x2F;async</p>
+</li>
+<li><p>当 HTML 解析到 script 标签时，会暂停构建 DOM，完成后才会从暂停的地方重新开始。也就是说，如果你想首屏渲染的越快，就越不应该在首屏就加载 JS 文件。并且 CSS 也会影响 JS 的执行，只有当解析完样式表才会执行 JS，所以也可以认为这种情况下，CSS 也会暂停构建 DOM</p>
+</li>
+</ul>
+<h1 id="浏览器与js进程"><a href="#浏览器与js进程" class="headerlink" title="浏览器与js进程"></a>浏览器与js进程</h1><h2 id="线程和进程"><a href="#线程和进程" class="headerlink" title="线程和进程"></a>线程和进程</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/165950721">https://zhuanlan.zhihu.com/p/165950721</a></p>
+<p>进程：可以理解为系统中正在运行的一个程序</p>
+<ul>
+<li>是正在执行的一个程序实例。在浏览器中打开一个网页就是开启了一个进程</li>
+<li>是资源拥有的最小单位。进程拥有<strong>独立</strong>的地址空间，不能直接访问其他进程的资源</li>
+<li>进程间相互访问资源需要进程间通讯：管道、文件、套接字…（websocket，localSotrage）</li>
+</ul>
+<p>线程：可以理解为轻量级的进程。</p>
+<ul>
+<li><p>线程依附于进程。进程将任务分成很多子任务，创建不同线程执行子任务</p>
+</li>
+<li><p>是调度和分配的最小单位。</p>
+</li>
+<li><p>同一进程的线程之间共享进程的地址空间等资源</p>
+</li>
+</ul>
+<h2 id="浏览器的线程"><a href="#浏览器的线程" class="headerlink" title="浏览器的线程"></a>浏览器的线程</h2><ul>
+<li><p>类别A：<strong>GUI 渲染线程</strong></p>
+</li>
+<li><p>类别B：<strong>JS 引擎线程</strong></p>
+</li>
+<li><p>类别C：EventLoop轮询处理线程</p>
+</li>
+<li><p>类别D：其他线程：</p>
+<ul>
+<li><p><strong>定时器触发线程 (setTimeout)</strong></p>
+</li>
+<li><p>http 异步线程(AJAX)</p>
+</li>
+<li><p>**浏览器事件线程 (onclick)**等等。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>AB互斥，也就是GUI在渲染时会阻塞js引擎，因为如果在GUI渲染时js改变了DOM，就会导致渲染不同步</p>
+<p>下面逐个介绍</p>
+<h3 id="类别B-js引擎线程"><a href="#类别B-js引擎线程" class="headerlink" title="类别B js引擎线程"></a>类别B js引擎线程</h3><p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000011198232">https://segmentfault.com/a/1190000011198232</a></p>
+<p>js是<strong>单线程</strong>语言，但是宿主环境却是多线程的，目前有两种主流的宿主环境：</p>
+<ul>
+<li>浏览器（Chorme V8 <a href="!%5BV8%E6%89%A7%E8%A1%8C%E4%B8%80%E6%AE%B5JavaScript%E6%B5%81%E7%A8%8B%E5%9B%BE%5D(https://segmentfault.com/img/bVcHdQR)">参考</a>）</li>
+<li>node</li>
+</ul>
+<p>javascript引擎线程称为<strong>主线程</strong>，是运行JS代码的线程（包括异步）</p>
+<p>它是基于事件驱动<strong>单线程</strong>执行的（可以修改DOM，简单化处理了），必须符合ECMAScript规范。</p>
+<ul>
+<li><p>JS引擎一直等待着<strong>event loop</strong>中任务的到来，然后加以处理</p>
+</li>
+<li><p>只有当前<strong>函数执行栈</strong>（处理同步操作）执行完毕，才会去<strong>任务队列</strong>（处理异步操作）中取任务执行</p>
+<ul>
+<li>Event loop：一旦”执行栈”中的所有同步任务执行完毕，系统就会读取”任务队列”，看看里面有哪些事件。那些对应的异步任务，于是结束等待状态，进入执行栈，开始执行</li>
+</ul>
+</li>
+<li><p>浏览器无论什么时候都只有一个JS线程在运行JS程序。</p>
+</li>
+</ul>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/bVU9kG.png" alt="图片描述"></p>
+<h4 id="函数执行栈"><a href="#函数执行栈" class="headerlink" title="函数执行栈"></a>函数执行栈</h4><p>所有同步任务都在主线程上执行，形成一个<a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2013/11/stack.html">执行栈</a></p>
+<p>主线程会生成执行栈，处理函数进栈出栈</p>
+<p>例子：运行下面代码的执行栈变化</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">2</span>);</span><br><span class="line">    bar();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">3</span>)</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">foo();</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/bVU9kK.png" alt="图片描述"></p>
+<h4 id="任务队列-Task-Queue"><a href="#任务队列-Task-Queue" class="headerlink" title="任务队列 Task Queue"></a>任务队列 Task Queue</h4><p>静态的队列存储结构，用于存储异步操作成功后的回调函数，注意是先判定异步操作成功再加入队列</p>
+<p>有两种任务队列：</p>
+<p><strong>宏任务</strong>是由宿主发起的，而<strong>微任务</strong>由JavaScript自身发起</p>
+<ul>
+<li>宏任务 macro task，ES6中叫task：优先级低，先定义的先执行<ul>
+<li><strong>script</strong>（全局任务全部代码） </li>
+<li>setTimeout, setInterval, setImmediate</li>
+<li>I&#x2F;O, UI rendering，event listener，postMessage，MessageChannel（用于消息通讯）</li>
+</ul>
+</li>
+<li>微任务 micro task，ES6中叫job：微任务，<strong>优先级高</strong>，并且可以插队，不是先定义先执行<ul>
+<li>process.nextTick（Node独有）</li>
+<li>Object.observer(已废弃), MutationObserver.</li>
+<li><strong>Promise</strong>(有些实现的promise将then方法放到了宏任务中)，Promise本身是同步的，Promise.then是异步的</li>
+</ul>
+</li>
+</ul>
+<h3 id="类别D-异步操作相关线程"><a href="#类别D-异步操作相关线程" class="headerlink" title="类别D 异步操作相关线程"></a>类别D 异步操作相关线程</h3><p>遇到异步代码就放到相应的线程</p>
+<ul>
+<li><code>setTimeout(fun A)</code> 定时器触发线程<ul>
+<li>定时器触发线程在接收到代码时就开始计时，时间到了将回调函数扔进队列</li>
+</ul>
+</li>
+<li><code>ajax(fun B)</code> http异步线程<ul>
+<li>http 异步线程立即发起http请求，请求成功后将回调函数扔进队列</li>
+</ul>
+</li>
+<li><code>dom.onclick(fun C)</code> 浏览器事件线程<ul>
+<li>浏览器事件线程会先监听dom，直到dom被点击了，才将回调函数扔进队列</li>
+</ul>
+</li>
+</ul>
+<p>1、执行主线程扔过来的异步代码，并执行代码</p>
+<p>2、保存着回调函数（例中的ABC），异步代码执行成功后，通知 <strong>Event Loop轮询处理线程</strong> 过来取相应的回调函数</p>
+<h3 id="类别C-Event-Loop轮询处理线程"><a href="#类别C-Event-Loop轮询处理线程" class="headerlink" title="类别C Event Loop轮询处理线程"></a>类别C Event Loop轮询处理线程</h3><p><a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2014/10/event-loop.html">https://www.ruanyifeng.com/blog/2014/10/event-loop.html</a></p>
+<p>上面我们已经知道了，有3个东西</p>
+<p>1、主线程，处理同步代码</p>
+<ul>
+<li>先处理执行栈，再从任务队列取</li>
+</ul>
+<p>2、类别D的线程，处理异步代码</p>
+<ul>
+<li>区分计时器、http、dom事件</li>
+</ul>
+<p>3、任务队列，存储着异步成功后的回调函数，一个静态存储结构</p>
+<ul>
+<li>队列分为微任务和宏任务，微任务优先级更高</li>
+</ul>
+<p>而发生的事情就是：</p>
+<ol>
+<li>主线程中检测到的异步任务交给异步线程</li>
+<li>把异步线程处理完的回调函数放到任务队列</li>
+<li>Event Loop：当函数执行栈为空时，取一个任务队列中的函数来执行</li>
+</ol>
+<p>有两种任务队列：微任务和宏任务</p>
+<h4 id="微任务和宏任务"><a href="#微任务和宏任务" class="headerlink" title="微任务和宏任务"></a>微任务和宏任务</h4><p><strong>宏任务</strong>是由宿主（浏览器或Node）发起的，而<strong>微任务</strong>由JavaScript自身发起</p>
+<ul>
+<li>宏任务 macro task，ES6中叫task：执行慢，优先级低，先定义的先执行<ul>
+<li><strong>script</strong>（全局任务全部代码） </li>
+<li>setTimeout, setInterval, setImmediate</li>
+<li>I&#x2F;O, UI rendering，event listener，postMessage，MessageChannel（用于消息通讯）</li>
+</ul>
+</li>
+<li>微任务 micro task，ES6中叫job：执行快，微任务，<strong>优先级高</strong>，并且可以插队，不是先定义先执行<ul>
+<li>process.nextTick（Node独有）</li>
+<li>Object.observer(已废弃), MutationObserver.</li>
+<li><strong>Promise</strong>(有些实现的promise将then方法放到了宏任务中)，Promise本身是同步的，Promise.then是异步的</li>
+</ul>
+</li>
+</ul>
+<h4 id="浏览器中的Event-Loop"><a href="#浏览器中的Event-Loop" class="headerlink" title="浏览器中的Event Loop"></a><strong>浏览器中的Event Loop</strong></h4><p>浏览器对宏任务和微任务的处理不同：</p>
+<ol>
+<li>JavaScript引擎首先从<strong>宏任务</strong>队列（macrotask queue）中取出第一个任务;</li>
+<li>执行完毕后，再将<strong>微任务</strong>（microtask queue）中的所有任务取出，按照顺序分别全部执行（这里包括不仅指开始执行时队列里的微任务），如果在这一步过程中产生新的微任务，也需要执行；</li>
+<li>然后再从<strong>宏任务</strong>队列中取下一个，执行完毕后，再次将 microtask queue 中的全部取出</li>
+<li>循环往复，直到两个 queue中的任务都取完。</li>
+</ol>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/bVU9kG.png" alt="&#39;图片描述&#39;"></p>
+<h1 id="面经"><a href="#面经" class="headerlink" title="面经"></a>面经</h1><h2 id="为什么setTimeout不准时"><a href="#为什么setTimeout不准时" class="headerlink" title="为什么setTimeout不准时"></a>为什么setTimeout不准时</h2><p>因为需要将主线程里所有的代码运行，所有同步代码运行完后，才会取任务队列中的setTimeout的回调运行，很可能虽然setTimeout在3秒后被放入任务队列，但是其实这时候函数执行栈里还没有全执行完。</p>
+<p>附，**<code>requestAnimationFrame</code>** 是准时的。</p>
+<p>使用 <code>requestAnimationFrame</code> 实现的动画效果比 <code>setTimeout</code> 好的原因如下：</p>
+<ul>
+<li>使用 <code>requestAnimationFrame</code> 不需要设置具体的时间；<ul>
+<li>它提供一个原生的API去执行动画的效果，它会在一帧（一般是 <code>16ms</code>）间隔内根据选择浏览器情况去执行相关动作。</li>
+<li><code>setTimeout</code> 是在特定的时间间隔去执行任务，不到时间间隔不会去执行，这样浏览器就没有办法去自动优化</li>
+</ul>
+</li>
+<li><code>requestAnimationFrame</code> 里面的回调函数是在页面刷新之前执行，它跟着屏幕的刷新频率走，保证每个刷新间隔只执行一次；</li>
+<li>如果页面未激活的话，<code>requestAnimationFrame</code> 也会停止渲染，这样既可以保证页面的流畅性，又能节省主线程执行函数的开销。</li>
+</ul>
+<h2 id="看代码说输出"><a href="#看代码说输出" class="headerlink" title="看代码说输出"></a>看代码说输出</h2><p><strong>为什么promise.then比setTimeout先执行</strong>：</p>
+<p>因为Promise.then的回调是微任务，setTimeout的回调是宏任务，微任务可以插队</p>
+<p>一般这个问题出现在看代码说输出的题型</p>
+<p>详见：看代码说输出</p>
+<h1 id="Todo"><a href="#Todo" class="headerlink" title="Todo"></a>Todo</h1><p>Nodejs</p>
+<ul>
+<li><p>和浏览器的区别</p>
+</li>
+<li><p>Event Loop</p>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_39200185/article/details/121201716">https://blog.csdn.net/qq_39200185/article/details/121201716</a></p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+    </div>
+
+    
+    
+    
+
+      <div>
+          
+<div class="my_post_copyright">
+<div style="text-align:center;color: #ccc;font-size:14px;">------ 版权信息 ------</div>
+ <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+ 
+ <p><span>本文标题:</span><a href="/2022/04/09/browser/browser1_EventLoop/">浏览器学习笔记1：浏览器线程和Event Loop</a></p>
+ <p><span>文章作者:</span><a href="/" title="访问 Lury 的个人博客">Lury</a></p>
+ <p><span>发布时间:</span>2022年04月09日 - 21:33</p>
+ <p><span>最后更新:</span>2022年04月09日 - 22:55</p>
+ <p><span>原始链接:</span><a href="/2022/04/09/browser/browser1_EventLoop/" title="浏览器学习笔记1：浏览器线程和Event Loop">https://luryzhu.github.io/2022/04/09/browser/browser1_EventLoop/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://luryzhu.github.io/2022/04/09/browser/browser1_EventLoop/"  aria-label="复制成功！"></i></span>
+ </p>
+ <p><span>许可协议:</span><a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+   var clipboard = new Clipboard('.fa-clipboard');
+   $(".fa-clipboard").click(function(){
+     clipboard.on('success', function(){
+       swal({   
+         title: "",   
+         text: '复制成功',
+         icon: "success", 
+         showConfirmButton: true
+         });
+ 	 });
+   });  
+</script>
+
+      </div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Event-Loop/" rel="tag"># Event Loop</a>
+              <a href="/tags/%E5%BE%AE%E4%BB%BB%E5%8A%A1-%E5%AE%8F%E4%BB%BB%E5%8A%A1/" rel="tag"># 微任务&宏任务</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/04/09/computerNetwork/HTTPS/" rel="prev" title="计网笔记1：理解HTTPS">
+      <i class="fa fa-chevron-left"></i> 计网笔记1：理解HTTPS
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/04/09/interview/interview1_async/" rel="next" title="面经整理1：异步输出——Promise，SetTimeout与async">
+      面经整理1：异步输出——Promise，SetTimeout与async <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E5%A6%82%E4%BD%95%E6%B8%B2%E6%9F%93"><span class="nav-number">1.</span> <span class="nav-text">浏览器如何渲染</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%8Ejs%E8%BF%9B%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">浏览器与js进程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E5%92%8C%E8%BF%9B%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">线程和进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E7%BA%BF%E7%A8%8B"><span class="nav-number">2.2.</span> <span class="nav-text">浏览器的线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%88%ABB-js%E5%BC%95%E6%93%8E%E7%BA%BF%E7%A8%8B"><span class="nav-number">2.2.1.</span> <span class="nav-text">类别B js引擎线程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%89%A7%E8%A1%8C%E6%A0%88"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">函数执行栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E9%98%9F%E5%88%97-Task-Queue"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">任务队列 Task Queue</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%88%ABD-%E5%BC%82%E6%AD%A5%E6%93%8D%E4%BD%9C%E7%9B%B8%E5%85%B3%E7%BA%BF%E7%A8%8B"><span class="nav-number">2.2.2.</span> <span class="nav-text">类别D 异步操作相关线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%88%ABC-Event-Loop%E8%BD%AE%E8%AF%A2%E5%A4%84%E7%90%86%E7%BA%BF%E7%A8%8B"><span class="nav-number">2.2.3.</span> <span class="nav-text">类别C Event Loop轮询处理线程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BE%AE%E4%BB%BB%E5%8A%A1%E5%92%8C%E5%AE%8F%E4%BB%BB%E5%8A%A1"><span class="nav-number">2.2.3.1.</span> <span class="nav-text">微任务和宏任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%AD%E7%9A%84Event-Loop"><span class="nav-number">2.2.3.2.</span> <span class="nav-text">浏览器中的Event Loop</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%A2%E7%BB%8F"><span class="nav-number">3.</span> <span class="nav-text">面经</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88setTimeout%E4%B8%8D%E5%87%86%E6%97%B6"><span class="nav-number">3.1.</span> <span class="nav-text">为什么setTimeout不准时</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9C%8B%E4%BB%A3%E7%A0%81%E8%AF%B4%E8%BE%93%E5%87%BA"><span class="nav-number">3.2.</span> <span class="nav-text">看代码说输出</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Todo"><span class="nav-number">4.</span> <span class="nav-text">Todo</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lury"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Lury</p>
+  <div class="site-description" itemprop="description">前端学习中...</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/luryZhu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;luryZhu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:LuryZhu@outlook.com" title="E-Mail → mailto:LuryZhu@outlook.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lury</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">137k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:05</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<!-- hexo injector body_end start --><script src="https://cdn.jsdelivr.net/npm/d3@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.7.4/dist/browser/view.min.js"></script>
+  <script>
+      const mindmaps = document.querySelectorAll('.markmap-svg');
+   
+      for(const mindmap of mindmaps) {
+          markmap.markmap(mindmap, JSON.parse(mindmap.innerHTML));
+      }
+  </script> <!-- hexo injector body_end end --></body>
+</html>

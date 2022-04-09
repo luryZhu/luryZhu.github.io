@@ -2674,10 +2674,8 @@
     <title>Redux学习笔记3：React和Redux的2种连接方法</title>
     <url>/2022/04/08/redux/redux3_react/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><p><a href="https://www.bilibili.com/video/BV1RF411v7cE">视频：Redux Fundamentals</a> | <a href="https://stevekinney.github.io/redux-fundamentals/">课件</a></p>
-</li>
-<li><p><a href="https://www.redux.org.cn/docs/api/">官方文档：Redux API</a></p>
-</li>
+<li><a href="https://www.bilibili.com/video/BV1RF411v7cE">视频：Redux Fundamentals</a> | <a href="https://stevekinney.github.io/redux-fundamentals/">课件</a></li>
+<li><a href="https://www.redux.org.cn/docs/api/">官方文档：Redux API</a></li>
 </ul>
 <p>探究的问题：</p>
 <ul>
@@ -2887,6 +2885,700 @@
       <tags>
         <tag>Redux</tag>
         <tag>React</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>浏览器学习笔记1：浏览器线程和Event Loop</title>
+    <url>/2022/04/09/browser/browser1_EventLoop/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>本文主要针对浏览器渲染阶段发生的以下任务进行分析：</p>
+<ul>
+<li>JS引擎线程运行js代码</li>
+<li>异步线程处理异步代码</li>
+<li>Event Loop 轮询任务队列</li>
+<li>任务队列中的宏任务和微任务</li>
+</ul>
+<p>参考文章</p>
+<p><a href="https://www.jianshu.com/p/8821c6432fe1">彻底明白JS线程</a></p>
+<span id="more"></span>
+
+<h1 id="浏览器如何渲染"><a href="#浏览器如何渲染" class="headerlink" title="浏览器如何渲染"></a>浏览器如何渲染</h1><p>核心问题：从浏览器获取url到渲染完页面之间经历了什么</p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/webp.webp"></p>
+<p>三个阶段：</p>
+<ul>
+<li>浏览器发送http请求</li>
+<li>服务器接收请求并发送响应报文</li>
+<li>浏览器接收响应报文并渲染</li>
+</ul>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/image-20220327162721724-16483696469672.png" alt="image-20220327162721724"></p>
+<p>解析HTML文档，生成DOM树</p>
+<p>遇到 link href css，下载解析css，生成CSSOM</p>
+<ul>
+<li><p>link 新http线程</p>
+</li>
+<li><p>在构建 CSSOM 树时，会阻塞渲染，直至 CSSOM 树构建完成。并且构建 CSSOM 树是一个十分消耗性能的过程，所以应该尽量保证层级扁平，减少过度层叠，越是具体的 CSS 选择器，执行速度越慢</p>
+</li>
+</ul>
+<p>遇到 script src，下载运行js</p>
+<ul>
+<li><p>defer&#x2F;async</p>
+</li>
+<li><p>当 HTML 解析到 script 标签时，会暂停构建 DOM，完成后才会从暂停的地方重新开始。也就是说，如果你想首屏渲染的越快，就越不应该在首屏就加载 JS 文件。并且 CSS 也会影响 JS 的执行，只有当解析完样式表才会执行 JS，所以也可以认为这种情况下，CSS 也会暂停构建 DOM</p>
+</li>
+</ul>
+<h1 id="浏览器与js进程"><a href="#浏览器与js进程" class="headerlink" title="浏览器与js进程"></a>浏览器与js进程</h1><h2 id="线程和进程"><a href="#线程和进程" class="headerlink" title="线程和进程"></a>线程和进程</h2><p><a href="https://zhuanlan.zhihu.com/p/165950721">https://zhuanlan.zhihu.com/p/165950721</a></p>
+<p>进程：可以理解为系统中正在运行的一个程序</p>
+<ul>
+<li>是正在执行的一个程序实例。在浏览器中打开一个网页就是开启了一个进程</li>
+<li>是资源拥有的最小单位。进程拥有<strong>独立</strong>的地址空间，不能直接访问其他进程的资源</li>
+<li>进程间相互访问资源需要进程间通讯：管道、文件、套接字…（websocket，localSotrage）</li>
+</ul>
+<p>线程：可以理解为轻量级的进程。</p>
+<ul>
+<li><p>线程依附于进程。进程将任务分成很多子任务，创建不同线程执行子任务</p>
+</li>
+<li><p>是调度和分配的最小单位。</p>
+</li>
+<li><p>同一进程的线程之间共享进程的地址空间等资源</p>
+</li>
+</ul>
+<h2 id="浏览器的线程"><a href="#浏览器的线程" class="headerlink" title="浏览器的线程"></a>浏览器的线程</h2><ul>
+<li><p>类别A：<strong>GUI 渲染线程</strong></p>
+</li>
+<li><p>类别B：<strong>JS 引擎线程</strong></p>
+</li>
+<li><p>类别C：EventLoop轮询处理线程</p>
+</li>
+<li><p>类别D：其他线程：</p>
+<ul>
+<li><p><strong>定时器触发线程 (setTimeout)</strong></p>
+</li>
+<li><p>http 异步线程(AJAX)</p>
+</li>
+<li><p>**浏览器事件线程 (onclick)**等等。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>AB互斥，也就是GUI在渲染时会阻塞js引擎，因为如果在GUI渲染时js改变了DOM，就会导致渲染不同步</p>
+<p>下面逐个介绍</p>
+<h3 id="类别B-js引擎线程"><a href="#类别B-js引擎线程" class="headerlink" title="类别B js引擎线程"></a>类别B js引擎线程</h3><p><a href="https://segmentfault.com/a/1190000011198232">https://segmentfault.com/a/1190000011198232</a></p>
+<p>js是<strong>单线程</strong>语言，但是宿主环境却是多线程的，目前有两种主流的宿主环境：</p>
+<ul>
+<li>浏览器（Chorme V8 <a href="!%5BV8%E6%89%A7%E8%A1%8C%E4%B8%80%E6%AE%B5JavaScript%E6%B5%81%E7%A8%8B%E5%9B%BE%5D(https://segmentfault.com/img/bVcHdQR)">参考</a>）</li>
+<li>node</li>
+</ul>
+<p>javascript引擎线程称为<strong>主线程</strong>，是运行JS代码的线程（包括异步）</p>
+<p>它是基于事件驱动<strong>单线程</strong>执行的（可以修改DOM，简单化处理了），必须符合ECMAScript规范。</p>
+<ul>
+<li><p>JS引擎一直等待着<strong>event loop</strong>中任务的到来，然后加以处理</p>
+</li>
+<li><p>只有当前<strong>函数执行栈</strong>（处理同步操作）执行完毕，才会去<strong>任务队列</strong>（处理异步操作）中取任务执行</p>
+<ul>
+<li>Event loop：一旦”执行栈”中的所有同步任务执行完毕，系统就会读取”任务队列”，看看里面有哪些事件。那些对应的异步任务，于是结束等待状态，进入执行栈，开始执行</li>
+</ul>
+</li>
+<li><p>浏览器无论什么时候都只有一个JS线程在运行JS程序。</p>
+</li>
+</ul>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/bVU9kG.png" alt="图片描述"></p>
+<h4 id="函数执行栈"><a href="#函数执行栈" class="headerlink" title="函数执行栈"></a>函数执行栈</h4><p>所有同步任务都在主线程上执行，形成一个<a href="https://www.ruanyifeng.com/blog/2013/11/stack.html">执行栈</a></p>
+<p>主线程会生成执行栈，处理函数进栈出栈</p>
+<p>例子：运行下面代码的执行栈变化</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">2</span>);</span><br><span class="line">    bar();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">3</span>)</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">foo();</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/bVU9kK.png" alt="图片描述"></p>
+<h4 id="任务队列-Task-Queue"><a href="#任务队列-Task-Queue" class="headerlink" title="任务队列 Task Queue"></a>任务队列 Task Queue</h4><p>静态的队列存储结构，用于存储异步操作成功后的回调函数，注意是先判定异步操作成功再加入队列</p>
+<p>有两种任务队列：</p>
+<p><strong>宏任务</strong>是由宿主发起的，而<strong>微任务</strong>由JavaScript自身发起</p>
+<ul>
+<li>宏任务 macro task，ES6中叫task：优先级低，先定义的先执行<ul>
+<li><strong>script</strong>（全局任务全部代码） </li>
+<li>setTimeout, setInterval, setImmediate</li>
+<li>I&#x2F;O, UI rendering，event listener，postMessage，MessageChannel（用于消息通讯）</li>
+</ul>
+</li>
+<li>微任务 micro task，ES6中叫job：微任务，<strong>优先级高</strong>，并且可以插队，不是先定义先执行<ul>
+<li>process.nextTick（Node独有）</li>
+<li>Object.observer(已废弃), MutationObserver.</li>
+<li><strong>Promise</strong>(有些实现的promise将then方法放到了宏任务中)，Promise本身是同步的，Promise.then是异步的</li>
+</ul>
+</li>
+</ul>
+<h3 id="类别D-异步操作相关线程"><a href="#类别D-异步操作相关线程" class="headerlink" title="类别D 异步操作相关线程"></a>类别D 异步操作相关线程</h3><p>遇到异步代码就放到相应的线程</p>
+<ul>
+<li><code>setTimeout(fun A)</code> 定时器触发线程<ul>
+<li>定时器触发线程在接收到代码时就开始计时，时间到了将回调函数扔进队列</li>
+</ul>
+</li>
+<li><code>ajax(fun B)</code> http异步线程<ul>
+<li>http 异步线程立即发起http请求，请求成功后将回调函数扔进队列</li>
+</ul>
+</li>
+<li><code>dom.onclick(fun C)</code> 浏览器事件线程<ul>
+<li>浏览器事件线程会先监听dom，直到dom被点击了，才将回调函数扔进队列</li>
+</ul>
+</li>
+</ul>
+<p>1、执行主线程扔过来的异步代码，并执行代码</p>
+<p>2、保存着回调函数（例中的ABC），异步代码执行成功后，通知 <strong>Event Loop轮询处理线程</strong> 过来取相应的回调函数</p>
+<h3 id="类别C-Event-Loop轮询处理线程"><a href="#类别C-Event-Loop轮询处理线程" class="headerlink" title="类别C Event Loop轮询处理线程"></a>类别C Event Loop轮询处理线程</h3><p><a href="https://www.ruanyifeng.com/blog/2014/10/event-loop.html">https://www.ruanyifeng.com/blog/2014/10/event-loop.html</a></p>
+<p>上面我们已经知道了，有3个东西</p>
+<p>1、主线程，处理同步代码</p>
+<ul>
+<li>先处理执行栈，再从任务队列取</li>
+</ul>
+<p>2、类别D的线程，处理异步代码</p>
+<ul>
+<li>区分计时器、http、dom事件</li>
+</ul>
+<p>3、任务队列，存储着异步成功后的回调函数，一个静态存储结构</p>
+<ul>
+<li>队列分为微任务和宏任务，微任务优先级更高</li>
+</ul>
+<p>而发生的事情就是：</p>
+<ol>
+<li>主线程中检测到的异步任务交给异步线程</li>
+<li>把异步线程处理完的回调函数放到任务队列</li>
+<li>Event Loop：当函数执行栈为空时，取一个任务队列中的函数来执行</li>
+</ol>
+<p>有两种任务队列：微任务和宏任务</p>
+<h4 id="微任务和宏任务"><a href="#微任务和宏任务" class="headerlink" title="微任务和宏任务"></a>微任务和宏任务</h4><p><strong>宏任务</strong>是由宿主（浏览器或Node）发起的，而<strong>微任务</strong>由JavaScript自身发起</p>
+<ul>
+<li>宏任务 macro task，ES6中叫task：执行慢，优先级低，先定义的先执行<ul>
+<li><strong>script</strong>（全局任务全部代码） </li>
+<li>setTimeout, setInterval, setImmediate</li>
+<li>I&#x2F;O, UI rendering，event listener，postMessage，MessageChannel（用于消息通讯）</li>
+</ul>
+</li>
+<li>微任务 micro task，ES6中叫job：执行快，微任务，<strong>优先级高</strong>，并且可以插队，不是先定义先执行<ul>
+<li>process.nextTick（Node独有）</li>
+<li>Object.observer(已废弃), MutationObserver.</li>
+<li><strong>Promise</strong>(有些实现的promise将then方法放到了宏任务中)，Promise本身是同步的，Promise.then是异步的</li>
+</ul>
+</li>
+</ul>
+<h4 id="浏览器中的Event-Loop"><a href="#浏览器中的Event-Loop" class="headerlink" title="浏览器中的Event Loop"></a><strong>浏览器中的Event Loop</strong></h4><p>浏览器对宏任务和微任务的处理不同：</p>
+<ol>
+<li>JavaScript引擎首先从<strong>宏任务</strong>队列（macrotask queue）中取出第一个任务;</li>
+<li>执行完毕后，再将<strong>微任务</strong>（microtask queue）中的所有任务取出，按照顺序分别全部执行（这里包括不仅指开始执行时队列里的微任务），如果在这一步过程中产生新的微任务，也需要执行；</li>
+<li>然后再从<strong>宏任务</strong>队列中取下一个，执行完毕后，再次将 microtask queue 中的全部取出</li>
+<li>循环往复，直到两个 queue中的任务都取完。</li>
+</ol>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/browser/bVU9kG.png" alt="&#39;图片描述&#39;"></p>
+<h1 id="面经"><a href="#面经" class="headerlink" title="面经"></a>面经</h1><h2 id="为什么setTimeout不准时"><a href="#为什么setTimeout不准时" class="headerlink" title="为什么setTimeout不准时"></a>为什么setTimeout不准时</h2><p>因为需要将主线程里所有的代码运行，所有同步代码运行完后，才会取任务队列中的setTimeout的回调运行，很可能虽然setTimeout在3秒后被放入任务队列，但是其实这时候函数执行栈里还没有全执行完。</p>
+<p>附，**<code>requestAnimationFrame</code>** 是准时的。</p>
+<p>使用 <code>requestAnimationFrame</code> 实现的动画效果比 <code>setTimeout</code> 好的原因如下：</p>
+<ul>
+<li>使用 <code>requestAnimationFrame</code> 不需要设置具体的时间；<ul>
+<li>它提供一个原生的API去执行动画的效果，它会在一帧（一般是 <code>16ms</code>）间隔内根据选择浏览器情况去执行相关动作。</li>
+<li><code>setTimeout</code> 是在特定的时间间隔去执行任务，不到时间间隔不会去执行，这样浏览器就没有办法去自动优化</li>
+</ul>
+</li>
+<li><code>requestAnimationFrame</code> 里面的回调函数是在页面刷新之前执行，它跟着屏幕的刷新频率走，保证每个刷新间隔只执行一次；</li>
+<li>如果页面未激活的话，<code>requestAnimationFrame</code> 也会停止渲染，这样既可以保证页面的流畅性，又能节省主线程执行函数的开销。</li>
+</ul>
+<h2 id="看代码说输出"><a href="#看代码说输出" class="headerlink" title="看代码说输出"></a>看代码说输出</h2><p><strong>为什么promise.then比setTimeout先执行</strong>：</p>
+<p>因为Promise.then的回调是微任务，setTimeout的回调是宏任务，微任务可以插队</p>
+<p>一般这个问题出现在看代码说输出的题型</p>
+<p>详见：看代码说输出</p>
+<h1 id="Todo"><a href="#Todo" class="headerlink" title="Todo"></a>Todo</h1><p>Nodejs</p>
+<ul>
+<li><p>和浏览器的区别</p>
+</li>
+<li><p>Event Loop</p>
+</li>
+</ul>
+<p><a href="https://blog.csdn.net/qq_39200185/article/details/121201716">https://blog.csdn.net/qq_39200185/article/details/121201716</a></p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>浏览器学习笔记</category>
+      </categories>
+      <tags>
+        <tag>Event Loop</tag>
+        <tag>微任务&amp;宏任务</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>面经整理1：异步输出——Promise，SetTimeout与async</title>
+    <url>/2022/04/09/interview/interview1_async/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="考察要点"><a href="#考察要点" class="headerlink" title="考察要点"></a>考察要点</h1><ul>
+<li>微任务和宏任务<ul>
+<li>script（宏任务），最先执行，产生其他微任务和宏任务</li>
+<li>微任务：promise.then的回调，<strong>优先级高</strong></li>
+<li>宏任务：setTimeout的回调，优先级低</li>
+</ul>
+</li>
+<li>Promise<ul>
+<li>then 只接受函数做参数，不是函数则使用默认回调<ul>
+<li>成功：值传递 <code>val=&gt;val</code></li>
+<li>失败：<strong>异常穿透</strong> <code>reason=&gt;throw(reason)</code></li>
+<li>then 方法的返回值不能是赋值对象（<code>p=otherP.then(res=&gt;return p)</code>会死循环！）</li>
+</ul>
+</li>
+<li>finally<ul>
+<li>读不到上一个Promise的状态，即没有入参</li>
+<li><strong>返回值默认是上一个Promise</strong>，报错才会重写返回值<ul>
+<li>在finally回调内写return没用</li>
+<li>除非回调里throw err或return 失败Promise(<code>return Promise.reject</code>)，返回值会变成失败Promise</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>race，all<ul>
+<li>all，返回值：<ul>
+<li>所有成功，才返回成功Promise，值为全部Promise结果的数组，顺序和输入一样</li>
+<li>一旦有一个失败，则立即返回失败Promise</li>
+</ul>
+</li>
+<li>race，返回第一个改变状态的Promise</li>
+<li>注意如果promise对象是<strong>延时</strong>后改变状态的情况</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>aysnc函数<ul>
+<li>await 等待的的算new Promise，同步</li>
+<li>await 后面的算then()，微任务</li>
+<li>await 等待的Promise<ul>
+<li>失败，直接<strong>抛出错误</strong></li>
+<li>new Promise陷阱：<ul>
+<li>如果没有resolve&#x2F;reject改变状态，就一直pending，<strong>await后面的代码不会执行</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="面经"><a href="#面经" class="headerlink" title="面经"></a>面经</h1><p>题目来源：<a href="https://www.yuque.com/cuggz/interview/wm7x19">前端面试题之代码输出篇</a></p>
+<h2 id="then相关"><a href="#then相关" class="headerlink" title="then相关"></a>then相关</h2><h3 id="1-then"><a href="#1-then" class="headerlink" title="1. then"></a>1. then</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">2</span>);</span><br><span class="line">&#125;);</span><br><span class="line">promise.then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">3</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">4</span>);</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 </span><br><span class="line">2 </span><br><span class="line">4</span><br></pre></td></tr></table></figure>
+
+<p>promise.then 是微任务，它会在所有的宏任务执行完之后才会执行，同时需要promise内部的状态发生变化，因为这里内部没有发生变化，一直处于pending状态，所以不输出3。</p>
+<h3 id="2-then"><a href="#2-then" class="headerlink" title="2. then"></a>2. then</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> promise1 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;promise1&#x27;</span>)</span><br><span class="line">  resolve(<span class="string">&#x27;resolve1&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">const</span> promise2 = promise1.then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;1&#x27;</span>, promise1);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;2&#x27;</span>, promise2);</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">promise1</span><br><span class="line">1 Promise&#123;&lt;resolved&gt;: resolve1&#125;</span><br><span class="line">2 Promise&#123;&lt;pending&gt;&#125;</span><br><span class="line">resolve1</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，直接打印promise1，会打印出它的状态值和参数。</p>
+<p>代码执行过程如下：</p>
+<ol>
+<li>script是一个宏任务，按照顺序执行这些代码；</li>
+<li>首先进入Promise，执行该构造函数中的代码，打印<code>promise1</code>；</li>
+<li>碰到<code>resolve</code>函数, 将<code>promise1</code>的状态改变为<code>resolved</code>, 并将结果保存下来；</li>
+<li>碰到<code>promise1.then</code>这个微任务，将它放入微任务队列；</li>
+<li><code>promise2</code>是一个新的状态为<code>pending</code>的<code>Promise</code>；</li>
+<li>执行同步代码1， 同时打印出<code>promise1</code>的状态是<code>resolved</code>；</li>
+<li>执行同步代码2，同时打印出<code>promise2</code>的状态是<code>pending</code>；</li>
+<li>宏任务执行完毕，查找微任务队列，发现<code>promise1.then</code>这个微任务且状态为<code>resolved</code>，执行它。</li>
+</ol>
+<h3 id="3-setTimeout、then顺序"><a href="#3-setTimeout、then顺序" class="headerlink" title="3. setTimeout、then顺序"></a>3. setTimeout、then顺序</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;timerStart&quot;</span>);</span><br><span class="line">    resolve(<span class="string">&quot;success&quot;</span>);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;timerEnd&quot;</span>);</span><br><span class="line">  &#125;, <span class="number">0</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">2</span>);</span><br><span class="line">&#125;);</span><br><span class="line">promise.then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">4</span>);</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">4</span><br><span class="line">timerStart</span><br><span class="line">timerEnd</span><br><span class="line">success</span><br></pre></td></tr></table></figure>
+
+<p>代码执行过程如下：</p>
+<ul>
+<li>首先遇到Promise构造函数，会先执行里面的内容，打印<code>1</code>；</li>
+<li>遇到定时器<code>steTimeout</code>，它是一个宏任务，放入宏任务队列；</li>
+<li>继续向下执行，打印出2；</li>
+<li>由于<code>Promise</code>的状态此时还是<code>pending</code>，所以<code>promise.then</code>先不执行；</li>
+<li>继续执行下面的同步任务，打印出4；</li>
+<li>此时微任务队列没有任务，继续执行下一轮宏任务，执行<code>steTimeout</code>；</li>
+<li>首先执行<code>timerStart</code>，然后遇到了<code>resolve</code>，将<code>promise</code>的状态改为<code>resolved</code>且保存结果并将之前的<code>promise.then</code>推入微任务队列，再执行<code>timerEnd</code>；</li>
+<li>执行完这个宏任务，就去执行微任务<code>promise.then</code>，打印出<code>resolve</code>的结果。</li>
+</ul>
+<h3 id="4-setTimeout、then顺序"><a href="#4-setTimeout、then顺序" class="headerlink" title="4. setTimeout、then顺序"></a>4. setTimeout、then顺序</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.resolve().then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;promise1&#x27;</span>);</span><br><span class="line">  <span class="keyword">const</span> timer2 = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;timer2&#x27;</span>)</span><br><span class="line">  &#125;, <span class="number">0</span>)</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">const</span> timer1 = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;timer1&#x27;</span>)</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;promise2&#x27;</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;, <span class="number">0</span>)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;start&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">start</span><br><span class="line">promise1</span><br><span class="line">timer1</span><br><span class="line">promise2</span><br><span class="line">timer2</span><br></pre></td></tr></table></figure>
+
+<p>代码执行过程如下：</p>
+<ol>
+<li>首先，<code>Promise.resolve().then</code>是一个微任务，加入微任务队列</li>
+<li>执行timer1，它是一个宏任务，加入宏任务队列</li>
+<li>继续执行下面的同步代码，打印出<code>start</code></li>
+<li>这样第一轮宏任务就执行完了，开始执行微任务<code>Promise.resolve().then</code>，打印出<code>promise1</code></li>
+<li>遇到<code>timer2</code>，它是一个宏任务，将其加入宏任务队列，此时宏任务队列有两个任务，分别是<code>timer1</code>、<code>timer2</code>；</li>
+<li>这样第一轮微任务就执行完了，开始执行第二轮宏任务，首先执行定时器<code>timer1</code>，打印<code>timer1</code>；</li>
+<li>遇到<code>Promise.resolve().then</code>，它是一个微任务，加入微任务队列</li>
+<li>开始执行微任务队列中的任务，打印<code>promise2</code>；</li>
+<li>最后执行宏任务<code>timer2</code>定时器，打印出<code>timer2</code>；</li>
+</ol>
+<h3 id="5-状态只改变一次"><a href="#5-状态只改变一次" class="headerlink" title="5. 状态只改变一次"></a>5. 状态只改变一次</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    resolve(<span class="string">&#x27;success1&#x27;</span>);</span><br><span class="line">    reject(<span class="string">&#x27;error&#x27;</span>);</span><br><span class="line">    resolve(<span class="string">&#x27;success2&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line">promise.then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;then:&#x27;</span>, res);</span><br><span class="line">&#125;).catch(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;catch:&#x27;</span>, err);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">then：success1</span><br></pre></td></tr></table></figure>
+
+<p>这个题目考察的就是<strong>Promise的状态在发生变化之后，就不会再发生变化</strong>。开始状态由<code>pending</code>变为<code>resolve</code>，说明已经变为已完成状态，下面的两个状态的就不会再执行，同时下面的catch也不会捕获到错误。</p>
+<h3 id="6-then的入参为函数"><a href="#6-then的入参为函数" class="headerlink" title="6. then的入参为函数"></a>6. then的入参为函数</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.resolve(<span class="number">1</span>)</span><br><span class="line">  .then(<span class="number">2</span>)</span><br><span class="line">  .then(<span class="built_in">Promise</span>.resolve(<span class="number">3</span>))</span><br><span class="line">  .then(<span class="built_in">console</span>.log)</span><br><span class="line">  </span><br><span class="line">  (res)=&gt;&#123;<span class="built_in">console</span>.log(res)&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1</span><br><span class="line">Promise &#123;&lt;fulfilled&gt;: undefined&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Promise.resolve方法的参数如果是一个原始值，或者是一个不具有then方法的对象，则Promise.resolve方法返回一个新的Promise对象，状态为resolved，Promise.resolve方法的参数，会同时传给回调函数。</p>
+<p>then方法接受的参数是函数，而如果传递的并非是一个函数，它实际上会将其解释为then(null)，这就会导致前一个Promise的结果会传递下面。</p>
+<h3 id="7-状态何时改变"><a href="#7-状态何时改变" class="headerlink" title="7. 状态何时改变"></a>7. 状态何时改变</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> promise1 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    resolve(<span class="string">&#x27;success&#x27;</span>)</span><br><span class="line">  &#125;, <span class="number">1000</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">const</span> promise2 = promise1.then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&#x27;error!!!&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;promise1&#x27;</span>, promise1)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;promise2&#x27;</span>, promise2)</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;promise1&#x27;</span>, promise1)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;promise2&#x27;</span>, promise2)</span><br><span class="line">&#125;, <span class="number">2000</span>)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">promise1 Promise &#123;&lt;pending&gt;&#125;</span><br><span class="line">promise2 Promise &#123;&lt;pending&gt;&#125;</span><br><span class="line"></span><br><span class="line">Uncaught (in promise) Error: error!!!</span><br><span class="line">promise1 Promise &#123;&lt;fulfilled&gt;: &quot;success&quot;&#125;</span><br><span class="line">promise2 Promise &#123;&lt;rejected&gt;: Error: error!!&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-catch"><a href="#8-catch" class="headerlink" title="8. catch"></a>8. catch</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.resolve(<span class="number">1</span>)</span><br><span class="line">  .then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">  &#125;)</span><br><span class="line">  .catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">3</span>;</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1   </span><br><span class="line">2</span><br></pre></td></tr></table></figure>
+
+<p>Promise是可以链式调用的，由于每次调用 <code>.then</code> 或者 <code>.catch</code> 都会返回一个新的 promise，从而实现了链式调用, 它并不像一般任务的链式调用一样return this。</p>
+<p>上面的输出结果之所以依次打印出1和2，是因为<code>resolve(1)</code>之后走的是第一个then方法，并没有进catch里，所以第二个then中的res得到的实际上是第一个then的返回值。并且return 2会被包装成<code>resolve(2)</code>，被最后的then打印输出2。</p>
+<h3 id="9-then返回值"><a href="#9-then返回值" class="headerlink" title="9. then返回值"></a>9. then返回值</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.resolve().then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&#x27;error!!!&#x27;</span>)</span><br><span class="line">&#125;).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;then: &quot;</span>, res)</span><br><span class="line">&#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;catch: &quot;</span>, err)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;then: &quot; &quot;Error: error!!!&quot;</span><br></pre></td></tr></table></figure>
+
+<p>返回任意一个非 promise 的值都会被包裹成 promise 对象，因此这里的<code>return new Error(&#39;error!!!&#39;)</code>也被包裹成了<code>return Promise.resolve(new Error(&#39;error!!!&#39;))</code>，因此它会被then捕获而不是catch。</p>
+<h3 id="10-死循环"><a href="#10-死循环" class="headerlink" title="10. 死循环"></a>10. 死循环</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> promise = <span class="built_in">Promise</span>.resolve().then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> promise;</span><br><span class="line">&#125;)</span><br><span class="line">promise.catch(<span class="built_in">console</span>.err)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Uncaught (in promise) TypeError: Chaining cycle detected for promise #&lt;Promise&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这里其实是一个坑，<code>.then</code> 或 <code>.catch</code> 返回的值不能是 promise 本身，否则会造成死循环。</p>
+<h3 id="11-值传递"><a href="#11-值传递" class="headerlink" title="11. 值传递"></a>11. 值传递</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.resolve(<span class="number">1</span>)</span><br><span class="line">  .then(<span class="number">2</span>)</span><br><span class="line">  .then(<span class="built_in">Promise</span>.resolve(<span class="number">3</span>))</span><br><span class="line">  .then(<span class="built_in">console</span>.log)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<p>看到这个题目，好多的then，实际上只需要记住一个原则：<code>.then</code> 或<code>.catch</code> 的参数期望是函数，传入非函数则会发生<strong>值透传</strong>。</p>
+<p>第一个then和第二个then中传入的都不是函数，一个是数字，一个是对象，因此发生了透传，将<code>resolve(1)</code> 的值直接传到最后一个then里，直接打印出1。</p>
+<h3 id="12-异常穿透"><a href="#12-异常穿透" class="headerlink" title="12. 异常穿透"></a>12. 异常穿透</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.reject(<span class="string">&#x27;err!!!&#x27;</span>)</span><br><span class="line">  .then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;success&#x27;</span>, res)</span><br><span class="line">  &#125;, <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;error&#x27;</span>, err)</span><br><span class="line">  &#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;catch&#x27;</span>, err)</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">error err!!!</span><br></pre></td></tr></table></figure>
+
+<p>我们知道，<code>.then</code>函数中的两个参数：</p>
+<ul>
+<li>第一个参数是用来处理Promise成功的函数</li>
+<li>第二个则是处理失败的函数</li>
+</ul>
+<p>也就是说<code>Promise.resolve(&#39;1&#39;)</code>的值会进入成功的函数，<code>Promise.reject(&#39;2&#39;)</code>的值会进入失败的函数。</p>
+<p>在这道题中，错误直接被<code>then</code>的第二个参数捕获了，所以就不会被<code>catch</code>捕获了，输出结果为：<code>error err!!!&#39;</code></p>
+<p>但是，如果是像下面这样：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.resolve()</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span> <span class="title">success</span> (<span class="params">res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&#x27;error!!!&#x27;</span>)</span><br><span class="line">  &#125;, <span class="function"><span class="keyword">function</span> <span class="title">fail1</span> (<span class="params">err</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;fail1&#x27;</span>, err)</span><br><span class="line">  &#125;).catch(<span class="function"><span class="keyword">function</span> <span class="title">fail2</span> (<span class="params">err</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;fail2&#x27;</span>, err)</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>在<code>then</code>的第一参数中抛出了错误，那么他就不会被第二个参数捕获了，而是被后面的<code>catch</code>捕获到。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">fail2 Error: error!!!</span><br></pre></td></tr></table></figure>
+
+<h2 id="finally、all、race"><a href="#finally、all、race" class="headerlink" title="finally、all、race"></a>finally、all、race</h2><h3 id="13-finally"><a href="#13-finally" class="headerlink" title="13. finally"></a>13. finally</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.resolve(<span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">  .then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res)</span><br><span class="line">  &#125;)</span><br><span class="line">  .finally(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;finally&#x27;</span>)</span><br><span class="line">  &#125;)</span><br><span class="line"><span class="built_in">Promise</span>.resolve(<span class="string">&#x27;2&#x27;</span>)</span><br><span class="line">  .finally(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;finally2&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;我是finally2返回的值&#x27;</span></span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;finally2后面的then函数&#x27;</span>, res)</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1</span><br><span class="line">finally2</span><br><span class="line">finally</span><br><span class="line">finally2后面的then函数 2</span><br></pre></td></tr></table></figure>
+
+<p><code>.finally()</code>一般用的很少，只要记住以下几点就可以了：</p>
+<ul>
+<li><p><code>.finally()</code>方法不管Promise对象最后的状态如何都会执行</p>
+</li>
+<li><p><code>.finally()</code>方法的回调函数不接受任何的参数，也就是说你在<code>.finally()</code>函数中是无法知道Promise最终的状态是<code>resolved</code>还是<code>rejected</code>的</p>
+</li>
+<li><p>它最终返回的默认会是一个上一次的Promise对象值，不过如果抛出的是一个异常则返回异常的Promise对象。</p>
+<ul>
+<li>return 没有用，除非return Promise.reject()</li>
+</ul>
+</li>
+<li><p>finally本质上是then方法的特例</p>
+</li>
+</ul>
+<p><code>.finally()</code>的错误捕获：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.resolve(<span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">  .finally(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;finally1&#x27;</span>)</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&#x27;我是finally中抛出的异常&#x27;</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;finally后面的then函数&#x27;</span>, res)</span><br><span class="line">  &#125;)</span><br><span class="line">  .catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;捕获错误&#x27;</span>, err)</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#x27;finally1&#x27;</span><br><span class="line">&#x27;捕获错误&#x27; Error: 我是finally中抛出的异常</span><br></pre></td></tr></table></figure>
+
+<h3 id="14-all"><a href="#14-all" class="headerlink" title="14. all"></a>14. all</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">runAsync</span> (<span class="params">x</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">r</span> =&gt;</span> <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> r(x, <span class="built_in">console</span>.log(x)), <span class="number">1000</span>))</span><br><span class="line">    <span class="keyword">return</span> p</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Promise</span>.all([runAsync(<span class="number">1</span>), runAsync(<span class="number">2</span>), runAsync(<span class="number">3</span>)]).then(<span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(res))</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">[1, 2, 3]</span><br></pre></td></tr></table></figure>
+
+<p>首先，定义了一个Promise，来异步执行函数runAsync，该函数传入一个值x，然后间隔一秒后打印出这个x。</p>
+<p>之后再使用<code>Promise.all</code>来执行这个函数，执行的时候，看到一秒之后输出了1，2，3，同时输出了数组[1, 2, 3]，三个函数是同步执行的，并且在一个回调函数中返回了所有的结果。并且结果和函数的执行顺序是一致的。</p>
+<h3 id="15-all"><a href="#15-all" class="headerlink" title="15. all"></a>15. all</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">runAsync</span> (<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">r</span> =&gt;</span> <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> r(x, <span class="built_in">console</span>.log(x)), <span class="number">1000</span>))</span><br><span class="line">  <span class="keyword">return</span> p</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">runReject</span> (<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> rej(<span class="string">`Error: <span class="subst">$&#123;x&#125;</span>`</span>, <span class="built_in">console</span>.log(x)), <span class="number">1000</span> * x))</span><br><span class="line">  <span class="keyword">return</span> p</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">Promise</span>.all([runAsync(<span class="number">1</span>), runReject(<span class="number">4</span>), runAsync(<span class="number">3</span>), runReject(<span class="number">2</span>)])</span><br><span class="line">       .then(<span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(res))</span><br><span class="line">       .catch(<span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.log(err))</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 1s后输出</span><br><span class="line">1</span><br><span class="line">3</span><br><span class="line">// 2s后输出</span><br><span class="line">2</span><br><span class="line">Error: 2</span><br><span class="line">// 4s后输出</span><br><span class="line">4</span><br></pre></td></tr></table></figure>
+
+<p>可以看到。catch捕获到了第一个错误，在这道题目中最先的错误就是<code>runReject(2)</code>的结果。如果一组异步操作中有一个异常都不会进入<code>.then()</code>的第一个回调函数参数中。会被<code>.then()</code>的第二个回调函数捕获。</p>
+<h3 id="16-race"><a href="#16-race" class="headerlink" title="16. race"></a>16. race</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">runAsync</span> (<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">r</span> =&gt;</span> <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> r(x, <span class="built_in">console</span>.log(x)), <span class="number">1000</span>))</span><br><span class="line">  <span class="keyword">return</span> p</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">Promise</span>.race([runAsync(<span class="number">1</span>), runAsync(<span class="number">2</span>), runAsync(<span class="number">3</span>)])</span><br><span class="line">  .then(<span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;result: &#x27;</span>, res))</span><br><span class="line">  .catch(<span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.log(err))</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1</span><br><span class="line">&#x27;result: &#x27; 1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+
+<p>then只会捕获第一个成功的方法，其他的函数虽然还会继续执行，但是不是被then捕获了。</p>
+<h3 id="17-race"><a href="#17-race" class="headerlink" title="17. race"></a>17. race</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">runAsync</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">r</span> =&gt;</span></span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> r(x, <span class="built_in">console</span>.log(x)), <span class="number">1000</span>)</span><br><span class="line">  );</span><br><span class="line">  <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">runReject</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span></span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> rej(<span class="string">`Error: <span class="subst">$&#123;x&#125;</span>`</span>, <span class="built_in">console</span>.log(x)), <span class="number">1000</span> * x)</span><br><span class="line">  );</span><br><span class="line">  <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">Promise</span>.race([runReject(<span class="number">0</span>), runAsync(<span class="number">1</span>), runAsync(<span class="number">2</span>), runAsync(<span class="number">3</span>)])</span><br><span class="line">  .then(<span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;result: &quot;</span>, res))</span><br><span class="line">  .catch(<span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.log(err));</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0</span><br><span class="line">Error: 0</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+
+<p>可以看到在catch捕获到第一个错误之后，后面的代码还不执行，不过不会再被捕获了。</p>
+<p>注意：<code>all</code>和<code>race</code>传入的数组中如果有会抛出异常的异步任务，那么只有最先抛出的错误会被捕获，并且是被then的第二个参数或者后面的catch捕获；但并不会影响数组中其它的异步任务的执行。</p>
+<h2 id="async-await相关"><a href="#async-await相关" class="headerlink" title="async await相关"></a>async await相关</h2><h3 id="18-async"><a href="#18-async" class="headerlink" title="18. async"></a>18. async</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async1 start&quot;</span>);</span><br><span class="line">  <span class="keyword">await</span> async2(); <span class="comment">// new Promise</span></span><br><span class="line">  <span class="comment">// .then</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async1 end&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async2&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">async1();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;start&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">async1 start</span><br><span class="line">async2</span><br><span class="line">start</span><br><span class="line">async1 end</span><br></pre></td></tr></table></figure>
+
+<p>代码的执行过程如下：</p>
+<ol>
+<li>首先执行函数中的同步代码<code>async1 start</code>，之后遇到了<code>await</code>，它会阻塞<code>async1</code>后面代码的执行，因此会先去执行<code>async2</code>中的同步代码<code>async2</code>，然后跳出<code>async1</code>；</li>
+<li>跳出<code>async1</code>函数后，执行同步代码<code>start</code>；</li>
+<li>在一轮宏任务全部执行完之后，再来执行<code>await</code>后面的内容<code>async1 end</code>。</li>
+</ol>
+<p><strong>这里可以理解为await后面的语句相当于放到了new Promise中，下一行及之后的语句相当于放在Promise.then中。</strong></p>
+<h3 id="19-async"><a href="#19-async" class="headerlink" title="19. async"></a>19. async</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async1 start&quot;</span>);</span><br><span class="line">  <span class="keyword">await</span> async2();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async1 end&quot;</span>);</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;timer1&#x27;</span>)</span><br><span class="line">  &#125;, <span class="number">0</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;timer2&#x27;</span>)</span><br><span class="line">  &#125;, <span class="number">0</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async2&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">async1();</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;timer3&#x27;</span>)</span><br><span class="line">&#125;, <span class="number">0</span>)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;start&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">async1 start</span><br><span class="line">async2</span><br><span class="line">start</span><br><span class="line">async1 end</span><br><span class="line">timer2</span><br><span class="line">timer3</span><br><span class="line">timer1</span><br></pre></td></tr></table></figure>
+
+<p>代码的执行过程如下：</p>
+<ol>
+<li>首先进入<code>async1</code>，打印出<code>async1 start</code>；</li>
+<li>之后遇到<code>async2</code>，进入<code>async2</code>，遇到定时器<code>timer2</code>，加入宏任务队列，之后打印<code>async2</code>；</li>
+<li>由于<code>async2</code>阻塞了后面代码的执行，所以执行后面的定时器<code>timer3</code>，将其加入宏任务队列，之后打印<code>start</code>；</li>
+<li>然后执行async2后面的代码，打印出<code>async1 end</code>，遇到定时器timer1，将其加入宏任务队列；</li>
+<li>最后，宏任务队列有三个任务，先后顺序为<code>timer2</code>，<code>timer3</code>，<code>timer1</code>，没有微任务，所以直接所有的宏任务按照先进先出的原则执行。</li>
+</ol>
+<h3 id="20-async、new-Promise陷阱"><a href="#20-async、new-Promise陷阱" class="headerlink" title="20. async、new Promise陷阱"></a>20. async、new Promise陷阱</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async1</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;async1 start&#x27;</span>);</span><br><span class="line">  <span class="keyword">await</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;promise1&#x27;</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;async1 success&#x27;</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;async1 end&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;srcipt start&#x27;</span>)</span><br><span class="line">async1().then(<span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(res))</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;srcipt end&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">script start</span><br><span class="line">async1 start</span><br><span class="line">promise1</span><br><span class="line">script end</span><br></pre></td></tr></table></figure>
+
+<p>这里需要注意的是在<code>async1</code>中<code>await</code>后面的Promise是没有返回值的，也就是它的状态始终是<code>pending</code>状态，所以在<code>await</code>之后的内容是不会执行的，包括<code>async1</code>后面的 <code>.then</code>。</p>
+<h3 id="21-async"><a href="#21-async" class="headerlink" title="21. async"></a>21. async</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async1</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;async1 start&#x27;</span>);</span><br><span class="line">  <span class="keyword">await</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;promise1&#x27;</span>)</span><br><span class="line">    resolve(<span class="string">&#x27;promise1 resolve&#x27;</span>)</span><br><span class="line">  &#125;).then(<span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(res))</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;async1 success&#x27;</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;async1 end&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;srcipt start&#x27;</span>)</span><br><span class="line">async1().then(<span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(res))</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;srcipt end&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这里是对上面一题进行了改造，加上了resolve。</p>
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">script start</span><br><span class="line">async1 start</span><br><span class="line">promise1</span><br><span class="line">script end</span><br><span class="line">promise1 resolve</span><br><span class="line">async1 success</span><br><span class="line">async1 end</span><br></pre></td></tr></table></figure>
+
+<h3 id="22-async"><a href="#22-async" class="headerlink" title="22. async"></a>22. async</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async1 start&quot;</span>);</span><br><span class="line">  <span class="keyword">await</span> async2();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async1 end&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;async2&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;script start&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;setTimeout&quot;</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">async1();</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;promise1&quot;</span>);</span><br><span class="line">  resolve();</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;promise2&quot;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;script end&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">script start</span><br><span class="line">async1 start</span><br><span class="line">async2</span><br><span class="line">promise1</span><br><span class="line">script end</span><br><span class="line">async1 end</span><br><span class="line">promise2</span><br><span class="line">setTimeout</span><br></pre></td></tr></table></figure>
+
+<p>代码执行过程如下： </p>
+<ol>
+<li>开头定义了async1和async2两个函数，但是并未执行，执行script中的代码，所以打印出script start；</li>
+<li>遇到定时器Settimeout，它是一个宏任务，将其加入到宏任务队列；</li>
+<li>之后执行函数async1，首先打印出async1 start；</li>
+<li>遇到await，执行async2，打印出async2，并阻断后面代码的执行，将后面的代码加入到微任务队列；</li>
+<li>然后跳出async1和async2，遇到Promise，打印出promise1；</li>
+<li>遇到resolve，将其加入到微任务队列，然后执行后面的script代码，打印出script end；</li>
+<li>之后就该执行微任务队列了，首先打印出async1 end，然后打印出promise2；</li>
+<li>执行完微任务队列，就开始执行宏任务队列中的定时器，打印出setTimeout。</li>
+</ol>
+<h3 id="23-async、抛出错误"><a href="#23-async、抛出错误" class="headerlink" title="23. async、抛出错误"></a>23. async、抛出错误</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async1</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">await</span> async2();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;async1&#x27;</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;async1 success&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async2</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;async2&#x27;</span>)</span><br><span class="line">    reject(<span class="string">&#x27;error&#x27;</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line">async1().then(<span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(res))</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">async2</span><br><span class="line">Uncaught (in promise) error</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，如果async函数中抛出了错误，就会终止错误结果，不会继续向下执行。</p>
+<p>如果想要让错误不足之处后面的代码执行，可以使用catch来捕获：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async1</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">await</span> <span class="built_in">Promise</span>.reject(<span class="string">&#x27;error!!!&#x27;</span>).catch(<span class="function"><span class="params">e</span> =&gt;</span> <span class="built_in">console</span>.log(e))</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;async1&#x27;</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(<span class="string">&#x27;async1 success&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line">async1().then(<span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(res))</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;script start&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这样的输出结果就是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">script start</span><br><span class="line">error!!!</span><br><span class="line">async1</span><br><span class="line">async1 success</span><br></pre></td></tr></table></figure>
+
+<h2 id="综合顺序相关"><a href="#综合顺序相关" class="headerlink" title="综合顺序相关"></a>综合顺序相关</h2><h3 id="24-微任务宏任务"><a href="#24-微任务宏任务" class="headerlink" title="24. 微任务宏任务"></a>24. 微任务宏任务</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> first = <span class="function">() =&gt;</span> (<span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">3</span>);</span><br><span class="line">    <span class="keyword">let</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="number">7</span>);</span><br><span class="line">        <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="number">5</span>);</span><br><span class="line">            resolve(<span class="number">6</span>);</span><br><span class="line">            <span class="built_in">console</span>.log(p)</span><br><span class="line">        &#125;, <span class="number">0</span>)</span><br><span class="line">        resolve(<span class="number">1</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">    resolve(<span class="number">2</span>);</span><br><span class="line">    p.then(<span class="function">(<span class="params">arg</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(arg);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;));</span><br><span class="line">first().then(<span class="function">(<span class="params">arg</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(arg);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">4</span>);</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3</span><br><span class="line">7</span><br><span class="line">4</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">5</span><br><span class="line">Promise&#123;&lt;resolved&gt;: 1&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码的执行过程如下：</p>
+<ol>
+<li>首先会进入Promise，打印出3，之后进入下面的Promise，打印出7；</li>
+<li>遇到了定时器，将其加入宏任务队列；</li>
+<li>执行Promise  p中的resolve，状态变为resolved，返回值为1；</li>
+<li>执行Promise first中的resolve，状态变为resolved，返回值为2；</li>
+<li>遇到p.then，将其加入微任务队列，遇到first().then，将其加入任务队列；</li>
+<li>执行外面的代码，打印出4；</li>
+<li>这样第一轮宏任务就执行完了，开始执行微任务队列中的任务，先后打印出1和2；</li>
+<li>这样微任务就执行完了，开始执行下一轮宏任务，宏任务队列中有一个定时器，执行它，打印出5，由于执行已经变为resolved状态，所以<code>resolve(6)</code>不会再执行；</li>
+<li>最后<code>console.log(p)</code>打印出<code>Promise&#123;&lt;resolved&gt;: 1&#125;</code>；</li>
+</ol>
+<h3 id="25-微任务宏任务、new-Promise"><a href="#25-微任务宏任务、new-Promise" class="headerlink" title="25. 微任务宏任务、new Promise"></a>25. 微任务宏任务、new Promise</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> async1 = <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;async1&#x27;</span>);</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;timer1&#x27;</span>)</span><br><span class="line">  &#125;, <span class="number">2000</span>)</span><br><span class="line">  <span class="keyword">await</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;promise1&#x27;</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;async1 end&#x27;</span>)</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;async1 success&#x27;</span></span><br><span class="line">&#125; </span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;script start&#x27;</span>);</span><br><span class="line">async1().then(<span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(res));</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;script end&#x27;</span>);</span><br><span class="line"><span class="built_in">Promise</span>.resolve(<span class="number">1</span>)</span><br><span class="line">  .then(<span class="number">2</span>)</span><br><span class="line">  .then(<span class="built_in">Promise</span>.resolve(<span class="number">3</span>))</span><br><span class="line">  .catch(<span class="number">4</span>)</span><br><span class="line">  .then(<span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(res))</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;timer2&#x27;</span>)</span><br><span class="line">&#125;, <span class="number">1000</span>)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">script start</span><br><span class="line">async1</span><br><span class="line">promise1</span><br><span class="line">script end</span><br><span class="line">1</span><br><span class="line">timer2</span><br><span class="line">timer1</span><br></pre></td></tr></table></figure>
+
+<p>代码的执行过程如下：</p>
+<ol>
+<li>首先执行同步带吗，打印出script start；</li>
+<li>遇到定时器timer1将其加入宏任务队列；</li>
+<li>之后是执行Promise，打印出promise1，由于Promise没有返回值，所以后面的代码不会执行；</li>
+<li>然后执行同步代码，打印出script end；</li>
+<li>继续执行下面的Promise，.then和.catch期望参数是一个函数，这里传入的是一个数字，因此就会发生值渗透，将resolve(1)的值传到最后一个then，直接打印出1；</li>
+<li>遇到第二个定时器，将其加入到微任务队列，执行微任务队列，按顺序依次执行两个定时器，但是由于定时器时间的原因，会在两秒后先打印出timer2，在四秒后打印出timer1。</li>
+</ol>
+<h3 id="26-微任务宏任务"><a href="#26-微任务宏任务" class="headerlink" title="26. 微任务宏任务"></a>26. 微任务宏任务</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> p1 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    resolve(<span class="string">&#x27;resolve3&#x27;</span>);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;timer1&#x27;</span>)</span><br><span class="line">  &#125;, <span class="number">0</span>)</span><br><span class="line">  resolve(<span class="string">&#x27;resovle1&#x27;</span>);</span><br><span class="line">  resolve(<span class="string">&#x27;resolve2&#x27;</span>);</span><br><span class="line">&#125;).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res)  <span class="comment">// resolve1</span></span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(p1)</span><br><span class="line">  &#125;, <span class="number">1000</span>)</span><br><span class="line">&#125;).finally(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;finally&#x27;</span>, res)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>执行结果为如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">resolve1</span><br><span class="line">finally  undefined</span><br><span class="line">timer1</span><br><span class="line">Promise&#123;&lt;resolved&gt;: undefined&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="27-process-nextTick"><a href="#27-process-nextTick" class="headerlink" title="27. process.nextTick"></a>27. process.nextTick</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;1&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;2&#x27;</span>);</span><br><span class="line">    process.nextTick(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;3&#x27;</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;4&#x27;</span>);</span><br><span class="line">        resolve();</span><br><span class="line">    &#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;5&#x27;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line">process.nextTick(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;6&#x27;</span>);</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;7&#x27;</span>);</span><br><span class="line">    resolve();</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;8&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;9&#x27;</span>);</span><br><span class="line">    process.nextTick(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;10&#x27;</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;11&#x27;</span>);</span><br><span class="line">        resolve();</span><br><span class="line">    &#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;12&#x27;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1</span><br><span class="line">7</span><br><span class="line">6</span><br><span class="line">8</span><br><span class="line">2</span><br><span class="line">4</span><br><span class="line">3</span><br><span class="line">5</span><br><span class="line">9</span><br><span class="line">11</span><br><span class="line">10</span><br><span class="line">12</span><br></pre></td></tr></table></figure>
+
+<p><strong>（1）第一轮事件循环流程分析如下：</strong></p>
+<ul>
+<li>整体script作为第一个宏任务进入主线程，遇到<code>console.log</code>，输出1。</li>
+<li>遇到<code>setTimeout</code>，其回调函数被分发到宏任务Event Queue中。暂且记为<code>setTimeout1</code>。</li>
+<li>遇到<code>process.nextTick()</code>，其回调函数被分发到微任务Event Queue中。记为<code>process1</code>。</li>
+<li>遇到<code>Promise</code>，<code>new Promise</code>直接执行，输出7。<code>then</code>被分发到微任务Event Queue中。记为<code>then1</code>。</li>
+<li>又遇到了<code>setTimeout</code>，其回调函数被分发到宏任务Event Queue中，记为<code>setTimeout2</code>。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>宏任务Event Queue</th>
+<th>微任务Event Queue</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>setTimeout1</td>
+<td>process1</td>
+</tr>
+<tr>
+<td>setTimeout2</td>
+<td>then1</td>
+</tr>
+</tbody></table>
+<p>上表是第一轮事件循环宏任务结束时各Event Queue的情况，此时已经输出了1和7。发现了<code>process1</code>和<code>then1</code>两个微任务：</p>
+<ul>
+<li>执行<code>process1</code>，输出6。</li>
+<li>执行<code>then1</code>，输出8。</li>
+</ul>
+<p>第一轮事件循环正式结束，这一轮的结果是输出1，7，6，8。</p>
+<p><strong>（2）第二轮时间循环从</strong><code>**setTimeout1**</code><strong>宏任务开始：</strong></p>
+<ul>
+<li>首先输出2。接下来遇到了<code>process.nextTick()</code>，同样将其分发到微任务Event Queue中，记为<code>process2</code>。</li>
+<li><code>new Promise</code>立即执行输出4，<code>then</code>也分发到微任务Event Queue中，记为<code>then2</code>。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>宏任务Event Queue</th>
+<th>微任务Event Queue</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>setTimeout2</td>
+<td>process2</td>
+</tr>
+<tr>
+<td></td>
+<td>then2</td>
+</tr>
+</tbody></table>
+<p>第二轮事件循环宏任务结束，发现有<code>process2</code>和<code>then2</code>两个微任务可以执行：</p>
+<ul>
+<li>输出3。</li>
+<li>输出5。</li>
+</ul>
+<p>第二轮事件循环结束，第二轮输出2，4，3，5。</p>
+<p><strong>（3）第三轮事件循环开始，此时只剩setTimeout2了，执行。</strong></p>
+<ul>
+<li>直接输出9。</li>
+<li>将<code>process.nextTick()</code>分发到微任务Event Queue中。记为<code>process3</code>。</li>
+<li>直接执行<code>new Promise</code>，输出11。</li>
+<li>将<code>then</code>分发到微任务Event Queue中，记为<code>then3</code>。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>宏任务Event Queue</th>
+<th>微任务Event Queue</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td>process3</td>
+</tr>
+<tr>
+<td></td>
+<td>then3</td>
+</tr>
+</tbody></table>
+<p>第三轮事件循环宏任务执行结束，执行两个微任务<code>process3</code>和<code>then3</code>：</p>
+<ul>
+<li>输出10。</li>
+<li>输出12。</li>
+</ul>
+<p>第三轮事件循环结束，第三轮输出9，11，10，12。</p>
+<p>整段代码，共进行了三次事件循环，完整的输出为1，7，6，8，2，4，3，5，9，11，10，12。</p>
+<h3 id="28-微任务宏任务"><a href="#28-微任务宏任务" class="headerlink" title="28. 微任务宏任务"></a>28. 微任务宏任务</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">2</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span>  &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">3</span>)</span><br><span class="line">  resolve(<span class="number">4</span>)</span><br><span class="line">&#125;).then(<span class="function"><span class="params">d</span> =&gt;</span> <span class="built_in">console</span>.log(d))</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">5</span>)</span><br><span class="line">  <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span>  &#123;</span><br><span class="line">    resolve(<span class="number">6</span>)</span><br><span class="line">  &#125;).then(<span class="function"><span class="params">d</span> =&gt;</span> <span class="built_in">console</span>.log(d))</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">7</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">8</span>)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1</span><br><span class="line">3</span><br><span class="line">8</span><br><span class="line">4</span><br><span class="line">2</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td></tr></table></figure>
+
+<p>代码执行过程如下：</p>
+<ol>
+<li>首先执行script代码，打印出1；</li>
+<li>遇到第一个定时器，加入到宏任务队列；</li>
+<li>遇到Promise，执行代码，打印出3，遇到resolve，将其加入到微任务队列；</li>
+<li>遇到第二个定时器，加入到宏任务队列；</li>
+<li>遇到第三个定时器，加入到宏任务队列；</li>
+<li>继续执行script代码，打印出8，第一轮执行结束；</li>
+<li>执行微任务队列，打印出第一个Promise的resolve结果：4；</li>
+<li>开始执行宏任务队列，执行第一个定时器，打印出2；</li>
+<li>此时没有微任务，继续执行宏任务中的第二个定时器，首先打印出5，遇到Promise，首选打印出6，遇到resolve，将其加入到微任务队列；</li>
+<li>执行微任务队列，打印出6；</li>
+<li>执行宏任务队列中的最后一个定时器，打印出7。</li>
+</ol>
+<h3 id="29-微任务宏任务"><a href="#29-微任务宏任务" class="headerlink" title="29. 微任务宏任务"></a>29. 微任务宏任务</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">    </span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">2</span>);</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">3</span>)</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">4</span>)</span><br><span class="line">  resolve(<span class="number">5</span>)</span><br><span class="line">&#125;).then(<span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(data);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">6</span>);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">7</span>);</span><br></pre></td></tr></table></figure>
+
+<p>代码输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1</span><br><span class="line">4</span><br><span class="line">7</span><br><span class="line">5</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">6</span><br></pre></td></tr></table></figure>
+
+<p>代码执行过程如下：</p>
+<ol>
+<li>首先执行scrip代码，打印出1；</li>
+<li>遇到第一个定时器setTimeout，将其加入到宏任务队列；</li>
+<li>遇到Promise，执行里面的同步代码，打印出4，遇到resolve，将其加入到微任务队列；</li>
+<li>遇到第二个定时器setTimeout，将其加入到红任务队列；</li>
+<li>执行script代码，打印出7，至此第一轮执行完成；</li>
+<li>指定微任务队列中的代码，打印出resolve的结果：5；</li>
+<li>执行宏任务中的第一个定时器setTimeout，首先打印出2，然后遇到 Promise.resolve().then()，将其加入到微任务队列；</li>
+<li>执行完这个宏任务，就开始执行微任务队列，打印出3；</li>
+<li>继续执行宏任务队列中的第二个定时器，打印出6。</li>
+</ol>
+<h3 id="30-then和catch"><a href="#30-then和catch" class="headerlink" title="30. then和catch"></a>30. then和catch</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.resolve().then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;1&#x27;</span>);</span><br><span class="line">    <span class="keyword">throw</span> <span class="string">&#x27;Error&#x27;</span>;</span><br><span class="line">&#125;).then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;2&#x27;</span>);</span><br><span class="line">&#125;).catch(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;3&#x27;</span>);</span><br><span class="line">    <span class="keyword">throw</span> <span class="string">&#x27;Error&#x27;</span>;</span><br><span class="line">&#125;).then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;4&#x27;</span>);</span><br><span class="line">&#125;).catch(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;5&#x27;</span>);</span><br><span class="line">&#125;).then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;6&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>执行结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 </span><br><span class="line">3 </span><br><span class="line">5 </span><br><span class="line">6</span><br></pre></td></tr></table></figure>
+
+<p>在这道题目中，我们需要知道，无论是thne还是catch中，只要throw 抛出了错误，就会被catch捕获，如果没有throw出错误，就被继续执行后面的then。</p>
+<h3 id="31-微任务宏任务"><a href="#31-微任务宏任务" class="headerlink" title="31. 微任务宏任务"></a>31. 微任务宏任务</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">&#125;, <span class="number">100</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">2</span>);</span><br><span class="line">  resolve();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">3</span>);</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">4</span>);</span><br><span class="line">  <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resove, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">5</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span>  &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="number">6</span>);</span><br><span class="line">    &#125;, <span class="number">10</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">7</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">8</span>);</span><br></pre></td></tr></table></figure>
+
+<p>输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">2</span><br><span class="line">3</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<p>代码执行过程如下：</p>
+<ol>
+<li>首先遇到定时器，将其加入到宏任务队列；</li>
+<li>遇到Promise，首先执行里面的同步代码，打印出2，遇到resolve，将其加入到微任务队列，执行后面同步代码，打印出3；</li>
+<li>继续执行script中的代码，打印出7和8，至此第一轮代码执行完成；</li>
+<li>执行微任务队列中的代码，首先打印出4，如遇到Promise，执行其中的同步代码，打印出5，遇到定时器，将其加入到宏任务队列中，此时宏任务队列中有两个定时器；</li>
+<li>执行宏任务队列中的代码，这里我们需要注意是的第一个定时器的时间为100ms，第二个定时器的时间为10ms，所以先执行第二个定时器，打印出6；</li>
+<li>此时微任务队列为空，继续执行宏任务队列，打印出1。</li>
+</ol>
+<p>做完这道题目，我们就需要格外注意，每个定时器的时间，并不是所有定时器的时间都为0哦。</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>前端面经</category>
+      </categories>
+      <tags>
+        <tag>微任务&amp;宏任务</tag>
+        <tag>面经</tag>
       </tags>
   </entry>
 </search>
