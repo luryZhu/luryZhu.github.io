@@ -3583,11 +3583,11 @@
   </entry>
   <entry>
     <title>面经复盘1：百度前端暑期实习 2022-04-10</title>
-    <url>/2022/04/09/interview/interview_Baidu/</url>
+    <url>/2022/04/10/interview/interview_Baidu/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>百度2022春暑期实习，2022-04-10，前端，下午场</p>
 <p>需要加强理解：</p>
 <ul>
-<li>CSS：posotion优先级、垂直定位</li>
+<li>CSS：position优先级、垂直水平居中</li>
 <li>手写：递归回溯相关leetcode（全排列、二叉树）</li>
 <li>React：高阶组件、自定义Hook、Context实现插槽</li>
 </ul>
