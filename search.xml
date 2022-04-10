@@ -3581,4 +3581,153 @@
         <tag>面经</tag>
       </tags>
   </entry>
+  <entry>
+    <title>面经复盘1：百度前端暑期实习 2022-04-10</title>
+    <url>/2022/04/09/interview/interview_Baidu/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>百度2022春暑期实习，2022-04-10，前端，下午场</p>
+<p>需要加强理解：</p>
+<ul>
+<li>CSS：posotion优先级、垂直定位</li>
+<li>手写：递归回溯相关leetcode（全排列、二叉树）</li>
+<li>React：高阶组件、自定义Hook、Context实现插槽</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="一面"><a href="#一面" class="headerlink" title="一面"></a>一面</h1><h2 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h2><h3 id="垂直居中怎么写"><a href="#垂直居中怎么写" class="headerlink" title="垂直居中怎么写 *"></a>垂直居中怎么写 *</h3><p>参考：<a href="https://www.cnblogs.com/qwguo/p/13047176.html">https://www.cnblogs.com/qwguo/p/13047176.html</a></p>
+<h4 id="transform"><a href="#transform" class="headerlink" title="transform"></a>transform</h4><p>利用transform里头的translateY（改变垂直的位移，如果使用百分比为单位，则是以元素本身的长宽为基准），搭配元素本身的top属性，就可以做出垂直居中的效果，比较需要注意的地方是，<strong>子元素必须要加上position:relative</strong>，不然就会没有效果喔。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.use-transform</span>&#123;</span><br><span class="line">    <span class="attribute">width</span>:<span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">height</span>:<span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">border</span>:<span class="number">1px</span> solid <span class="number">#000</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.use-transform</span> <span class="selector-tag">div</span>&#123;</span><br><span class="line">    <span class="attribute">position</span>: relative;			//!!!</span><br><span class="line">    <span class="attribute">width</span>:<span class="number">100px</span>;</span><br><span class="line">    <span class="attribute">height</span>:<span class="number">50px</span>;</span><br><span class="line">    <span class="attribute">top</span>:<span class="number">50%</span>;					//!!!</span><br><span class="line">    <span class="attribute">transform</span>:<span class="built_in">translateY</span>(-<span class="number">50%</span>); //!!!</span><br><span class="line">    <span class="attribute">background</span>:<span class="number">#095</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="绝对定位"><a href="#绝对定位" class="headerlink" title="绝对定位"></a>绝对定位</h4><p><strong>将上下左右的数值都设为0，再搭配一个margin:auto</strong>，就可以办到垂直居中，不过要特别注意的是，设定绝对定位的子元素，其父元素的position必须要指定为relative喔（<strong>子绝父相</strong>）！而且绝对定位的元素是会互相覆盖的，所以如果内容元素较多，可能就会有些问题。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.use-absolute</span>&#123;</span><br><span class="line">    <span class="attribute">position</span>: relative;		//!!!</span><br><span class="line">    <span class="attribute">width</span>:<span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">height</span>:<span class="number">150px</span>;</span><br><span class="line">    <span class="attribute">border</span>:<span class="number">1px</span> solid <span class="number">#000</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.use-absolute</span> <span class="selector-tag">div</span>&#123;</span><br><span class="line">    <span class="attribute">position</span>: absolute;		//!!!</span><br><span class="line">    <span class="attribute">width</span>:<span class="number">100px</span>;</span><br><span class="line">    <span class="attribute">height</span>:<span class="number">50px</span>;</span><br><span class="line">    <span class="attribute">top</span>:<span class="number">0</span>;					//!!!</span><br><span class="line">    <span class="attribute">right</span>:<span class="number">0</span>;</span><br><span class="line">    <span class="attribute">bottom</span>:<span class="number">0</span>;</span><br><span class="line">    <span class="attribute">left</span>:<span class="number">0</span>;</span><br><span class="line">    <span class="attribute">margin</span>:auto;			//!!!</span><br><span class="line">    <span class="attribute">background</span>:<span class="number">#f60</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="flex"><a href="#flex" class="headerlink" title="flex"></a>flex</h4><ul>
+<li><p>使用<strong>align-items</strong>或<strong>align-content</strong>的属性，轻轻松松就可以做到垂直居中的效果。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.use-flexbox</span>&#123;</span><br><span class="line">    <span class="attribute">display</span>:flex;			//!!!</span><br><span class="line">    <span class="attribute">align-items</span>:center;		//垂直居中</span><br><span class="line">    <span class="attribute">justify-content</span>:center;	//水平居中</span><br><span class="line">    <span class="attribute">width</span>:<span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">height</span>:<span class="number">150px</span>;</span><br><span class="line">    <span class="attribute">border</span>:<span class="number">1px</span> solid <span class="number">#000</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.use-flexbox</span> <span class="selector-tag">div</span>&#123;</span><br><span class="line">    <span class="attribute">width</span>:<span class="number">100px</span>;</span><br><span class="line">    <span class="attribute">height</span>:<span class="number">50px</span>;</span><br><span class="line">    <span class="attribute">background</span>:<span class="number">#099</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="flex-1代表什么，默认值是什么"><a href="#flex-1代表什么，默认值是什么" class="headerlink" title="flex: 1代表什么，默认值是什么 *"></a>flex: 1代表什么，默认值是什么 *</h3><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/136223806">https://zhuanlan.zhihu.com/p/136223806</a></li>
+<li>代表三个属性：<ul>
+<li>flex-grow：定义项目的放大比例，默认为<strong>0</strong>，即如果存在剩余空间，也不放大。</li>
+<li>flex-shrink：定义了项目的缩小比例，默认为<strong>1</strong>，即如果空间不足，该项目将缩小。</li>
+<li>flex-basis：定义了在分配多余空间之前，项目占据的主轴空间。浏览器根据这个属性，计算主轴是否有多余空间。它的默认值为<strong>auto</strong>，即项目的本来大小。</li>
+</ul>
+</li>
+<li>flex: 1 &#x3D;&#x3D;&#x3D; flex 1 1 0</li>
+<li>flex默认值是 0 1 auto</li>
+</ul>
+<h3 id="padding百分比是基于盒子的width还是height"><a href="#padding百分比是基于盒子的width还是height" class="headerlink" title="padding百分比是基于盒子的width还是height *"></a>padding百分比是基于盒子的width还是height *</h3><ul>
+<li><p><strong>width</strong></p>
+</li>
+<li><p>padding的百分比是相对于父元素宽度，</p>
+<ul>
+<li>如果父元素有宽度，相对于父元素宽度，</li>
+<li>如果没有，找其父辈元素的宽度，均没设宽度时，相对于屏幕的宽度。</li>
+</ul>
+</li>
+</ul>
+<h3 id="position，display-none，float优先级"><a href="#position，display-none，float优先级" class="headerlink" title="position，display: none，float优先级 *"></a>position，display: none，float优先级 *</h3><ul>
+<li><code>display: none</code> &gt; <code>position: absolute/fixed</code> &gt; <code>float: 非none</code></li>
+<li><img src="https://img-blog.csdn.net/20161225213004672?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvY3J5c3RhbDY5MTg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"></li>
+</ul>
+<h3 id="less和sass的区别"><a href="#less和sass的区别" class="headerlink" title="less和sass的区别"></a>less和sass的区别</h3><ul>
+<li><a href="https://www.jianshu.com/p/e3f1fcbbccc3">https://www.jianshu.com/p/e3f1fcbbccc3</a></li>
+<li>最主要的是编译环境？<ul>
+<li>less：JS，客户端处理，npm</li>
+<li>sass：ruby，服务器处理</li>
+</ul>
+</li>
+</ul>
+<h2 id="JS"><a href="#JS" class="headerlink" title="JS"></a>JS</h2><h3 id="数组用什么方法"><a href="#数组用什么方法" class="headerlink" title="数组用什么方法"></a>数组用什么方法</h3><ul>
+<li>push pop shift unshift forEach map</li>
+<li>shift unshift 干什么的</li>
+</ul>
+<h3 id="get和post区别"><a href="#get和post区别" class="headerlink" title="get和post区别"></a>get和post区别</h3><ul>
+<li>都是明文传输啊都很危险</li>
+<li>为什么HTTPS安全</li>
+</ul>
+<h3 id="跨域失败的请求被谁拦截？"><a href="#跨域失败的请求被谁拦截？" class="headerlink" title="跨域失败的请求被谁拦截？*"></a>跨域失败的请求被谁拦截？*</h3><p><a href="https://cloud.tencent.com/developer/article/1745763">https://cloud.tencent.com/developer/article/1745763</a></p>
+<p>被浏览器拦截，拦截的是响应不是请求</p>
+<h3 id="事件循环"><a href="#事件循环" class="headerlink" title="事件循环"></a>事件循环</h3><p>Event Loop</p>
+<h2 id="React"><a href="#React" class="headerlink" title="React"></a>React</h2><h3 id="说下用过的钩子"><a href="#说下用过的钩子" class="headerlink" title="说下用过的钩子"></a>说下用过的钩子</h3><p>useEffect, useState, useRef, useMemo…</p>
+<h2 id="说输出"><a href="#说输出" class="headerlink" title="说输出"></a>说输出</h2><h3 id="function、var声明提升"><a href="#function、var声明提升" class="headerlink" title="function、var声明提升"></a>function、var声明提升</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  show(); <span class="comment">//5</span></span><br><span class="line">  <span class="keyword">var</span> show = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">4</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">  show(); <span class="comment">//4</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">show</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">5</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  show(); <span class="comment">//4</span></span><br><span class="line">&#125;)();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 顺序：</span></span><br><span class="line"><span class="comment">// function show()&#123;...&#125; 函数声明优先</span></span><br><span class="line"><span class="comment">// var show</span></span><br><span class="line"><span class="comment">// show = function()&#123;...&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="setTimeout，promise"><a href="#setTimeout，promise" class="headerlink" title="setTimeout，promise"></a>setTimeout，promise</h3><p>promise微任务插队</p>
+<h2 id="手写"><a href="#手写" class="headerlink" title="手写"></a>手写</h2><h3 id="一段文字渲染到屏幕，改颜色"><a href="#一段文字渲染到屏幕，改颜色" class="headerlink" title="一段文字渲染到屏幕，改颜色 *"></a>一段文字渲染到屏幕，改颜色 *</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> result = &#123;</span><br><span class="line">  <span class="attr">content</span>: <span class="string">&quot;sdhkjahsdhakhdjksahjs&quot;</span>,</span><br><span class="line">  <span class="attr">offset</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">offset</span>: [<span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">      <span class="attr">color</span>: <span class="string">&quot;red&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">offset</span>: [<span class="number">7</span>, <span class="number">10</span>],</span><br><span class="line">      <span class="attr">color</span>: <span class="string">&quot;yello&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">offset</span>: [<span class="number">12</span>, <span class="number">14</span>],</span><br><span class="line">      <span class="attr">color</span>: <span class="string">&quot;blue&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>把content内容按照下标和颜色渲染</p>
+<p>思路：先按offset排序，然后遍历，组装成有颜色的span，替换原来的元素，然后拼接成模板字符串什么的加入html</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> app = <span class="built_in">document</span>.getElementById(<span class="string">&quot;app&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> result = &#123;</span><br><span class="line">  <span class="attr">content</span>: <span class="string">&quot;my name is Kitty Hello Hell no, Bye!&quot;</span>,</span><br><span class="line">  <span class="attr">offsets</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">offset</span>: [<span class="number">11</span>, <span class="number">16</span>],</span><br><span class="line">      <span class="attr">color</span>: <span class="string">&quot;blue&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">offset</span>: [<span class="number">3</span>, <span class="number">7</span>],</span><br><span class="line">      <span class="attr">color</span>: <span class="string">&quot;red&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">offset</span>: [<span class="number">17</span>, <span class="number">22</span>],</span><br><span class="line">      <span class="attr">color</span>: <span class="string">&quot;purple&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">offset</span>: [<span class="number">8</span>, <span class="number">10</span>],</span><br><span class="line">      <span class="attr">color</span>: <span class="string">&quot;green&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">showResult</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> getSpan = <span class="function">(<span class="params">text, color</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> span = <span class="built_in">document</span>.createElement(<span class="string">&quot;span&quot;</span>);</span><br><span class="line">    span.innerHTML = text;</span><br><span class="line">    <span class="keyword">if</span> (color) span.style.color = color;</span><br><span class="line">    <span class="keyword">return</span> span;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">let</span> offsets = obj.offsets;</span><br><span class="line">  <span class="keyword">let</span> renderArr = [];</span><br><span class="line">  offsets.sort(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a.offset[<span class="number">0</span>] - b.offset[<span class="number">0</span>]);</span><br><span class="line">  <span class="comment">// console.log(offsets);</span></span><br><span class="line">  <span class="keyword">let</span> preIdx = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">let</span> text = <span class="string">&quot;&quot;</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> item <span class="keyword">of</span> offsets) &#123;</span><br><span class="line">    <span class="keyword">if</span> (item.offset[<span class="number">0</span>] &gt; preIdx) &#123;</span><br><span class="line">      text = obj.content.slice(preIdx, item.offset[<span class="number">0</span>]);</span><br><span class="line">      renderArr.push(getSpan(text));</span><br><span class="line">    &#125;</span><br><span class="line">    text = obj.content.slice(item.offset[<span class="number">0</span>], item.offset[<span class="number">1</span>]);</span><br><span class="line">    renderArr.push(getSpan(text, item.color));</span><br><span class="line">    preIdx = item.offset[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// console.log(renderArr);</span></span><br><span class="line">  &#125;</span><br><span class="line">  text = obj.content.slice(preIdx);</span><br><span class="line"></span><br><span class="line">  renderArr.push(getSpan(text));</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> item <span class="keyword">of</span> renderArr) &#123;</span><br><span class="line">    app.appendChild(item);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">showResult(result);</span><br></pre></td></tr></table></figure>
+
+<h3 id="对称二叉树"><a href="#对称二叉树" class="headerlink" title="对称二叉树"></a>对称二叉树</h3><p><a href="https://github.com/luryZhu/leetcode-js/issues/16">https://github.com/luryZhu/leetcode-js/issues/16</a></p>
+<h1 id="二面"><a href="#二面" class="headerlink" title="二面 *"></a>二面 *</h1><p>自我介绍</p>
+<p>一边手写一边回答问题，全寄</p>
+<h2 id="全排列"><a href="#全排列" class="headerlink" title="全排列 *"></a>全排列 *</h2><p><a href="https://github.com/luryZhu/leetcode-js/issues/30">https://github.com/luryZhu/leetcode-js/issues/30</a></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">permute</span>(<span class="params">numbers</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> res = [];</span><br><span class="line">  <span class="keyword">const</span> used = [];</span><br><span class="line">  <span class="keyword">const</span> len = numbers.length;</span><br><span class="line">  <span class="keyword">let</span> dfs = <span class="function">(<span class="params">pre</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (pre.length === len) &#123;</span><br><span class="line">      res.push([...pre]);</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">      <span class="keyword">if</span> (used[i]) <span class="keyword">continue</span>;</span><br><span class="line">      used[i] = <span class="literal">true</span>;</span><br><span class="line">      dfs([...pre, numbers[i]]);</span><br><span class="line">      used[i] = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  dfs([]);</span><br><span class="line">  <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(permute(numbers));</span><br></pre></td></tr></table></figure>
+
+<h2 id="解析URL"><a href="#解析URL" class="headerlink" title="解析URL *"></a>解析URL *</h2><p><code>url: https://interview.nowcoder.com/interview/confirm?code=Cq1y2tOP&amp;roundId=3819618</code> *</p>
+<p>不停split</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">urlQuery</span>(<span class="params">url</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> resObj = &#123;&#125;;</span><br><span class="line">  <span class="keyword">let</span> queries = url.split(<span class="string">&quot;?&quot;</span>)[<span class="number">1</span>].split(<span class="string">&quot;&amp;&quot;</span>);</span><br><span class="line">  queries.forEach(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> [key, value] = item.split(<span class="string">&quot;=&quot;</span>);</span><br><span class="line">    resObj[key] = value;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> resObj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> url =</span><br><span class="line">  <span class="string">&quot;url: https://interview.nowcoder.com/interview/confirm?code=Cq1y2tOP&amp;roundId=3819618&quot;</span>;</span><br><span class="line"><span class="built_in">console</span>.log(urlQuery(url));</span><br></pre></td></tr></table></figure>
+
+<h2 id="reduce拆分递增数组"><a href="#reduce拆分递增数组" class="headerlink" title="reduce拆分递增数组 *"></a>reduce拆分递增数组 *</h2><p>[1,2,3,5,7,9]&#x3D;&gt;[[1,2,3],[5],[7],[9] *</p>
+<p>reudce：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce</a></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reduceSplit</span>(<span class="params">arr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> arr.reduce(<span class="function">(<span class="params">pre, cur</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (pre.length === <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> [[cur]];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;pre&quot;</span>, pre);</span><br><span class="line">    <span class="keyword">let</span> temp = pre.pop();</span><br><span class="line">    <span class="keyword">if</span> (cur - temp[temp.length - <span class="number">1</span>] === <span class="number">1</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> [...pre, [...temp, cur]];</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> [...pre, [...temp], [cur]];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, []);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(reduceSplit([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">10</span>]));</span><br></pre></td></tr></table></figure>
+
+<h2 id="useCountDown"><a href="#useCountDown" class="headerlink" title="useCountDown *"></a>useCountDown *</h2><p>说一下高阶组件：</p>
+<ul>
+<li>把组件转换为另一个组件：<a href="https://react.docschina.org/docs/higher-order-components.html">https://react.docschina.org/docs/higher-order-components.html</a></li>
+<li>Memo</li>
+<li>useMemo，useCallback使用场景</li>
+<li>每个组件都要用Memo包吗？不用，渲染开销大的才包，因为缓存也要成本</li>
+</ul>
+<p>自定义Hook，实现读秒倒数，例如输入60，每秒-1，最终输出0 *</p>
+<ul>
+<li>自定义钩子返回什么？什么情况下返回DOM？ *<ul>
+<li><a href="https://blog.csdn.net/qq_34895059/article/details/118913677">https://blog.csdn.net/qq_34895059/article/details/118913677</a></li>
+<li>一般返回对象、数组之类的</li>
+<li>返回DOM节点的情况可能是？组件？判断是否到底，到底返回一个到底了的元素</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;./styles.css&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useEffect, useState &#125; <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> useCountDown = <span class="function">(<span class="params">prev</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> [count, setCount] = useState(prev);</span><br><span class="line">  useEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;countdown!&quot;</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (count &gt; <span class="number">0</span>) setCount(count - <span class="number">1</span>);</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;, [count]);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> [count];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">App</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> [count] = useCountDown(<span class="number">10</span>);</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;App&quot;</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">h1</span>&gt;</span>count<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">h2</span>&gt;</span>&#123;count&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="vue插槽"><a href="#vue插槽" class="headerlink" title="vue插槽 *"></a>vue插槽 *</h2><p>说一下Context</p>
+<ul>
+<li>祖孙、兄弟传值</li>
+</ul>
+<p>react怎么实现vue的插槽？</p>
+<ul>
+<li>props.children? 不行，插槽跟顺序相关blabla</li>
+<li>Context实现：<a href="https://segmentfault.com/a/1190000019797724">https://segmentfault.com/a/1190000019797724</a></li>
+</ul>
+<h2 id="两数之和"><a href="#两数之和" class="headerlink" title="两数之和"></a>两数之和</h2><p>leetcode 1：<a href="https://luryzhu.github.io/2021/07/21/leetcode/leetcode1/">https://luryzhu.github.io/2021/07/21/leetcode/leetcode1/</a></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">twoSum</span>(<span class="params">numbers, target</span>) </span>&#123;</span><br><span class="line">  numbers.sort();</span><br><span class="line">  <span class="keyword">let</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> n <span class="keyword">of</span> numbers) &#123;</span><br><span class="line">    <span class="keyword">if</span> (map.has(n)) &#123;</span><br><span class="line">      <span class="keyword">return</span> [map.get(n), n];</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      map.set(target - n, n);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> [];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> arr = [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">8</span>];</span><br><span class="line"><span class="built_in">console</span>.log(twoSum(arr, <span class="number">8</span>));</span><br></pre></td></tr></table></figure>
+
+<h1 id="三面"><a href="#三面" class="headerlink" title="三面"></a>三面</h1><p>自我介绍</p>
+<p>怎么学的前端</p>
+<ul>
+<li>怎么产生学前端的兴趣</li>
+</ul>
+<p>介绍一个最能说的项目</p>
+<p>大学里学过什么语言</p>
+<p>前端与后端语言、技术栈的区别</p>
+<ul>
+<li>说了点配环境简单，所见即所得什么的</li>
+</ul>
+<p>都是个人项目，有什么团队经验？</p>
+<ul>
+<li>说了社团经历</li>
+</ul>
+<p>反问</p>
+<ul>
+<li>招100个人怎么安排实习：说是百度联合招聘，会发配到不同部门</li>
+</ul>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>前端面经</category>
+        <category>复盘</category>
+      </categories>
+      <tags>
+        <tag>面经</tag>
+      </tags>
+  </entry>
 </search>

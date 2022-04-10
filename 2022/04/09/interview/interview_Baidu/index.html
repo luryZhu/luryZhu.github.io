@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"luryzhu.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="百度2022春暑期实习，2022-04-10，前端，下午场 需要加强理解：  CSS：posotion优先级、垂直定位 手写：递归回溯相关leetcode（全排列、二叉树） React：高阶组件、自定义Hook、Context实现插槽">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面经复盘1：百度前端暑期实习 2022-04-10">
+<meta property="og:url" content="https://luryzhu.github.io/2022/04/09/interview/interview_Baidu/index.html">
+<meta property="og:site_name" content="Lury的世界尽头">
+<meta property="og:description" content="百度2022春暑期实习，2022-04-10，前端，下午场 需要加强理解：  CSS：posotion优先级、垂直定位 手写：递归回溯相关leetcode（全排列、二叉树） React：高阶组件、自定义Hook、Context实现插槽">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdn.net/20161225213004672?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvY3J5c3RhbDY5MTg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="article:published_time" content="2022-04-09T14:33:16.000Z">
+<meta property="article:modified_time" content="2022-04-10T16:02:09.236Z">
+<meta property="article:author" content="Lury">
+<meta property="article:tag" content="面经">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20161225213004672?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvY3J5c3RhbDY5MTg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+<link rel="canonical" href="https://luryzhu.github.io/2022/04/09/interview/interview_Baidu/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>面经复盘1：百度前端暑期实习 2022-04-10 | Lury的世界尽头</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lury的世界尽头</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://luryzhu.github.io/2022/04/09/interview/interview_Baidu/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Lury">
+      <meta itemprop="description" content="前端学习中...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lury的世界尽头">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          面经复盘1：百度前端暑期实习 2022-04-10
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-04-09 22:33:16" itemprop="dateCreated datePublished" datetime="2022-04-09T22:33:16+08:00">2022-04-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-04-11 00:02:09" itemprop="dateModified" datetime="2022-04-11T00:02:09+08:00">2022-04-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%8D%E7%AB%AF%E9%9D%A2%E7%BB%8F/" itemprop="url" rel="index"><span itemprop="name">前端面经</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%8D%E7%AB%AF%E9%9D%A2%E7%BB%8F/%E5%A4%8D%E7%9B%98/" itemprop="url" rel="index"><span itemprop="name">复盘</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>百度2022春暑期实习，2022-04-10，前端，下午场</p>
+<p>需要加强理解：</p>
+<ul>
+<li>CSS：posotion优先级、垂直定位</li>
+<li>手写：递归回溯相关leetcode（全排列、二叉树）</li>
+<li>React：高阶组件、自定义Hook、Context实现插槽</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="一面"><a href="#一面" class="headerlink" title="一面"></a>一面</h1><h2 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h2><h3 id="垂直居中怎么写"><a href="#垂直居中怎么写" class="headerlink" title="垂直居中怎么写 *"></a>垂直居中怎么写 *</h3><p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/qwguo/p/13047176.html">https://www.cnblogs.com/qwguo/p/13047176.html</a></p>
+<h4 id="transform"><a href="#transform" class="headerlink" title="transform"></a>transform</h4><p>利用transform里头的translateY（改变垂直的位移，如果使用百分比为单位，则是以元素本身的长宽为基准），搭配元素本身的top属性，就可以做出垂直居中的效果，比较需要注意的地方是，<strong>子元素必须要加上position:relative</strong>，不然就会没有效果喔。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.use-transform</span>&#123;</span><br><span class="line">    <span class="attribute">width</span>:<span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">height</span>:<span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">border</span>:<span class="number">1px</span> solid <span class="number">#000</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.use-transform</span> <span class="selector-tag">div</span>&#123;</span><br><span class="line">    <span class="attribute">position</span>: relative;			//!!!</span><br><span class="line">    <span class="attribute">width</span>:<span class="number">100px</span>;</span><br><span class="line">    <span class="attribute">height</span>:<span class="number">50px</span>;</span><br><span class="line">    <span class="attribute">top</span>:<span class="number">50%</span>;					//!!!</span><br><span class="line">    <span class="attribute">transform</span>:<span class="built_in">translateY</span>(-<span class="number">50%</span>); //!!!</span><br><span class="line">    <span class="attribute">background</span>:<span class="number">#095</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="绝对定位"><a href="#绝对定位" class="headerlink" title="绝对定位"></a>绝对定位</h4><p><strong>将上下左右的数值都设为0，再搭配一个margin:auto</strong>，就可以办到垂直居中，不过要特别注意的是，设定绝对定位的子元素，其父元素的position必须要指定为relative喔（<strong>子绝父相</strong>）！而且绝对定位的元素是会互相覆盖的，所以如果内容元素较多，可能就会有些问题。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.use-absolute</span>&#123;</span><br><span class="line">    <span class="attribute">position</span>: relative;		//!!!</span><br><span class="line">    <span class="attribute">width</span>:<span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">height</span>:<span class="number">150px</span>;</span><br><span class="line">    <span class="attribute">border</span>:<span class="number">1px</span> solid <span class="number">#000</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.use-absolute</span> <span class="selector-tag">div</span>&#123;</span><br><span class="line">    <span class="attribute">position</span>: absolute;		//!!!</span><br><span class="line">    <span class="attribute">width</span>:<span class="number">100px</span>;</span><br><span class="line">    <span class="attribute">height</span>:<span class="number">50px</span>;</span><br><span class="line">    <span class="attribute">top</span>:<span class="number">0</span>;					//!!!</span><br><span class="line">    <span class="attribute">right</span>:<span class="number">0</span>;</span><br><span class="line">    <span class="attribute">bottom</span>:<span class="number">0</span>;</span><br><span class="line">    <span class="attribute">left</span>:<span class="number">0</span>;</span><br><span class="line">    <span class="attribute">margin</span>:auto;			//!!!</span><br><span class="line">    <span class="attribute">background</span>:<span class="number">#f60</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="flex"><a href="#flex" class="headerlink" title="flex"></a>flex</h4><ul>
+<li><p>使用<strong>align-items</strong>或<strong>align-content</strong>的属性，轻轻松松就可以做到垂直居中的效果。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.use-flexbox</span>&#123;</span><br><span class="line">    <span class="attribute">display</span>:flex;			//!!!</span><br><span class="line">    <span class="attribute">align-items</span>:center;		//垂直居中</span><br><span class="line">    <span class="attribute">justify-content</span>:center;	//水平居中</span><br><span class="line">    <span class="attribute">width</span>:<span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">height</span>:<span class="number">150px</span>;</span><br><span class="line">    <span class="attribute">border</span>:<span class="number">1px</span> solid <span class="number">#000</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.use-flexbox</span> <span class="selector-tag">div</span>&#123;</span><br><span class="line">    <span class="attribute">width</span>:<span class="number">100px</span>;</span><br><span class="line">    <span class="attribute">height</span>:<span class="number">50px</span>;</span><br><span class="line">    <span class="attribute">background</span>:<span class="number">#099</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="flex-1代表什么，默认值是什么"><a href="#flex-1代表什么，默认值是什么" class="headerlink" title="flex: 1代表什么，默认值是什么 *"></a>flex: 1代表什么，默认值是什么 *</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/136223806">https://zhuanlan.zhihu.com/p/136223806</a></li>
+<li>代表三个属性：<ul>
+<li>flex-grow：定义项目的放大比例，默认为<strong>0</strong>，即如果存在剩余空间，也不放大。</li>
+<li>flex-shrink：定义了项目的缩小比例，默认为<strong>1</strong>，即如果空间不足，该项目将缩小。</li>
+<li>flex-basis：定义了在分配多余空间之前，项目占据的主轴空间。浏览器根据这个属性，计算主轴是否有多余空间。它的默认值为<strong>auto</strong>，即项目的本来大小。</li>
+</ul>
+</li>
+<li>flex: 1 &#x3D;&#x3D;&#x3D; flex 1 1 0</li>
+<li>flex默认值是 0 1 auto</li>
+</ul>
+<h3 id="padding百分比是基于盒子的width还是height"><a href="#padding百分比是基于盒子的width还是height" class="headerlink" title="padding百分比是基于盒子的width还是height *"></a>padding百分比是基于盒子的width还是height *</h3><ul>
+<li><p><strong>width</strong></p>
+</li>
+<li><p>padding的百分比是相对于父元素宽度，</p>
+<ul>
+<li>如果父元素有宽度，相对于父元素宽度，</li>
+<li>如果没有，找其父辈元素的宽度，均没设宽度时，相对于屏幕的宽度。</li>
+</ul>
+</li>
+</ul>
+<h3 id="position，display-none，float优先级"><a href="#position，display-none，float优先级" class="headerlink" title="position，display: none，float优先级 *"></a>position，display: none，float优先级 *</h3><ul>
+<li><code>display: none</code> &gt; <code>position: absolute/fixed</code> &gt; <code>float: 非none</code></li>
+<li><img src="https://img-blog.csdn.net/20161225213004672?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvY3J5c3RhbDY5MTg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast"></li>
+</ul>
+<h3 id="less和sass的区别"><a href="#less和sass的区别" class="headerlink" title="less和sass的区别"></a>less和sass的区别</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/e3f1fcbbccc3">https://www.jianshu.com/p/e3f1fcbbccc3</a></li>
+<li>最主要的是编译环境？<ul>
+<li>less：JS，客户端处理，npm</li>
+<li>sass：ruby，服务器处理</li>
+</ul>
+</li>
+</ul>
+<h2 id="JS"><a href="#JS" class="headerlink" title="JS"></a>JS</h2><h3 id="数组用什么方法"><a href="#数组用什么方法" class="headerlink" title="数组用什么方法"></a>数组用什么方法</h3><ul>
+<li>push pop shift unshift forEach map</li>
+<li>shift unshift 干什么的</li>
+</ul>
+<h3 id="get和post区别"><a href="#get和post区别" class="headerlink" title="get和post区别"></a>get和post区别</h3><ul>
+<li>都是明文传输啊都很危险</li>
+<li>为什么HTTPS安全</li>
+</ul>
+<h3 id="跨域失败的请求被谁拦截？"><a href="#跨域失败的请求被谁拦截？" class="headerlink" title="跨域失败的请求被谁拦截？*"></a>跨域失败的请求被谁拦截？*</h3><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1745763">https://cloud.tencent.com/developer/article/1745763</a></p>
+<p>被浏览器拦截，拦截的是响应不是请求</p>
+<h3 id="事件循环"><a href="#事件循环" class="headerlink" title="事件循环"></a>事件循环</h3><p>Event Loop</p>
+<h2 id="React"><a href="#React" class="headerlink" title="React"></a>React</h2><h3 id="说下用过的钩子"><a href="#说下用过的钩子" class="headerlink" title="说下用过的钩子"></a>说下用过的钩子</h3><p>useEffect, useState, useRef, useMemo…</p>
+<h2 id="说输出"><a href="#说输出" class="headerlink" title="说输出"></a>说输出</h2><h3 id="function、var声明提升"><a href="#function、var声明提升" class="headerlink" title="function、var声明提升"></a>function、var声明提升</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  show(); <span class="comment">//5</span></span><br><span class="line">  <span class="keyword">var</span> show = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">4</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">  show(); <span class="comment">//4</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">show</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">5</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  show(); <span class="comment">//4</span></span><br><span class="line">&#125;)();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 顺序：</span></span><br><span class="line"><span class="comment">// function show()&#123;...&#125; 函数声明优先</span></span><br><span class="line"><span class="comment">// var show</span></span><br><span class="line"><span class="comment">// show = function()&#123;...&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="setTimeout，promise"><a href="#setTimeout，promise" class="headerlink" title="setTimeout，promise"></a>setTimeout，promise</h3><p>promise微任务插队</p>
+<h2 id="手写"><a href="#手写" class="headerlink" title="手写"></a>手写</h2><h3 id="一段文字渲染到屏幕，改颜色"><a href="#一段文字渲染到屏幕，改颜色" class="headerlink" title="一段文字渲染到屏幕，改颜色 *"></a>一段文字渲染到屏幕，改颜色 *</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> result = &#123;</span><br><span class="line">  <span class="attr">content</span>: <span class="string">&quot;sdhkjahsdhakhdjksahjs&quot;</span>,</span><br><span class="line">  <span class="attr">offset</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">offset</span>: [<span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">      <span class="attr">color</span>: <span class="string">&quot;red&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">offset</span>: [<span class="number">7</span>, <span class="number">10</span>],</span><br><span class="line">      <span class="attr">color</span>: <span class="string">&quot;yello&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">offset</span>: [<span class="number">12</span>, <span class="number">14</span>],</span><br><span class="line">      <span class="attr">color</span>: <span class="string">&quot;blue&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>把content内容按照下标和颜色渲染</p>
+<p>思路：先按offset排序，然后遍历，组装成有颜色的span，替换原来的元素，然后拼接成模板字符串什么的加入html</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> app = <span class="built_in">document</span>.getElementById(<span class="string">&quot;app&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> result = &#123;</span><br><span class="line">  <span class="attr">content</span>: <span class="string">&quot;my name is Kitty Hello Hell no, Bye!&quot;</span>,</span><br><span class="line">  <span class="attr">offsets</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">offset</span>: [<span class="number">11</span>, <span class="number">16</span>],</span><br><span class="line">      <span class="attr">color</span>: <span class="string">&quot;blue&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">offset</span>: [<span class="number">3</span>, <span class="number">7</span>],</span><br><span class="line">      <span class="attr">color</span>: <span class="string">&quot;red&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">offset</span>: [<span class="number">17</span>, <span class="number">22</span>],</span><br><span class="line">      <span class="attr">color</span>: <span class="string">&quot;purple&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">offset</span>: [<span class="number">8</span>, <span class="number">10</span>],</span><br><span class="line">      <span class="attr">color</span>: <span class="string">&quot;green&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">showResult</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> getSpan = <span class="function">(<span class="params">text, color</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> span = <span class="built_in">document</span>.createElement(<span class="string">&quot;span&quot;</span>);</span><br><span class="line">    span.innerHTML = text;</span><br><span class="line">    <span class="keyword">if</span> (color) span.style.color = color;</span><br><span class="line">    <span class="keyword">return</span> span;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">let</span> offsets = obj.offsets;</span><br><span class="line">  <span class="keyword">let</span> renderArr = [];</span><br><span class="line">  offsets.sort(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a.offset[<span class="number">0</span>] - b.offset[<span class="number">0</span>]);</span><br><span class="line">  <span class="comment">// console.log(offsets);</span></span><br><span class="line">  <span class="keyword">let</span> preIdx = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">let</span> text = <span class="string">&quot;&quot;</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> item <span class="keyword">of</span> offsets) &#123;</span><br><span class="line">    <span class="keyword">if</span> (item.offset[<span class="number">0</span>] &gt; preIdx) &#123;</span><br><span class="line">      text = obj.content.slice(preIdx, item.offset[<span class="number">0</span>]);</span><br><span class="line">      renderArr.push(getSpan(text));</span><br><span class="line">    &#125;</span><br><span class="line">    text = obj.content.slice(item.offset[<span class="number">0</span>], item.offset[<span class="number">1</span>]);</span><br><span class="line">    renderArr.push(getSpan(text, item.color));</span><br><span class="line">    preIdx = item.offset[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// console.log(renderArr);</span></span><br><span class="line">  &#125;</span><br><span class="line">  text = obj.content.slice(preIdx);</span><br><span class="line"></span><br><span class="line">  renderArr.push(getSpan(text));</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> item <span class="keyword">of</span> renderArr) &#123;</span><br><span class="line">    app.appendChild(item);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">showResult(result);</span><br></pre></td></tr></table></figure>
+
+<h3 id="对称二叉树"><a href="#对称二叉树" class="headerlink" title="对称二叉树"></a>对称二叉树</h3><p><a target="_blank" rel="noopener" href="https://github.com/luryZhu/leetcode-js/issues/16">https://github.com/luryZhu/leetcode-js/issues/16</a></p>
+<h1 id="二面"><a href="#二面" class="headerlink" title="二面 *"></a>二面 *</h1><p>自我介绍</p>
+<p>一边手写一边回答问题，全寄</p>
+<h2 id="全排列"><a href="#全排列" class="headerlink" title="全排列 *"></a>全排列 *</h2><p><a target="_blank" rel="noopener" href="https://github.com/luryZhu/leetcode-js/issues/30">https://github.com/luryZhu/leetcode-js/issues/30</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">permute</span>(<span class="params">numbers</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> res = [];</span><br><span class="line">  <span class="keyword">const</span> used = [];</span><br><span class="line">  <span class="keyword">const</span> len = numbers.length;</span><br><span class="line">  <span class="keyword">let</span> dfs = <span class="function">(<span class="params">pre</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (pre.length === len) &#123;</span><br><span class="line">      res.push([...pre]);</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">      <span class="keyword">if</span> (used[i]) <span class="keyword">continue</span>;</span><br><span class="line">      used[i] = <span class="literal">true</span>;</span><br><span class="line">      dfs([...pre, numbers[i]]);</span><br><span class="line">      used[i] = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  dfs([]);</span><br><span class="line">  <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(permute(numbers));</span><br></pre></td></tr></table></figure>
+
+<h2 id="解析URL"><a href="#解析URL" class="headerlink" title="解析URL *"></a>解析URL *</h2><p><code>url: https://interview.nowcoder.com/interview/confirm?code=Cq1y2tOP&amp;roundId=3819618</code> *</p>
+<p>不停split</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">urlQuery</span>(<span class="params">url</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> resObj = &#123;&#125;;</span><br><span class="line">  <span class="keyword">let</span> queries = url.split(<span class="string">&quot;?&quot;</span>)[<span class="number">1</span>].split(<span class="string">&quot;&amp;&quot;</span>);</span><br><span class="line">  queries.forEach(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> [key, value] = item.split(<span class="string">&quot;=&quot;</span>);</span><br><span class="line">    resObj[key] = value;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> resObj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> url =</span><br><span class="line">  <span class="string">&quot;url: https://interview.nowcoder.com/interview/confirm?code=Cq1y2tOP&amp;roundId=3819618&quot;</span>;</span><br><span class="line"><span class="built_in">console</span>.log(urlQuery(url));</span><br></pre></td></tr></table></figure>
+
+<h2 id="reduce拆分递增数组"><a href="#reduce拆分递增数组" class="headerlink" title="reduce拆分递增数组 *"></a>reduce拆分递增数组 *</h2><p>[1,2,3,5,7,9]&#x3D;&gt;[[1,2,3],[5],[7],[9] *</p>
+<p>reudce：<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reduceSplit</span>(<span class="params">arr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> arr.reduce(<span class="function">(<span class="params">pre, cur</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (pre.length === <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> [[cur]];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;pre&quot;</span>, pre);</span><br><span class="line">    <span class="keyword">let</span> temp = pre.pop();</span><br><span class="line">    <span class="keyword">if</span> (cur - temp[temp.length - <span class="number">1</span>] === <span class="number">1</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> [...pre, [...temp, cur]];</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> [...pre, [...temp], [cur]];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, []);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(reduceSplit([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">10</span>]));</span><br></pre></td></tr></table></figure>
+
+<h2 id="useCountDown"><a href="#useCountDown" class="headerlink" title="useCountDown *"></a>useCountDown *</h2><p>说一下高阶组件：</p>
+<ul>
+<li>把组件转换为另一个组件：<a target="_blank" rel="noopener" href="https://react.docschina.org/docs/higher-order-components.html">https://react.docschina.org/docs/higher-order-components.html</a></li>
+<li>Memo</li>
+<li>useMemo，useCallback使用场景</li>
+<li>每个组件都要用Memo包吗？不用，渲染开销大的才包，因为缓存也要成本</li>
+</ul>
+<p>自定义Hook，实现读秒倒数，例如输入60，每秒-1，最终输出0 *</p>
+<ul>
+<li>自定义钩子返回什么？什么情况下返回DOM？ *<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34895059/article/details/118913677">https://blog.csdn.net/qq_34895059/article/details/118913677</a></li>
+<li>一般返回对象、数组之类的</li>
+<li>返回DOM节点的情况可能是？组件？判断是否到底，到底返回一个到底了的元素</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;./styles.css&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useEffect, useState &#125; <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> useCountDown = <span class="function">(<span class="params">prev</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> [count, setCount] = useState(prev);</span><br><span class="line">  useEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;countdown!&quot;</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (count &gt; <span class="number">0</span>) setCount(count - <span class="number">1</span>);</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;, [count]);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> [count];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">App</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> [count] = useCountDown(<span class="number">10</span>);</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;App&quot;</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">h1</span>&gt;</span>count<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">h2</span>&gt;</span>&#123;count&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="vue插槽"><a href="#vue插槽" class="headerlink" title="vue插槽 *"></a>vue插槽 *</h2><p>说一下Context</p>
+<ul>
+<li>祖孙、兄弟传值</li>
+</ul>
+<p>react怎么实现vue的插槽？</p>
+<ul>
+<li>props.children? 不行，插槽跟顺序相关blabla</li>
+<li>Context实现：<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000019797724">https://segmentfault.com/a/1190000019797724</a></li>
+</ul>
+<h2 id="两数之和"><a href="#两数之和" class="headerlink" title="两数之和"></a>两数之和</h2><p>leetcode 1：<a href="https://luryzhu.github.io/2021/07/21/leetcode/leetcode1/">https://luryzhu.github.io/2021/07/21/leetcode/leetcode1/</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">twoSum</span>(<span class="params">numbers, target</span>) </span>&#123;</span><br><span class="line">  numbers.sort();</span><br><span class="line">  <span class="keyword">let</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> n <span class="keyword">of</span> numbers) &#123;</span><br><span class="line">    <span class="keyword">if</span> (map.has(n)) &#123;</span><br><span class="line">      <span class="keyword">return</span> [map.get(n), n];</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      map.set(target - n, n);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> [];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> arr = [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">8</span>];</span><br><span class="line"><span class="built_in">console</span>.log(twoSum(arr, <span class="number">8</span>));</span><br></pre></td></tr></table></figure>
+
+<h1 id="三面"><a href="#三面" class="headerlink" title="三面"></a>三面</h1><p>自我介绍</p>
+<p>怎么学的前端</p>
+<ul>
+<li>怎么产生学前端的兴趣</li>
+</ul>
+<p>介绍一个最能说的项目</p>
+<p>大学里学过什么语言</p>
+<p>前端与后端语言、技术栈的区别</p>
+<ul>
+<li>说了点配环境简单，所见即所得什么的</li>
+</ul>
+<p>都是个人项目，有什么团队经验？</p>
+<ul>
+<li>说了社团经历</li>
+</ul>
+<p>反问</p>
+<ul>
+<li>招100个人怎么安排实习：说是百度联合招聘，会发配到不同部门</li>
+</ul>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+    </div>
+
+    
+    
+    
+
+      <div>
+          
+<div class="my_post_copyright">
+<div style="text-align:center;color: #ccc;font-size:14px;">------ 版权信息 ------</div>
+ <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+ 
+ <p><span>本文标题:</span><a href="/2022/04/09/interview/interview_Baidu/">面经复盘1：百度前端暑期实习 2022-04-10</a></p>
+ <p><span>文章作者:</span><a href="/" title="访问 Lury 的个人博客">Lury</a></p>
+ <p><span>发布时间:</span>2022年04月09日 - 22:33</p>
+ <p><span>最后更新:</span>2022年04月11日 - 00:02</p>
+ <p><span>原始链接:</span><a href="/2022/04/09/interview/interview_Baidu/" title="面经复盘1：百度前端暑期实习 2022-04-10">https://luryzhu.github.io/2022/04/09/interview/interview_Baidu/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://luryzhu.github.io/2022/04/09/interview/interview_Baidu/"  aria-label="复制成功！"></i></span>
+ </p>
+ <p><span>许可协议:</span><a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+   var clipboard = new Clipboard('.fa-clipboard');
+   $(".fa-clipboard").click(function(){
+     clipboard.on('success', function(){
+       swal({   
+         title: "",   
+         text: '复制成功',
+         icon: "success", 
+         showConfirmButton: true
+         });
+ 	 });
+   });  
+</script>
+
+      </div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9D%A2%E7%BB%8F/" rel="tag"># 面经</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/04/09/browser/browser1_EventLoop/" rel="prev" title="浏览器学习笔记1：浏览器线程和Event Loop">
+      <i class="fa fa-chevron-left"></i> 浏览器学习笔记1：浏览器线程和Event Loop
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/04/09/interview/interview1_async/" rel="next" title="面经整理1：异步输出——Promise，SetTimeout与async">
+      面经整理1：异步输出——Promise，SetTimeout与async <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E9%9D%A2"><span class="nav-number">1.</span> <span class="nav-text">一面</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS"><span class="nav-number">1.1.</span> <span class="nav-text">CSS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9E%82%E7%9B%B4%E5%B1%85%E4%B8%AD%E6%80%8E%E4%B9%88%E5%86%99"><span class="nav-number">1.1.1.</span> <span class="nav-text">垂直居中怎么写 *</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#transform"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">transform</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%9D%E5%AF%B9%E5%AE%9A%E4%BD%8D"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">绝对定位</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#flex"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">flex</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flex-1%E4%BB%A3%E8%A1%A8%E4%BB%80%E4%B9%88%EF%BC%8C%E9%BB%98%E8%AE%A4%E5%80%BC%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.2.</span> <span class="nav-text">flex: 1代表什么，默认值是什么 *</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#padding%E7%99%BE%E5%88%86%E6%AF%94%E6%98%AF%E5%9F%BA%E4%BA%8E%E7%9B%92%E5%AD%90%E7%9A%84width%E8%BF%98%E6%98%AFheight"><span class="nav-number">1.1.3.</span> <span class="nav-text">padding百分比是基于盒子的width还是height *</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#position%EF%BC%8Cdisplay-none%EF%BC%8Cfloat%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-number">1.1.4.</span> <span class="nav-text">position，display: none，float优先级 *</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#less%E5%92%8Csass%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.1.5.</span> <span class="nav-text">less和sass的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JS"><span class="nav-number">1.2.</span> <span class="nav-text">JS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E7%94%A8%E4%BB%80%E4%B9%88%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.1.</span> <span class="nav-text">数组用什么方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get%E5%92%8Cpost%E5%8C%BA%E5%88%AB"><span class="nav-number">1.2.2.</span> <span class="nav-text">get和post区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%A8%E5%9F%9F%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%AF%B7%E6%B1%82%E8%A2%AB%E8%B0%81%E6%8B%A6%E6%88%AA%EF%BC%9F"><span class="nav-number">1.2.3.</span> <span class="nav-text">跨域失败的请求被谁拦截？*</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.2.4.</span> <span class="nav-text">事件循环</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React"><span class="nav-number">1.3.</span> <span class="nav-text">React</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%B4%E4%B8%8B%E7%94%A8%E8%BF%87%E7%9A%84%E9%92%A9%E5%AD%90"><span class="nav-number">1.3.1.</span> <span class="nav-text">说下用过的钩子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E8%BE%93%E5%87%BA"><span class="nav-number">1.4.</span> <span class="nav-text">说输出</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#function%E3%80%81var%E5%A3%B0%E6%98%8E%E6%8F%90%E5%8D%87"><span class="nav-number">1.4.1.</span> <span class="nav-text">function、var声明提升</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setTimeout%EF%BC%8Cpromise"><span class="nav-number">1.4.2.</span> <span class="nav-text">setTimeout，promise</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%8B%E5%86%99"><span class="nav-number">1.5.</span> <span class="nav-text">手写</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E6%AE%B5%E6%96%87%E5%AD%97%E6%B8%B2%E6%9F%93%E5%88%B0%E5%B1%8F%E5%B9%95%EF%BC%8C%E6%94%B9%E9%A2%9C%E8%89%B2"><span class="nav-number">1.5.1.</span> <span class="nav-text">一段文字渲染到屏幕，改颜色 *</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E7%A7%B0%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.5.2.</span> <span class="nav-text">对称二叉树</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E9%9D%A2"><span class="nav-number">2.</span> <span class="nav-text">二面 *</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E6%8E%92%E5%88%97"><span class="nav-number">2.1.</span> <span class="nav-text">全排列 *</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90URL"><span class="nav-number">2.2.</span> <span class="nav-text">解析URL *</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reduce%E6%8B%86%E5%88%86%E9%80%92%E5%A2%9E%E6%95%B0%E7%BB%84"><span class="nav-number">2.3.</span> <span class="nav-text">reduce拆分递增数组 *</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#useCountDown"><span class="nav-number">2.4.</span> <span class="nav-text">useCountDown *</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vue%E6%8F%92%E6%A7%BD"><span class="nav-number">2.5.</span> <span class="nav-text">vue插槽 *</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C"><span class="nav-number">2.6.</span> <span class="nav-text">两数之和</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E9%9D%A2"><span class="nav-number">3.</span> <span class="nav-text">三面</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lury"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Lury</p>
+  <div class="site-description" itemprop="description">前端学习中...</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/luryZhu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;luryZhu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:LuryZhu@outlook.com" title="E-Mail → mailto:LuryZhu@outlook.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lury</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">144k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:11</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<!-- hexo injector body_end start --><script src="https://cdn.jsdelivr.net/npm/d3@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.7.4/dist/browser/view.min.js"></script>
+  <script>
+      const mindmaps = document.querySelectorAll('.markmap-svg');
+   
+      for(const mindmap of mindmaps) {
+          markmap.markmap(mindmap, JSON.parse(mindmap.innerHTML));
+      }
+  </script> <!-- hexo injector body_end end --></body>
+</html>
