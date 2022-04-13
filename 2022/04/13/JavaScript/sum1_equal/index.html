@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"luryzhu.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="参考：MDN相等性判断 JavaScript提供三种不同的值比较操作：  &#x3D;&#x3D;&#x3D; ，严格相等比较 (也被称作”strict equality”, “identity”, “triple equals”) &#x3D;&#x3D;，抽象相等比较 (“loose equality”，”double equals”)  Object.is （ECMAScript 2015&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript中的相等比较">
+<meta property="og:url" content="https://luryzhu.github.io/2022/04/13/JavaScript/sum1_equal/index.html">
+<meta property="og:site_name" content="Lury的世界尽头">
+<meta property="og:description" content="参考：MDN相等性判断 JavaScript提供三种不同的值比较操作：  &#x3D;&#x3D;&#x3D; ，严格相等比较 (也被称作”strict equality”, “identity”, “triple equals”) &#x3D;&#x3D;，抽象相等比较 (“loose equality”，”double equals”)  Object.is （ECMAScript 2015&amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/JavaScript/sum/image-20220413113049671.png">
+<meta property="article:published_time" content="2022-04-13T05:10:41.000Z">
+<meta property="article:modified_time" content="2022-04-13T05:18:59.904Z">
+<meta property="article:author" content="Lury">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="类型转换">
+<meta property="article:tag" content="相等">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/JavaScript/sum/image-20220413113049671.png">
+
+<link rel="canonical" href="https://luryzhu.github.io/2022/04/13/JavaScript/sum1_equal/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JavaScript中的相等比较 | Lury的世界尽头</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lury的世界尽头</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://luryzhu.github.io/2022/04/13/JavaScript/sum1_equal/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Lury">
+      <meta itemprop="description" content="前端学习中...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lury的世界尽头">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaScript中的相等比较
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-13 13:10:41 / 修改时间：13:18:59" itemprop="dateCreated datePublished" datetime="2022-04-13T13:10:41+08:00">2022-04-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">JavaScript笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>参考：<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Equality_comparisons_and_sameness">MDN相等性判断</a></p>
+<p>JavaScript提供三种不同的值比较操作：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Comparison_Operators#Identity">&#x3D;&#x3D;&#x3D;</a> ，严格相等比较 (也被称作”strict equality”, “identity”, “triple equals”)</li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Comparison_Operators#Equality">&#x3D;&#x3D;</a>，抽象相等比较 (“loose equality”，”double equals”) </li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is"><code>Object.is</code></a> （ECMAScript 2015&#x2F; ES6 新特性）</li>
+</ul>
+<blockquote>
+<p><strong>Moral of the story:</strong><br>Always use 3 equals unless you have a good reason to use 2.<br>能用<code>===</code>就用<code>===</code>！！！</p>
+</blockquote>
+<span id="more"></span>
+
+<h1 id=""><a href="#" class="headerlink" title="==="></a><code>===</code></h1><p>全等操作符比较两个值是否相等，两个被比较的值在比较前都<strong>不进行隐式转换</strong>。</p>
+<p>如果两个被比较的值具有<strong>不同的类型</strong>，这两个值是不全等的。具体规则：</p>
+<ul>
+<li>如果<strong>类型</strong>不同，就[不相等] </li>
+<li>如果两个值<strong>都是null</strong>，或者<strong>都是undefined</strong>，那么[相等]。 </li>
+<li>如果两个都是<strong>数值</strong>，并且是同一个值，那么[相等]。但是+-0和NaN要特殊对待<ul>
+<li>+0，-0，0视作相等</li>
+<li>NaN与任何值都不等，包括NaN</li>
+</ul>
+</li>
+<li>如果两个都是<strong>字符串</strong>，每个位置的字符都一样，那么[相等]；否则[不相等]。 </li>
+<li>如果两个值都<strong>引用</strong>同一个对象或函数，那么[相等]；否则[不相等]。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这些是===符合预期的情况</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">true</span> === <span class="number">1</span>); <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(&#123;&#125; === &#123;&#125;); <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;2&quot;</span> === <span class="number">2</span>); <span class="comment">// false</span></span><br><span class="line"><span class="comment">// 这些情况在不同JavaScript引擎中表现不同，但仍被认为相等</span></span><br><span class="line"><span class="built_in">console</span>.log(+<span class="number">0</span> === -<span class="number">0</span>); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(+<span class="number">0</span> === <span class="number">0</span>); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(-<span class="number">0</span> === <span class="number">0</span>); <span class="comment">// true</span></span><br><span class="line"><span class="comment">// 要确定NaN的相等性，必须使用极为讨厌的isNaN()</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span> === <span class="literal">NaN</span>); <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">isNaN</span>(<span class="literal">NaN</span>)); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Object-is"><a href="#Object-is" class="headerlink" title="Object.is"></a><code>Object.is</code></h1><p>Object.is的行为方式与<code>===</code>相同，但是对于NaN和-0和+0进行特殊处理</p>
+<ul>
+<li><code>===</code><ul>
+<li>+0，-0，0视作相等</li>
+<li>NaN与任何值都不等，包括NaN</li>
+</ul>
+</li>
+<li>Object.is<ul>
+<li>+0和0相等，和-0不相等</li>
+<li>NaN和NaN相等</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 行为方式与===相同</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.is(<span class="literal">true</span>, <span class="number">1</span>)); <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.is(&#123;&#125;, &#123;&#125;)); <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.is(<span class="string">&quot;2&quot;</span>, <span class="number">2</span>)); <span class="comment">// false</span></span><br><span class="line"><span class="comment">// 正确的0、-0、+0相等/不等判定</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.is(+<span class="number">0</span>, -<span class="number">0</span>)); <span class="comment">// false *******</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.is(+<span class="number">0</span>, <span class="number">0</span>)); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.is(-<span class="number">0</span>, <span class="number">0</span>)); <span class="comment">// false ******</span></span><br><span class="line"><span class="comment">// 正确的NaN相等判定</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.is(<span class="literal">NaN</span>, <span class="literal">NaN</span>)); <span class="comment">// true ********</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="0-0"><a href="#0-0" class="headerlink" title="+0 -0"></a>+0 -0</h2><p><strong>+0和-0的区别</strong></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qiwoo_weekly/article/details/101442976?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_antiscanv2&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_antiscanv2&utm_relevant_index=1">参考</a></p>
+<ul>
+<li>+0是0，-0是别的</li>
+<li>主要是浮点数表示中符号位不同</li>
+<li>表现不同：加减乘除运算</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+<span class="number">0</span> + (+<span class="number">0</span>) = +<span class="number">0</span></span><br><span class="line">+<span class="number">0</span> + (-<span class="number">0</span>) = +<span class="number">0</span></span><br><span class="line">-<span class="number">0</span> + (+<span class="number">0</span>) = +<span class="number">0</span></span><br><span class="line">-<span class="number">0</span> + (-<span class="number">0</span>) = -<span class="number">0</span></span><br><span class="line"><span class="number">1</span>/-<span class="number">0</span> = -<span class="literal">Infinity</span></span><br><span class="line"><span class="number">1</span>/+<span class="number">0</span> = <span class="literal">Infinity</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>判断+-0</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//判断是否为+0</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isPositiveZero</span>(<span class="params">num</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> num === <span class="number">0</span> &amp;&amp; <span class="number">1</span> / num &gt; <span class="number">0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//判断是否为-0</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isNegativeZero</span>(<span class="params">num</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> num === <span class="number">0</span> &amp;&amp; <span class="number">1</span> / num &lt; <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>+0和-0的应用场景</strong></p>
+<p>隐式类型转换：String转Number用-0，此外*1或&#x2F;1也行</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;123&quot;</span>+<span class="number">0</span>  <span class="comment">// &#x27;1230&#x27;</span></span><br><span class="line"><span class="string">&quot;123&quot;</span>-<span class="number">0</span>  <span class="comment">// 123</span></span><br><span class="line"><span class="string">&quot;123&quot;</span>*<span class="number">1</span>  <span class="comment">// 123</span></span><br><span class="line"><span class="string">&quot;123&quot;</span>/<span class="number">1</span>  <span class="comment">// 123</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="NaN"><a href="#NaN" class="headerlink" title="NaN"></a>NaN</h2><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/NaN">MDN: NaN</a></p>
+<p><code>NaN</code> 是一个<em>全局对象</em>的属性。</p>
+<p><code>NaN</code> 属性的初始值就是 NaN，和 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/NaN"><code>Number.NaN</code></a> 的值一样。在现代浏览器中（ES5 中）， <code>NaN</code> 属性是一个不可配置（non-configurable），不可写（non-writable）的属性</p>
+<p><strong>NaN出现的情况</strong></p>
+<p>编码中很少直接使用到 <code>NaN</code>。通常都是在计算失败时</p>
+<ul>
+<li>作为 Math 的某个方法的返回值出现的（例如：<code>Math.sqrt(-1)</code>）</li>
+<li>或者尝试将一个字符串解析成数字但失败了的时候（例如：<code>parseInt(&quot;blabla&quot;)</code>）。</li>
+</ul>
+<p><strong>判断一个值是否是 <code>NaN</code></strong></p>
+<p>返回false的情况</p>
+<ul>
+<li>通过 <code>==</code>、  <code>===</code>与其他任何值比较都将<strong>不相等</strong>， 包括与其他 <code>NaN</code> 值进行比较。</li>
+</ul>
+<p>返回true的情况</p>
+<ul>
+<li>Object.is(NaN, NaN)</li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/isNaN"><code>Number.isNaN()</code></a> 或 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/isNaN"><code>isNaN()</code></a> 函数</li>
+</ul>
+<p>在执行自比较之中：也只有 <code>NaN</code> 不等于它自己。</p>
+<h1 id="-1"><a href="#-1" class="headerlink" title="=="></a><code>==</code></h1><p>在比较前将两个被比较的值<strong>转换为相同类型</strong>。</p>
+<p>在转换后（等式的一边或两边都可能被转换），最终的比较方式等同于全等操作符 &#x3D;&#x3D;&#x3D; 的比较方式</p>
+<p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/JavaScript/sum/image-20220413113049671.png" alt="image-20220413113049671"></p>
+<p>如果两个值<strong>类型相同</strong>，进行 &#x3D;&#x3D;&#x3D; 比较。 </p>
+<ul>
+<li>注意NaN和NaN，规定[不相等]！</li>
+</ul>
+<p>如果两个值<strong>类型不同</strong>。根据下面规则进行<strong>类型转换</strong>再比较： </p>
+<ul>
+<li><p>如果一个是null、一个是undefined，那么[相等]</p>
+<ul>
+<li>null、undefined和其他数据类型比较都[不相等]</li>
+</ul>
+</li>
+<li><p>如果其中之一为Number</p>
+<ul>
+<li>另一个是String，就转成Number判断<ul>
+<li>返回值可能是NaN或数值</li>
+</ul>
+</li>
+<li>另一个是Boolean，就转成Number判断<ul>
+<li>true-&gt;1，false-&gt;0</li>
+</ul>
+</li>
+<li>另一个是Object，调用ToPrimitive比较</li>
+</ul>
+</li>
+<li><p>如果是String和Boolean</p>
+<ul>
+<li>都转化成Number</li>
+</ul>
+</li>
+<li><p>如果是Object</p>
+<ul>
+<li>调用ToPrimitive比较</li>
+</ul>
+</li>
+</ul>
+<h2 id="Number"><a href="#Number" class="headerlink" title="Number"></a>Number</h2><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number">MDN: Number</a></p>
+<p><code>Number</code> 对象主要用于：</p>
+<ul>
+<li>如果参数无法被转换为数字，则返回 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/NaN"><code>NaN</code></a>。</li>
+<li>在非构造器上下文中 (如：没有 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new"><code>new</code></a> 操作符)，<code>Number</code> 能被用来执行类型转换。</li>
+</ul>
+<p><strong>使用new操作符</strong></p>
+<p>new，返回对象，由Number构造函数产生</p>
+<p>不new，返回Number类型的一个数值</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Number</span>(value);</span><br><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> <span class="built_in">Number</span>(<span class="string">&#x27;123&#x27;</span>); <span class="comment">// a === 123 is false</span></span><br><span class="line"><span class="keyword">var</span> b = <span class="built_in">Number</span>(<span class="string">&#x27;123&#x27;</span>); <span class="comment">// b === 123 is true</span></span><br><span class="line">a <span class="keyword">instanceof</span> <span class="built_in">Number</span>; <span class="comment">// is true</span></span><br><span class="line">b <span class="keyword">instanceof</span> <span class="built_in">Number</span>; <span class="comment">// is false</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="ToPrimitive"><a href="#ToPrimitive" class="headerlink" title="ToPrimitive"></a>ToPrimitive</h2><h3 id="Symbol-toPrimitive"><a href="#Symbol-toPrimitive" class="headerlink" title="Symbol.toPrimitive"></a>Symbol.toPrimitive</h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Symbol/toPrimitive">MDN: Symbol.toPrimitive</a></p>
+<p>这是一个对象的内置函数属性，无法从外部调用，但是我们可以通过触发隐式类型转换观察它的行为</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj1 = &#123;&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(+obj1);     <span class="comment">// NaN</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;obj1&#125;</span>`</span>); <span class="comment">// &quot;[object Object]&quot;</span></span><br><span class="line"><span class="built_in">console</span>.log(obj1 + <span class="string">&quot;&quot;</span>); <span class="comment">// &quot;[object Object]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以重写Symbol.toPrimitive属性，<code>hint</code> 参数的取值是 <code>&quot;number&quot;</code>、<code>&quot;string&quot;</code> 和 <code>&quot;default&quot;</code> 中的任意一个。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 接下面声明一个对象，手动赋予了 Symbol.toPrimitive 属性，再来查看输出结果</span></span><br><span class="line"><span class="keyword">var</span> obj2 = &#123;</span><br><span class="line">  [<span class="built_in">Symbol</span>.toPrimitive](hint) &#123;</span><br><span class="line">    <span class="keyword">if</span> (hint == <span class="string">&quot;number&quot;</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (hint == <span class="string">&quot;string&quot;</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(+obj2);     <span class="comment">// 10      -- hint 参数值是 &quot;number&quot;</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;obj2&#125;</span>`</span>); <span class="comment">// &quot;hello&quot; -- hint 参数值是 &quot;string&quot;</span></span><br><span class="line"><span class="built_in">console</span>.log(obj2 + <span class="string">&quot;&quot;</span>); <span class="comment">// &quot;true&quot;  -- hint 参数值是 &quot;default&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="转换规则"><a href="#转换规则" class="headerlink" title="转换规则"></a>转换规则</h3><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7013933952436011039">学习js原始值转换的抽象操作 toPrimitive</a></p>
+<p><strong><code>hint</code> 参数是<code>&quot;string&quot;</code>，Object-&gt;String</strong></p>
+<p>判断对象中有没有<code>toString()</code>方法</p>
+<ul>
+<li><p>有，调用<code>toString()</code>方法。</p>
+<ul>
+<li>如果返回一个原始值，非字符串的转化为字符串，返回字符串</li>
+</ul>
+</li>
+<li><p>没有，或者<code>toString()</code>返回一个非原始值，那么js会调用<code>valueOf()</code>方法。</p>
+<ul>
+<li>如果返回一个原始值，非字符串的转化为字符串，返回字符串</li>
+</ul>
+</li>
+<li><p>否则，js抛出一个类型错误异常。</p>
+</li>
+</ul>
+<p><strong><code>hint</code> 参数是<code>&quot;number/default&quot;</code>，Object-&gt;Number</strong></p>
+<p>判断对象中有没有<code>valueOf()</code>方法</p>
+<ul>
+<li>有，调用<code>valueOf()</code>方法<ul>
+<li>返回一个原始值，则js会将其转换为数字(如果需要的话)并返回这个数字。</li>
+</ul>
+</li>
+<li>没有，如果对象具有<code>toString()</code>方法，则调用<ul>
+<li>返回一个原始值(字符串直接量)，则js将其转换为数字类型，并返回这个数字。</li>
+</ul>
+</li>
+<li>否则，js抛出一个类型错误异常。</li>
+</ul>
+<h1 id="判断"><a href="#判断" class="headerlink" title="判断"></a>判断</h1><p>参考：<a target="_blank" rel="noopener" href="http://dorey.github.io/JavaScript-Equality-Table/">JS比较表</a></p>
+<p>下面的情况&#x3D;&#x3D;会输出什么？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">NaN</span>==<span class="literal">NaN</span> <span class="comment">// false, NaN与任何值都不等</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// true</span></span><br><span class="line"><span class="literal">true</span>==<span class="number">1</span></span><br><span class="line"><span class="literal">true</span>==<span class="string">&quot;1&quot;</span></span><br><span class="line"><span class="literal">true</span>==[<span class="number">1</span>]</span><br><span class="line"><span class="literal">false</span>==<span class="number">0</span></span><br><span class="line"><span class="literal">false</span>==<span class="string">&quot;0&quot;</span></span><br><span class="line"><span class="literal">false</span>==[]</span><br><span class="line"><span class="literal">false</span>==[[]]</span><br><span class="line"><span class="literal">false</span>==[<span class="number">0</span>]</span><br><span class="line"><span class="literal">false</span>==&#123;&#125; <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;1,2,3&quot;</span>==[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]		<span class="comment">// true, Array.prototype.toString =&gt; &#x27;1,2,3&#x27;</span></span><br><span class="line"><span class="string">&#x27;[object Object]&#x27;</span>==&#123;&#125;	<span class="comment">// true, Object.prototype.toString(&#123;&#125;)=&gt;&#x27;[object Object]&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;123&quot;</span>==[<span class="number">123</span>]                <span class="comment">// true</span></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">&quot;123&quot;</span>)==<span class="string">&quot;123&quot;</span>    <span class="comment">// true</span></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">&quot;123&quot;</span>)==[<span class="number">123</span>]    <span class="comment">// false, 因为是两个Object比较</span></span><br></pre></td></tr></table></figure>
+
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+    </div>
+
+    
+    
+    
+
+      <div>
+          
+<div class="my_post_copyright">
+<div style="text-align:center;color: #ccc;font-size:14px;">------ 版权信息 ------</div>
+ <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+ 
+ <p><span>本文标题:</span><a href="/2022/04/13/JavaScript/sum1_equal/">JavaScript中的相等比较</a></p>
+ <p><span>文章作者:</span><a href="/" title="访问 Lury 的个人博客">Lury</a></p>
+ <p><span>发布时间:</span>2022年04月13日 - 13:10</p>
+ <p><span>最后更新:</span>2022年04月13日 - 13:18</p>
+ <p><span>原始链接:</span><a href="/2022/04/13/JavaScript/sum1_equal/" title="JavaScript中的相等比较">https://luryzhu.github.io/2022/04/13/JavaScript/sum1_equal/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://luryzhu.github.io/2022/04/13/JavaScript/sum1_equal/"  aria-label="复制成功！"></i></span>
+ </p>
+ <p><span>许可协议:</span><a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+   var clipboard = new Clipboard('.fa-clipboard');
+   $(".fa-clipboard").click(function(){
+     clipboard.on('success', function(){
+       swal({   
+         title: "",   
+         text: '复制成功',
+         icon: "success", 
+         showConfirmButton: true
+         });
+ 	 });
+   });  
+</script>
+
+      </div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" rel="tag"># 类型转换</a>
+              <a href="/tags/%E7%9B%B8%E7%AD%89/" rel="tag"># 相等</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/04/10/interview/interview_Baidu/" rel="prev" title="面经复盘1：百度前端暑期实习 2022-04-10">
+      <i class="fa fa-chevron-left"></i> 面经复盘1：百度前端暑期实习 2022-04-10
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">&#x3D;&#x3D;&#x3D;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Object-is"><span class="nav-number">2.</span> <span class="nav-text">Object.is</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-0"><span class="nav-number">2.1.</span> <span class="nav-text">+0 -0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NaN"><span class="nav-number">2.2.</span> <span class="nav-text">NaN</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#-1"><span class="nav-number">3.</span> <span class="nav-text">&#x3D;&#x3D;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Number"><span class="nav-number">3.1.</span> <span class="nav-text">Number</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ToPrimitive"><span class="nav-number">3.2.</span> <span class="nav-text">ToPrimitive</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Symbol-toPrimitive"><span class="nav-number">3.2.1.</span> <span class="nav-text">Symbol.toPrimitive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E6%8D%A2%E8%A7%84%E5%88%99"><span class="nav-number">3.2.2.</span> <span class="nav-text">转换规则</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%A4%E6%96%AD"><span class="nav-number">4.</span> <span class="nav-text">判断</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lury"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Lury</p>
+  <div class="site-description" itemprop="description">前端学习中...</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/luryZhu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;luryZhu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:LuryZhu@outlook.com" title="E-Mail → mailto:LuryZhu@outlook.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lury</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">149k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:15</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<!-- hexo injector body_end start --><script src="https://cdn.jsdelivr.net/npm/d3@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.7.4/dist/browser/view.min.js"></script>
+  <script>
+      const mindmaps = document.querySelectorAll('.markmap-svg');
+   
+      for(const mindmap of mindmaps) {
+          markmap.markmap(mindmap, JSON.parse(mindmap.innerHTML));
+      }
+  </script> <!-- hexo injector body_end end --></body>
+</html>
