@@ -2570,7 +2570,7 @@
       </tags>
   </entry>
   <entry>
-    <title>面经复盘1：百度前端暑期实习 2022-04-10</title>
+    <title>面经复盘2：百度前端暑期实习 2022-04-10</title>
     <url>/2022/04/10/interview/interview_Baidu/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>百度2022春暑期实习，2022-04-10，前端，下午场</p>
 <p>需要加强理解：</p>
@@ -3909,6 +3909,137 @@
         <tag>JavaScript</tag>
         <tag>类型转换</tag>
         <tag>相等</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>面经复盘1：贝壳前端暑期实习 2022-03-26</title>
+    <url>/2022/03/26/interview/interview_Beike/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>贝壳暑期实习，2022-03-26，前端，下午场</p>
+<p>第一次正式面试，有点紧张，流水面比较高压，但是纵深不会太深</p>
+<p>面试模式：牛客外包，流水面，2技术面+1hr面</p>
+<ul>
+<li>面试结束会立刻通知下一面</li>
+<li>需要扫码摇号排队</li>
+</ul>
+<p>需要加强理解：</p>
+<ul>
+<li>如何反问技术面试官</li>
+<li>如何面对hr<ul>
+<li>表现责任心、不一味强调个人追求</li>
+<li>表现对公司的好奇和了解<ul>
+<li>雷区：！！！工作地点一定要说那个公司的城市，提前看好！</li>
+</ul>
+</li>
+<li>团队意识，整理一下团队经验</li>
+<li>hr可能在套话<ul>
+<li>其他投递公司可以实话实说（都在流程中）、</li>
+<li>人设：精神状态正常，肯吃苦吧大概</li>
+</ul>
+</li>
+<li>提问：公司架构，人才培养计划之类的</li>
+</ul>
+</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="一面"><a href="#一面" class="headerlink" title="一面"></a>一面</h1><p>自我介绍</p>
+<p>html</p>
+<ul>
+<li>header footer标签有什么了解</li>
+</ul>
+<p>http</p>
+<ul>
+<li><p>post和get的区别 *** <a href="https://github.com/febobo/web-interview/issues/145">参考</a></p>
+<ul>
+<li>get怎么提交数据</li>
+<li>get提交数据有什么缺点</li>
+</ul>
+</li>
+<li><p>常用状态码</p>
+<ul>
+<li>503  504 *** <a href="https://mp.weixin.qq.com/s?__biz=MzA4MjkxMzMyNg==&mid=2654068952&idx=1&sn=1bd63a71610d73fcd563888d6f93398d&scene=24&srcid=0804843QrwLCsKWGYxfPum2H#wechat_redirect">参考</a><ul>
+<li>503 Servive Unavailable 由于<strong>超载或系统维护</strong>，<strong>服务器暂时的无法处理客户端的请求</strong>。延时的长度可包含在服务器的Retry-After头信息中</li>
+<li>504 Gateway Timeout <strong>充当网关或代理的服务器，未及时从远端服务器获取请求</strong>（通常是由于DNS解析）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>css</p>
+<ul>
+<li><p>说下行内标签，块标签</p>
+</li>
+<li><p>less用过什么功能</p>
+</li>
+<li><p>css平时写什么布局</p>
+<ul>
+<li>flex用过什么属性</li>
+</ul>
+</li>
+</ul>
+<p>react</p>
+<ul>
+<li><p>函数式编程和类式编程区别</p>
+</li>
+<li><p>纯函数是什么 *** <a href="https://blog.csdn.net/c_kite/article/details/79138814">参考</a></p>
+<ul>
+<li>返回值只由输入参数决定</li>
+<li>没有副作用（一个函数的执行过程产生了外部可观察的变化）</li>
+</ul>
+</li>
+<li><p>平时用的什么构建工具，说了脚手架eject，less-loader</p>
+</li>
+</ul>
+<p>js</p>
+<ul>
+<li><p>es6新特性了解</p>
+<ul>
+<li><p>let</p>
+</li>
+<li><p>promise</p>
+</li>
+</ul>
+</li>
+<li><p>数组用过什么方法</p>
+<ul>
+<li>forEach和map的区别，返回值不一样，forEach没有返回值</li>
+</ul>
+</li>
+</ul>
+<p>手写防抖</p>
+<p>平时学习方法是什么</p>
+<p>有什么问题</p>
+<h1 id="二面"><a href="#二面" class="headerlink" title="二面"></a>二面</h1><p>自我介绍</p>
+<ul>
+<li>根据自我介绍问了下为什么学前端，怎么学的</li>
+</ul>
+<p>看项目，对React有什么了解</p>
+<ul>
+<li>state 副作用</li>
+<li>redux怎么用的</li>
+</ul>
+<p>手写：红绿灯，10s绿灯，2s黄灯，10s红灯，循环 ***</p>
+<ul>
+<li>瞎写也没运行，问了setTimeout执行顺序 ***</li>
+<li>setTimeout时间准确吗 <a href="https://blog.csdn.net/weixin_43862991/article/details/108838173">参考</a> ***</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>红绿灯<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></span><br><span class="line"><span class="css">        <span class="selector-id">#light</span>&#123;</span></span><br><span class="line"><span class="css">            <span class="attribute">height</span>: <span class="number">30px</span>;</span></span><br><span class="line"><span class="css">            <span class="attribute">width</span>: <span class="number">30px</span>;</span></span><br><span class="line"><span class="css">            <span class="attribute">border-radius</span>: <span class="number">50%</span>;</span></span><br><span class="line"><span class="css">            <span class="attribute">background-color</span>: grey;</span></span><br><span class="line"><span class="css">        &#125;</span></span><br><span class="line"><span class="css">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>实现红绿灯：循环亮，绿灯2s，黄灯1s，红灯2s<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;light&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">        <span class="keyword">const</span> light=<span class="built_in">document</span>.getElementById(<span class="string">&#x27;light&#x27;</span>)</span></span><br><span class="line"><span class="javascript">        light.style.backgroundColor=<span class="string">&quot;green&quot;</span></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">setLight</span>(<span class="params">color, delay</span>)</span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve,reject</span>)=&gt;</span>&#123;</span></span><br><span class="line"><span class="javascript">                <span class="built_in">setTimeout</span>(<span class="function">()=&gt;</span>&#123;</span></span><br><span class="line"><span class="javascript">                    light.style.backgroundColor=color</span></span><br><span class="line"><span class="javascript">                    resolve()</span></span><br><span class="line"><span class="javascript">                &#125;,delay)</span></span><br><span class="line"><span class="javascript">            &#125;)</span></span><br><span class="line"><span class="javascript">        &#125;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">        <span class="comment">// 法1：直接then</span></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">trafficLight</span>(<span class="params"></span>)</span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="built_in">Promise</span>.resolve().then(<span class="function">()=&gt;</span>&#123;</span></span><br><span class="line"><span class="javascript">                <span class="keyword">return</span> setLight(<span class="string">&#x27;yellow&#x27;</span>, <span class="number">2000</span>)</span></span><br><span class="line"><span class="javascript">            &#125;).then(<span class="function">()=&gt;</span>&#123;</span></span><br><span class="line"><span class="javascript">                <span class="keyword">return</span> setLight(<span class="string">&#x27;red&#x27;</span>, <span class="number">1000</span>)</span></span><br><span class="line"><span class="javascript">            &#125;).then(<span class="function">()=&gt;</span>&#123;</span></span><br><span class="line"><span class="javascript">                <span class="keyword">return</span> setLight(<span class="string">&#x27;green&#x27;</span>,<span class="number">2000</span>)</span></span><br><span class="line"><span class="javascript">            &#125;).then(<span class="function">()=&gt;</span>&#123;</span></span><br><span class="line"><span class="javascript">                trafficLight()</span></span><br><span class="line"><span class="javascript">            &#125;)</span></span><br><span class="line"><span class="javascript">            </span></span><br><span class="line"><span class="javascript">        &#125;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">        <span class="comment">// 法2：async await</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">asyncTrafficLight</span>(<span class="params"></span>)</span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">await</span> setLight(<span class="string">&#x27;yellow&#x27;</span>, <span class="number">2000</span>)</span></span><br><span class="line"><span class="javascript">            <span class="keyword">await</span> setLight(<span class="string">&#x27;red&#x27;</span>, <span class="number">1000</span>)</span></span><br><span class="line"><span class="javascript">            <span class="keyword">await</span> setLight(<span class="string">&#x27;green&#x27;</span>,<span class="number">2000</span>)</span></span><br><span class="line"><span class="javascript">            asyncTrafficLight()</span></span><br><span class="line"><span class="javascript">        &#125;</span></span><br><span class="line"><span class="javascript">        </span></span><br><span class="line"><span class="javascript">        <span class="comment">// trafficLight()</span></span></span><br><span class="line"><span class="javascript">        asyncTrafficLight()</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">        </span></span><br><span class="line"><span class="javascript">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>有什么问题</p>
+<h1 id="HR面"><a href="#HR面" class="headerlink" title="HR面"></a>HR面</h1><p>自我介绍</p>
+<p>简历上有几个项目，介绍一下你最能说的，说一下实现的功能，最有成就感的部分</p>
+<p>有什么团队合作的项目经历</p>
+<p>还面了什么公司，怎么会想投贝壳的</p>
+<p>实习想学到什么，对工作内容和团队职责有什么预期</p>
+<p>什么时候能实习，时间节点</p>
+<p>有什么问题</p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>前端面经</category>
+        <category>复盘</category>
+      </categories>
+      <tags>
+        <tag>面经</tag>
       </tags>
   </entry>
 </search>
