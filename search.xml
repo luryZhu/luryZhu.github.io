@@ -91,7 +91,7 @@
       </tags>
   </entry>
   <entry>
-    <title>计网笔记1：理解HTTPS</title>
+    <title>计网笔记：理解HTTPS</title>
     <url>/2022/04/09/computerNetwork/HTTPS/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>参考视频：<a href="https://www.bilibili.com/video/BV1w4411m7GL">https://www.bilibili.com/video/BV1w4411m7GL</a></p>
 <p>HTTP请求过程中，客户端与服务器之间没有任何身份确认的过程，数据全部明文传输，所以很容易遭到黑客的攻击</p>
@@ -229,6 +229,7 @@
 <link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
       <categories>
         <category>计算机网络笔记</category>
+        <category>HTTP</category>
       </categories>
       <tags>
         <tag>计算机网络</tag>
@@ -4040,6 +4041,579 @@
       </categories>
       <tags>
         <tag>面经</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计网笔记：理解HTTP1——请求方法与状态码</title>
+    <url>/2022/04/13/computerNetwork/HTTP1_method/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>重点掌握：</p>
+<ul>
+<li>请求方法：GET POST PUT及区别</li>
+<li>状态码：200 301 302 304 404 503 504</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="HTTP协议介绍"><a href="#HTTP协议介绍" class="headerlink" title="HTTP协议介绍"></a>HTTP协议介绍</h1><p>HyperText Transfer Protocol 超文本传输协议</p>
+<p>基于TCP&#x2F;IP协议的应用层协议</p>
+<p>用于定义WEB浏览器与WEB服务器之间交换数据的过程</p>
+<h1 id="请求方法-8种"><a href="#请求方法-8种" class="headerlink" title="请求方法 8种 *"></a>请求方法 8种 *</h1><p>HTTP1.0: GET POST HEAD</p>
+<p>HTTP1.1: + OPTIONS、PUT、DELETE、TRACE 和 CONNECT </p>
+<p>1、OPTIONS</p>
+<p>返回服务器针对特定资源所支持的<strong>HTTP请求方法</strong>，也可以利用向web服务器发送‘<em>’的请求来*<em>测试服务器的功能性</em></em></p>
+<p>2、<strong>HEAD</strong></p>
+<p>向服务器索与GET请求相一致的响应，只不过<strong>响应体将不会被返回</strong>。这一方法可以再不必传输整个响应内容的情况下，就可以<strong>获取包含在响应小消息头中的元信息</strong>。</p>
+<p>3、<strong>GET</strong></p>
+<p>向特定的资源发出请求。注意：GET方法不应当被用于产生“副作用”的操作中，例如在Web Application中，其中一个原因是GET可能会被网络蜘蛛等随意访问。</p>
+<p>4、<strong>POST</strong></p>
+<p>向指定资源提交数据进行处理请求（例如提交表单或者上传文件）。数据被包含在请求体中。POST请求可能会导致新的资源的建立和&#x2F;或已有资源的修改。 </p>
+<p>5、PUT</p>
+<p>向指定资源位置上传其最新内容，<code>PUT</code> 与 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/POST"><code>POST</code></a> 方法的区别在于，PUT方法是幂等的：<strong>调用一次与连续调用多次是等价的</strong>（即没有副作用），而连续调用多次POST方法可能会有副作用，比如将一个订单重复提交多次。</p>
+<ul>
+<li>没有资源，则创建，返回201</li>
+<li>有资源</li>
+</ul>
+<p>6、DELETE</p>
+<p>请求服务器删除Request-URL所标识的资源</p>
+<p>7、TRACE</p>
+<p>回显服务器收到的请求，主要用于测试或诊断</p>
+<p>8、CONNECT</p>
+<p>HTTP&#x2F;1.1协议中预留给能够将连接改为管道方式的代理服务器。</p>
+<h3 id="GET和POST请求的区别"><a href="#GET和POST请求的区别" class="headerlink" title="GET和POST请求的区别"></a>GET和POST请求的区别</h3><p>Post 和 Get 是 HTTP 请求的两种方法</p>
+<ul>
+<li><strong>应用场景：</strong><ul>
+<li>幂等性：指一次和多次请求某一个资源应该具有同样的副作用 <a href="https://blog.csdn.net/kepengs/article/details/82706721">参考</a></li>
+<li>Get 请求是一个<strong>幂等</strong>的请求，一般 Get 请求用于对服务器资源不会产生影响的场景，比如说请求一个网页的资源。</li>
+<li>Post <strong>不</strong>是一个<strong>幂等</strong>的请求，一般用于对服务器资源会产生影响的情景，比如注册用户这一类的操作。</li>
+</ul>
+</li>
+<li><strong>是否缓存：</strong>因为两者应用场景不同，浏览器一般会对 Get 请求缓存，但很少对 Post 请求缓存。<ul>
+<li>Get会<strong>缓存</strong></li>
+<li>Post不会缓存</li>
+</ul>
+</li>
+<li><strong>发送的报文格式：</strong><ul>
+<li>Get 请求的报文中<strong>请求体为空</strong></li>
+<li>Post 请求的报文中请求体一般为向服务器发送的数据。</li>
+</ul>
+</li>
+<li><strong>安全性：</strong><ul>
+<li>历史记录：<ul>
+<li>Get请求保存在浏览器历史记录，且可以将url的payload显示在地址栏</li>
+<li>Post请求不会存在历史记录</li>
+</ul>
+</li>
+<li>明文传输：<ul>
+<li>Get和Post本质上都是明文传输，不安全，传密码等敏感信息还是要用HTTPS</li>
+</ul>
+</li>
+<li>黑客攻击：<ul>
+<li>Get请求容易产生CSRF攻击，而Post被CSRF攻击的成本更高</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>请求长度：</strong><ul>
+<li>浏览器由于对 url 长度的限制，所以会影响 get 请求发送数据时的长度。这个限制是浏览器规定的，并不是 RFC 规定的。</li>
+</ul>
+</li>
+<li><strong>参数类型：</strong><ul>
+<li>post 的参数传递支持更多的数据类型。</li>
+</ul>
+</li>
+</ul>
+<h3 id="POST和PUT请求的区别"><a href="#POST和PUT请求的区别" class="headerlink" title="POST和PUT请求的区别"></a>POST和PUT请求的区别</h3><table>
+<thead>
+<tr>
+<th>区别</th>
+<th>POST</th>
+<th>PUT</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>幂等</td>
+<td>不幂等</td>
+<td>是<strong>幂等</strong>的，执行多次同样的PUT请求，结果是一样的</td>
+</tr>
+<tr>
+<td>指定资源</td>
+<td>不需指定</td>
+<td>需要指定资源对象</td>
+</tr>
+<tr>
+<td>创建资源</td>
+<td>自己不创建资源，服务器来创建</td>
+<td>指定的资源不存在，则创建资源</td>
+</tr>
+<tr>
+<td>修改资源</td>
+<td>对已经存在的资源新增内容</td>
+<td>整个替换指定的资源为新的值</td>
+</tr>
+</tbody></table>
+<ul>
+<li>PUT请求是向服务器端发送数据，从而修改数据的内容，但是不会增加数据的种类等，也就是说无论进行多少次PUT操作，其结果并没有不同。（可以理解为时<strong>更新数据</strong>）</li>
+<li>POST请求是向服务器端发送数据，该请求会改变数据的种类等资源，它会创建新的内容。（可以理解为是<strong>创建数据</strong>）</li>
+</ul>
+<h2 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><table>
+<thead>
+<tr>
+<th align="left">分类</th>
+<th align="left">分类描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1**</td>
+<td align="left">信息，服务器收到请求，需要请求者继续执行操作</td>
+</tr>
+<tr>
+<td align="left">2**</td>
+<td align="left">成功，操作被成功接收并处理</td>
+</tr>
+<tr>
+<td align="left">3**</td>
+<td align="left">重定向，需要进一步的操作以完成请求</td>
+</tr>
+<tr>
+<td align="left">4**</td>
+<td align="left">客户端错误，请求包含语法错误或无法完成请求</td>
+</tr>
+<tr>
+<td align="left">5**</td>
+<td align="left">服务器错误，服务器在处理请求的过程中发生了错误</td>
+</tr>
+</tbody></table>
+<h3 id="精简版"><a href="#精简版" class="headerlink" title="精简版 *"></a>精简版 *</h3><p>1xx -&gt; 信息性状态码</p>
+<p>2xx -&gt; 请求成功</p>
+<ol>
+<li><strong>200</strong> -&gt; 网络请求成</li>
+<li>204 -&gt; 请求成功，但是服务没有内容返回</li>
+<li>206 -&gt; 请求成功，服务器返回指定范围内的内容</li>
+</ol>
+<p>3xx -&gt; 重定向</p>
+<ol>
+<li><strong>301</strong> -&gt; 永久重定向（网站域名永久更改，有利于搜索引擎优化）</li>
+<li><strong>302</strong> -&gt; 临时重定向（活动页面，将首页临时重定向到活动页）</li>
+<li>303 -&gt; 和301一样，GET、POST</li>
+<li><strong>304</strong> -&gt; 资源未修改，用于缓存</li>
+<li>307 -&gt; 和302一样，GET</li>
+</ol>
+<p>4xx -&gt; 资源问题</p>
+<ol>
+<li>400 -&gt; 请求报文语法错误</li>
+<li>401 -&gt; 需要进行授权</li>
+<li>403 -&gt; 没有权限访问资源</li>
+<li><strong>404</strong> -&gt; 没有找到对应资源</li>
+</ol>
+<p>5xx -&gt; 服务器问题</p>
+<ol>
+<li>500 -&gt; 一般为后端发生错误，代码错误等</li>
+<li>502 -&gt; Bad Gateway 网关或代理服务器收到<strong>无效响应</strong></li>
+<li><strong>503</strong> -&gt; 服务器<strong>繁忙或者停机维护</strong>等情况</li>
+<li><strong>504</strong> -&gt; Bad Gateway timeout，网关或代理服务器收到<strong>超时</strong>未获取响应</li>
+</ol>
+<h3 id="完整版"><a href="#完整版" class="headerlink" title="完整版"></a>完整版</h3><table>
+<thead>
+<tr>
+<th align="left">状态码</th>
+<th align="left">状态码英文名称</th>
+<th align="left">中文描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">100</td>
+<td align="left">Continue</td>
+<td align="left">继续。客户端应继续其请求</td>
+</tr>
+<tr>
+<td align="left">101</td>
+<td align="left">Switching Protocols</td>
+<td align="left">切换协议。服务器根据客户端的请求切换协议。只能切换到更高级的协议，例如，切换到HTTP的新版本协议</td>
+</tr>
+<tr>
+<td align="left"><strong>200</strong></td>
+<td align="left"><strong>OK</strong></td>
+<td align="left"><strong>请求成功。一般用于GET与POST请求</strong></td>
+</tr>
+<tr>
+<td align="left">201</td>
+<td align="left">Created</td>
+<td align="left">已创建。成功请求并创建了新的资源</td>
+</tr>
+<tr>
+<td align="left">202</td>
+<td align="left">Accepted</td>
+<td align="left">已接受。已经接受请求，但未处理完成</td>
+</tr>
+<tr>
+<td align="left">203</td>
+<td align="left">Non-Authoritative Information</td>
+<td align="left">非授权信息。请求成功。但返回的meta信息不在原始的服务器，而是一个副本</td>
+</tr>
+<tr>
+<td align="left"><strong>204</strong></td>
+<td align="left"><strong>No Content</strong></td>
+<td align="left"><strong>无内容。服务器成功处理，但未返回内容。在未更新网页的情况下，可确保浏览器继续显示当前文档</strong></td>
+</tr>
+<tr>
+<td align="left">205</td>
+<td align="left">Reset Content</td>
+<td align="left">重置内容。服务器处理成功，用户终端（例如：浏览器）应重置文档视图。可通过此返回码清除浏览器的表单域</td>
+</tr>
+<tr>
+<td align="left"><strong>206</strong></td>
+<td align="left"><strong>Partial Content</strong></td>
+<td align="left"><strong>部分内容。服务器成功处理了部分GET请求</strong></td>
+</tr>
+<tr>
+<td align="left">300</td>
+<td align="left">Multiple Choices</td>
+<td align="left">多种选择。请求的资源可包括多个位置，相应可返回一个资源特征与地址的列表用于用户终端（例如：浏览器）选择</td>
+</tr>
+<tr>
+<td align="left"><strong>301</strong></td>
+<td align="left"><strong>Moved Permanently</strong></td>
+<td align="left"><strong>永久移动。请求的资源已被永久的移动到新URI，返回信息会包括新的URI，浏览器会自动定向到新URI。今后任何新的请求都应使用新的URI代替</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>302</strong></td>
+<td align="left"><strong>Found</strong></td>
+<td align="left"><strong>临时移动。与301类似。但资源只是临时被移动。客户端应继续使用原有URI</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>303</strong></td>
+<td align="left"><strong>See Other</strong></td>
+<td align="left">查看其它地址。与302类似。使用<strong>GET和POST</strong>请求查看</td>
+</tr>
+<tr>
+<td align="left"><strong>304</strong></td>
+<td align="left">&#x3D;&#x3D;<strong>Not Modified</strong>&#x3D;&#x3D;</td>
+<td align="left"><strong>未修改</strong>。所请求的资源未修改，服务器返回此状态码时，不会返回任何资源。客户端通常会缓存访问过的资源，通过提供一个头信息指出客户端希望只返回在指定日期之后修改的资源</td>
+</tr>
+<tr>
+<td align="left">305</td>
+<td align="left">Use Proxy</td>
+<td align="left">使用代理。所请求的资源必须通过代理访问</td>
+</tr>
+<tr>
+<td align="left">306</td>
+<td align="left">Unused</td>
+<td align="left">已经被废弃的HTTP状态码</td>
+</tr>
+<tr>
+<td align="left"><strong>307</strong></td>
+<td align="left"><strong>Temporary Redirect</strong></td>
+<td align="left">临时重定向。与302类似。只能使用<strong>GET</strong>请求重定向</td>
+</tr>
+<tr>
+<td align="left"><strong>400</strong></td>
+<td align="left"><strong>Bad Request</strong></td>
+<td align="left"><strong>客户端请求的语法错误，服务器无法理解</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>401</strong></td>
+<td align="left"><strong>Unauthorized</strong></td>
+<td align="left"><strong>请求要求用户的身份认证</strong></td>
+</tr>
+<tr>
+<td align="left">402</td>
+<td align="left">Payment Required</td>
+<td align="left">保留，将来使用</td>
+</tr>
+<tr>
+<td align="left"><strong>403</strong></td>
+<td align="left"><strong>Forbidden</strong></td>
+<td align="left"><strong>服务器理解请求客户端的请求，但是拒绝执行此请求</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>404</strong></td>
+<td align="left"><strong>Not Found</strong></td>
+<td align="left"><strong>服务器无法根据客户端的请求找到资源（网页）。通过此代码，网站设计人员可设置”您所请求的资源无法找到”的个性页面</strong></td>
+</tr>
+<tr>
+<td align="left">405</td>
+<td align="left">Method Not Allowed</td>
+<td align="left">客户端请求中的方法被禁止</td>
+</tr>
+<tr>
+<td align="left">406</td>
+<td align="left">Not Acceptable</td>
+<td align="left">服务器无法根据客户端请求的内容特性完成请求</td>
+</tr>
+<tr>
+<td align="left">407</td>
+<td align="left">Proxy Authentication Required</td>
+<td align="left">请求要求代理的身份认证，与401类似，但请求者应当使用代理进行授权</td>
+</tr>
+<tr>
+<td align="left">408</td>
+<td align="left">Request Time-out</td>
+<td align="left">服务器等待客户端发送的请求时间过长，超时</td>
+</tr>
+<tr>
+<td align="left">409</td>
+<td align="left">Conflict</td>
+<td align="left">服务器完成客户端的 PUT 请求时可能返回此代码，服务器处理请求时发生了冲突</td>
+</tr>
+<tr>
+<td align="left">410</td>
+<td align="left">Gone</td>
+<td align="left">客户端请求的资源已经不存在。410不同于404，如果资源以前有现在被永久删除了可使用410代码，网站设计人员可通过301代码指定资源的新位置</td>
+</tr>
+<tr>
+<td align="left">411</td>
+<td align="left">Length Required</td>
+<td align="left">服务器无法处理客户端发送的不带Content-Length的请求信息</td>
+</tr>
+<tr>
+<td align="left">412</td>
+<td align="left">Precondition Failed</td>
+<td align="left">客户端请求信息的先决条件错误</td>
+</tr>
+<tr>
+<td align="left">413</td>
+<td align="left">Request Entity Too Large</td>
+<td align="left">由于请求的实体过大，服务器无法处理，因此拒绝请求。为防止客户端的连续请求，服务器可能会关闭连接。如果只是服务器暂时无法处理，则会包含一个Retry-After的响应信息</td>
+</tr>
+<tr>
+<td align="left">414</td>
+<td align="left">Request-URI Too Large</td>
+<td align="left">请求的URI过长（URI通常为网址），服务器无法处理</td>
+</tr>
+<tr>
+<td align="left">415</td>
+<td align="left">Unsupported Media Type</td>
+<td align="left">服务器无法处理请求附带的媒体格式</td>
+</tr>
+<tr>
+<td align="left">416</td>
+<td align="left">Requested range not satisfiable</td>
+<td align="left">客户端请求的范围无效</td>
+</tr>
+<tr>
+<td align="left">417</td>
+<td align="left">Expectation Failed</td>
+<td align="left">服务器无法满足Expect的请求头信息</td>
+</tr>
+<tr>
+<td align="left"><strong>500</strong></td>
+<td align="left"><strong>Internal Server Error</strong></td>
+<td align="left"><strong>服务器内部错误，无法完成请求</strong></td>
+</tr>
+<tr>
+<td align="left">501</td>
+<td align="left">Not Implemented</td>
+<td align="left">服务器不支持请求的功能，无法完成请求</td>
+</tr>
+<tr>
+<td align="left"><strong>502</strong></td>
+<td align="left"><strong>Bad Gateway</strong></td>
+<td align="left"><strong>作为网关或者代理工作的服务器尝试执行请求时，从远程服务器接收到了一个无效的响应</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>503</strong></td>
+<td align="left"><strong>Service Unavailable</strong></td>
+<td align="left">由于<strong>超载或系统维护</strong>，<strong>服务器暂时的无法处理客户端的请求</strong>。延时的长度可包含在服务器的Retry-After头信息中</td>
+</tr>
+<tr>
+<td align="left"><strong>504</strong></td>
+<td align="left"><strong>Gateway Time-out</strong></td>
+<td align="left"><strong>充当网关或代理的服务器，未及时从远端服务器获取请求</strong></td>
+</tr>
+<tr>
+<td align="left">505</td>
+<td align="left">HTTP Version not supported</td>
+<td align="left">服务器不支持请求的HTTP协议的版本，无法完成处理</td>
+</tr>
+</tbody></table>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>计算机网络笔记</category>
+        <category>HTTP</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
+        <tag>HTTP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计网笔记：理解HTTP2——TCP与UDP</title>
+    <url>/2022/04/13/computerNetwork/HTTP2_tcp/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>重点掌握：</p>
+<ul>
+<li>TCP建立连接3次握手</li>
+<li>TCP结束连接4次握手</li>
+<li>TCP和UDP的区别</li>
+</ul>
+<p><a href="https://github.com/CyC2018/CS-Notes/blob/master/notes/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%20-%20%E4%BC%A0%E8%BE%93%E5%B1%82.md#udp-%E5%92%8C-tcp-%E7%9A%84%E7%89%B9%E7%82%B9">参考</a></p>
+<span id="more"></span>
+
+<h1 id="TCP和UDP概念"><a href="#TCP和UDP概念" class="headerlink" title="TCP和UDP概念"></a>TCP和UDP概念</h1><p>TCP和UDP是传输层协议，提供了进程间的逻辑通信，传输层向高层用户屏蔽了下面网络层的核心细节，使应用程序看起来像是在两个传输层实体之间有一条端到端的逻辑通信信道。</p>
+<ul>
+<li>用户数据报协议 <strong>UDP</strong>（User Datagram Protocol）是无连接的，尽最大可能交付，没有拥塞控制，面向报文（对于应用程序传下来的报文不合并也不拆分，只是添加 UDP 首部），支持一对一、一对多、多对一和多对多的交互通信。</li>
+<li>传输控制协议 <strong>TCP</strong>（Transmission Control Protocol）是<strong>面向连接</strong>的，提供<strong>可靠交付</strong>，有<strong>流量控制</strong>，<strong>拥塞控制</strong>，提供<strong>全双工通信</strong>，面向<strong>字节流</strong>（把应用层传下来的报文看成字节流，把字节流组织成大小不等的数据块），每一条 TCP 连接只能是<strong>点对点</strong>的（一对一）。</li>
+</ul>
+<h1 id="TCP握手"><a href="#TCP握手" class="headerlink" title="TCP握手"></a>TCP握手</h1><p>TCP报文段的一些Header格式</p>
+<ul>
+<li><strong>序号</strong> seq：用于对字节流进行编号，例如序号为 301，表示第一个字节的编号为 301，如果携带的数据长度为 100 字节，那么下一个报文段的序号应为 401。</li>
+<li><strong>确认号</strong> ack：<strong>期望</strong>收到的下一个报文段的序号。例如 B 正确收到 A 发送来的一个报文段，序号为 501，携带的数据长度为 200 字节，因此 B 期望下一个报文段的序号为 701，B 发送给 A 的确认报文段中确认号就为 701。</li>
+<li><strong>确认 ACK</strong> ：<strong>当 ACK&#x3D;1 时确认号ack字段有效</strong>，否则无效。TCP 规定，在连接建立后所有传送的报文段都必须把 ACK 置 1。</li>
+<li><strong>同步 SYN</strong> ：在连接建立时用来同步序号。<ul>
+<li><strong>连接请求</strong>报文段：<strong>SYN&#x3D;1，ACK&#x3D;0</strong> </li>
+<li><strong>同意建立连接</strong>，则响应报文中：<strong>SYN&#x3D;1，ACK&#x3D;1</strong></li>
+</ul>
+</li>
+<li><strong>终止 FIN</strong> ：用来释放一个连接，当 FIN&#x3D;1 时，表示此报文段的发送方的数据已发送完毕，并要求释放连接。</li>
+</ul>
+<h2 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h2><h3 id="建立连接过程"><a href="#建立连接过程" class="headerlink" title="建立连接过程 *"></a>建立连接过程 *</h3><p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/HTTP/image-20220413195201878.png"></p>
+<p>假设 A 为客户端，B 为服务器端。</p>
+<ul>
+<li>首先 B 处于 LISTEN（监听）状态，等待客户的连接请求。</li>
+<li>A 向 B 发送连接请求报文，<strong>SYN&#x3D;1，ACK&#x3D;0</strong>，选择一个初始的序号 x。</li>
+<li>B 收到连接请求报文，如果同意建立连接，则向 A 发送连接确认报文，<strong>SYN&#x3D;1，ACK&#x3D;1</strong>，确认号为 x+1，同时也选择一个初始的序号 y。</li>
+<li>A 收到 B 的连接确认报文后，还要向 B 发出确认，确认号为 y+1，序号为 x+1。</li>
+<li>B 收到 A 的确认后，连接建立。</li>
+</ul>
+<h3 id="三次握手的原因"><a href="#三次握手的原因" class="headerlink" title="三次握手的原因"></a><strong>三次握手的原因</strong></h3><p>第三次握手是为了<strong>防止失效的连接请求到达服务器</strong>，让服务器错误打开连接，客户端会丢弃失效的连接，但服务器会一直维持这个资源，造成浪费。</p>
+<p>两次握手不够的原因是：两次只能让服务端接收并发送请求，缺没办法知道客户端是否将这次请求判定为成功</p>
+<p>四次五次也可以，但是浪费</p>
+<h2 id="四次握手"><a href="#四次握手" class="headerlink" title="四次握手"></a>四次握手</h2><h3 id="释放连接过程"><a href="#释放连接过程" class="headerlink" title="释放连接过程 *"></a>释放连接过程 *</h3><p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/noteImg/HTTP/image-20220413195236682.png"></p>
+<ul>
+<li>A 发送连接释放报文，FIN&#x3D;1。</li>
+<li>B 收到之后发出确认，此时 TCP 属于<strong>半关闭状态</strong>，B 能向 A 发送数据但是 A 不能向 B 发送数据。</li>
+<li>当 B 不再需要连接时，发送连接释放报文，FIN&#x3D;1。</li>
+<li>A 收到后发出确认，进入 TIME-WAIT 状态，等待 2 MSL（最大报文存活时间）后释放连接。</li>
+<li>B 收到 A 的确认后释放连接。</li>
+</ul>
+<h3 id="四次握手的原因"><a href="#四次握手的原因" class="headerlink" title="四次握手的原因"></a>四次握手的原因</h3><p>客户端发送了 FIN 连接释放报文之后，服务器收到了这个报文，就进入了 CLOSE-WAIT 状态。这个状态是为了<strong>让服务器端发送还未传送完毕的数据</strong>，传送完毕之后，服务器会发送 FIN 连接释放报文</p>
+<h3 id="TIME-WAIT原因"><a href="#TIME-WAIT原因" class="headerlink" title="TIME_WAIT原因"></a>TIME_WAIT原因</h3><p>客户端接收到服务器端的 FIN 报文后进入此状态，此时并不是直接进入 CLOSED 状态，还需要等待一个时间计时器设置的时间 2MSL。这么做有两个理由：</p>
+<ul>
+<li><strong>确保最后一个确认报文能够到达</strong>。如果 B 没收到 A 发送来的确认报文，那么就会重新发送连接释放请求报文，A 等待一段时间就是为了处理这种情况的发生。</li>
+<li>等待一段时间是为了<strong>让本连接持续时间内所产生的所有报文都从网络中消失</strong>，使得下一个新的连接不会出现旧的连接请求报文。</li>
+</ul>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>计算机网络笔记</category>
+        <category>HTTP</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
+        <tag>HTTP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计网笔记：理解HTTP3——缓存</title>
+    <url>/2022/04/13/computerNetwork/HTTP3_cache/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>重点掌握：</p>
+<ul>
+<li>强缓存：Expires, cache-control</li>
+<li>协商缓存：Last-Modified&#x2F; If-Modified-Since, ETag&#x2F; If-None-Match</li>
+<li>状态码304</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="强缓存"><a href="#强缓存" class="headerlink" title="强缓存"></a>强缓存</h3><ul>
+<li>缓存数据<strong>未失效</strong>的情况下，那么就会直接使用浏览器的缓存数据，不会再向服务器发送任何请求。</li>
+<li>可以通过设置两种 HTTP Header 实现：Expires 和 Cache-Control</li>
+<li>判断过期：<ul>
+<li>HTTP1.0：Expires的缓存时间没有过期</li>
+<li>HTTP1.1：Cache-Control的max-age没有过期</li>
+</ul>
+</li>
+<li>强制缓存生效时，http状态码为200，chrome中缓存从两种地方获取：<ul>
+<li>from memory cache (从内存中获取&#x2F;一般缓存更新频率较高的js、图片、字体等资源)</li>
+<li>from disk cache (从磁盘中获取&#x2F;一般缓存更新频率较低的js、css等资源)</li>
+</ul>
+</li>
+</ul>
+<h4 id="Expires"><a href="#Expires" class="headerlink" title="Expires"></a>Expires</h4><p>HTTP1.0的强缓存，值为过期时间（秒级）时间戳，现在基本不用，优先考虑Cache-Control</p>
+<p><strong>缺点</strong>：存储的是服务器的时间，无法应对客户端的时间和服务器端的时间不一致，或者用户可以对客户端时间进行修改的情况</p>
+<h4 id="Cache-Control"><a href="#Cache-Control" class="headerlink" title="Cache-Control"></a>Cache-Control</h4><p>HTTP1.1的强缓存，置为有效时间（秒级）</p>
+<ul>
+<li>例如，max-age&#x3D;300时，则代表在这个请求正确返回时间（浏览器也会记录下来）的5分钟内再次加载资源，就会命中强缓存。</li>
+</ul>
+<p>属性：</p>
+<ul>
+<li><p><code>public</code>：设置了该字段值的资源表示可以被任何对象（包括：发送请求的客户端、代理服务器等等）缓存。这个字段值不常用，一般还是使用max-age&#x3D;来精确控制；</p>
+</li>
+<li><p><code>private</code>：设置了该字段值的资源<strong>只能被用户浏览器缓存</strong>，不允许任何代理服务器缓存。在实际开发当中，对于一些含有用户信息的HTML，通常都要设置这个字段值，避免代理服务器(CDN)缓存；</p>
+</li>
+<li><p><strong><code>no-cache</code><strong>：客户端缓存内容，是否使用缓存则需要</strong>经过协商缓存</strong>来验证决定。</p>
+<ul>
+<li>表示不使用 Cache-Control的缓存控制方式做前置验证，而是使用 Etag 或者Last-Modified字段来控制缓存。</li>
+</ul>
+</li>
+<li><p><strong><code>no-store</code><strong>：所有内容都不会被缓存，即</strong>不使用强制缓存，也不使用协商缓存</strong>(memory cache也会失效)</p>
+</li>
+<li><p>**<code>max-age</code>**：max-age&#x3D;xxx 表示缓存内容将在xxx秒后失效</p>
+</li>
+</ul>
+<p>当两种强缓存方式一起使用时，Cache-Control 的优先级要高于 Expires</p>
+<h3 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h3><ul>
+<li>协商缓存就是强缓存<strong>失效</strong>后，浏览器携带缓存标识向服务器发起请求，由服务器根据缓存标识决定是否使用缓存的过程</li>
+<li>可以通过设置两种 HTTP Header，Last-Modified或者ETag实现</li>
+<li>判断过期：当浏览器第一次向服务器发送请求时，会在响应头中返回协商缓存的头属性：ETag和Last-Modified<ul>
+<li>HTTP 1.0：Last-Modified&#x2F;If-Modified-Since<ul>
+<li>Last-Modified返回的是GMT格式的最后修改时间（只能判断秒级修改）</li>
+<li>浏览器在第二次发送请求的时候，会在请求头中带上与Last-Modified对应的If-Modified-Since，值为最后修改时间</li>
+</ul>
+</li>
+<li>HTTP 1.1：ETag&#x2F;If-Not-Match <ul>
+<li>ETag返回的是一个hash值</li>
+<li>浏览器在第二次发送请求的时候，会在请求头中带上与ETag对应的If-Not-Match，值为Etag的hash值</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>如果服务器资源未修改，返回304，如果有修改，返回200和新资源</li>
+</ul>
+<h4 id="Last-Modified"><a href="#Last-Modified" class="headerlink" title="Last-Modified"></a>Last-Modified</h4><p>Last-Modified&#x2F; If-Modified-Since</p>
+<p>HTTP1.0的协商缓存，值为资源文件最后一次更改时间（秒级）</p>
+<p>缓存过程：</p>
+<ul>
+<li>浏览器第一次请求资源<ul>
+<li>服务器通过在响应头中添加 Last-Modified 属性来指出资源最后一次修改的时间，</li>
+</ul>
+</li>
+<li>浏览器下一次发起请求时<ul>
+<li>浏览器在会在请求头中添加一个 If-Modified-Since 的属性，属性值为上一次资源返回时的 Last-Modified 的值。</li>
+<li>服务器会通过这个属性来和资源的最后一次的修改时间来进行比较，以此来判断资源是否做了修改。<ul>
+<li>如果资源没有修改，那么返回 304 状态，让客户端使用本地的缓存。</li>
+<li>如果资源已经被修改了，则返回200状态和修改后的资源。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>因为是秒级，如果某些文件在1秒钟以内，被修改多次的话，那么文件已将改变了但是 Last-Modified 却没有改变，这样会造成缓存命中的不准确</li>
+<li>可能资源被修改过，但是值未发生变化，这种时候也不算已修改</li>
+</ul>
+<h4 id="Etag"><a href="#Etag" class="headerlink" title="Etag"></a>Etag</h4><p>Etag&#x2F; If-None-Match</p>
+<p>全程Entity Tag，值是资源生成的唯一标识符，对输入敏感，资源发生改变后ETag也改变，可以解决Last-Modified问题</p>
+<ul>
+<li>生成Etag的方法有很多，通常是使用内容的散列、最后修改时间戳的哈希值或简单地使用版本号</li>
+</ul>
+<p>缓存过程：和Last-Modified类似</p>
+<ul>
+<li>浏览器第一次请求资源<ul>
+<li>服务器在返回资源的时候，在头信息中添加了 Etag 属性</li>
+</ul>
+</li>
+<li>浏览器下一次发起请求时<ul>
+<li>浏览器会在请求头中添加一个 If-None-Match 属性，这个属性的值就是上次返回的资源的 Etag 的值。</li>
+<li>服务接收到请求后会根据这个值来和资源当前的 Etag 的值来进行比较，以此来判断资源是否发生改变，是否需要返回资源。</li>
+</ul>
+</li>
+</ul>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>计算机网络笔记</category>
+        <category>HTTP</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
+        <tag>HTTP</tag>
       </tags>
   </entry>
 </search>
