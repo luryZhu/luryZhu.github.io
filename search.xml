@@ -26,7 +26,7 @@
 <h1 id="浏览器架构"><a href="#浏览器架构" class="headerlink" title="浏览器架构"></a>浏览器架构</h1><p><img src="https://luryblog.oss-cn-beijing.aliyuncs.com/front-end-notes/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9E%B6%E6%9E%84.png"></p>
 <link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
       <categories>
-        <category>JavaScript笔记</category>
+        <category>前端工程师进阶系列</category>
       </categories>
       <tags>
         <tag>front end</tag>
@@ -308,6 +308,7 @@
 <p><a href="https://blog.csdn.net/qq_39200185/article/details/121201716">https://blog.csdn.net/qq_39200185/article/details/121201716</a></p>
 <link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
       <categories>
+        <category>前端工程师进阶系列</category>
         <category>浏览器学习笔记</category>
       </categories>
       <tags>
@@ -1263,8 +1264,8 @@
 </ul>
 <link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
       <categories>
+        <category>前端工程师进阶系列</category>
         <category>计算机网络笔记</category>
-        <category>HTTP</category>
       </categories>
       <tags>
         <tag>计算机网络</tag>
@@ -2177,8 +2178,8 @@
 </tbody></table>
 <link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
       <categories>
+        <category>前端工程师进阶系列</category>
         <category>计算机网络笔记</category>
-        <category>HTTP</category>
       </categories>
       <tags>
         <tag>计算机网络</tag>
@@ -2323,8 +2324,8 @@
 </ul>
 <link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
       <categories>
+        <category>前端工程师进阶系列</category>
         <category>计算机网络笔记</category>
-        <category>HTTP</category>
       </categories>
       <tags>
         <tag>计算机网络</tag>
@@ -2439,8 +2440,8 @@
 </ul>
 <link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
       <categories>
+        <category>前端工程师进阶系列</category>
         <category>计算机网络笔记</category>
-        <category>HTTP</category>
       </categories>
       <tags>
         <tag>计算机网络</tag>
@@ -3741,6 +3742,7 @@
 <p>注意default应该返回传入的state快照</p>
 <link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
       <categories>
+        <category>前端工程师进阶系列</category>
         <category>Redux学习笔记</category>
       </categories>
       <tags>
@@ -4006,6 +4008,7 @@
 <h2 id="需求4"><a href="#需求4" class="headerlink" title="需求4"></a>需求4</h2><p>在3的基础上，使用applyMiddleware完成该功能</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 前面到action creator的部分都一样</span></span><br><span class="line"><span class="comment">// 集成reducer</span></span><br><span class="line"><span class="keyword">const</span> rootReducers = combineReducers(&#123; counter, todos &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// middleWare</span></span><br><span class="line"><span class="comment">// 监控state变化和action</span></span><br><span class="line"><span class="keyword">const</span> logMiddleWare = <span class="function">(<span class="params">store</span>) =&gt;</span> <span class="function">(<span class="params">next</span>) =&gt;</span> <span class="function">(<span class="params">action</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;old state :&quot;</span>, store.getState());</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;will diapatch:&quot;</span>, action);</span><br><span class="line">  next(action);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;new state :&quot;</span>, store.getState());</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监控执行时间</span></span><br><span class="line"><span class="keyword">const</span> monitorMiddleWare = <span class="function">(<span class="params">store</span>) =&gt;</span> <span class="function">(<span class="params">next</span>) =&gt;</span> <span class="function">(<span class="params">action</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> start = performance.now();</span><br><span class="line">  next(action);</span><br><span class="line">  <span class="keyword">const</span> end = performance.now();</span><br><span class="line">  <span class="keyword">const</span> diff = end - start;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;reducer execute time: &quot;</span>, diff);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建store</span></span><br><span class="line"><span class="keyword">const</span> store = createStore(</span><br><span class="line">  rootReducers,</span><br><span class="line">  applyMiddleware(logMiddleWare, monitorMiddleWare)</span><br><span class="line">);</span><br><span class="line"><span class="comment">// 集成actions</span></span><br><span class="line"><span class="keyword">const</span> actions = bindActionCreators(</span><br><span class="line">  &#123; increment, decrement, reset, addTodo, shiftTodo &#125;,</span><br><span class="line">  store.dispatch</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 派发事件</span></span><br><span class="line">actions.increment(<span class="number">10</span>);</span><br><span class="line">actions.decrement(<span class="number">5</span>);</span><br><span class="line">actions.addTodo(<span class="string">&quot;learn Redux&quot;</span>);</span><br><span class="line">actions.addTodo(<span class="string">&quot;learn React&quot;</span>);</span><br><span class="line">actions.shiftTodo();</span><br><span class="line">actions.reset();</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
       <categories>
+        <category>前端工程师进阶系列</category>
         <category>Redux学习笔记</category>
       </categories>
       <tags>
@@ -4222,6 +4225,7 @@
 
 <link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
       <categories>
+        <category>前端工程师进阶系列</category>
         <category>Redux学习笔记</category>
       </categories>
       <tags>
