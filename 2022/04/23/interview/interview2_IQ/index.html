@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"luryzhu.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="重点掌握： 水杯分水、割金条、烧绳子，其他看一下思路">
+  <meta name="description" content="重点掌握：  必看：水杯分水、割金条、烧绳子 理解思路：概率、组合、锦标赛、毒药消耗 其他困难：海盗分钱、秘书问题、二人博弈等">
 <meta property="og:type" content="article">
 <meta property="og:title" content="面经整理2：大厂智力题">
-<meta property="og:url" content="https://luryzhu.github.io/2022/04/23/interview/interview_IQ/index.html">
+<meta property="og:url" content="https://luryzhu.github.io/2022/04/23/interview/interview2_IQ/index.html">
 <meta property="og:site_name" content="Lury的世界尽头">
-<meta property="og:description" content="重点掌握： 水杯分水、割金条、烧绳子，其他看一下思路">
+<meta property="og:description" content="重点掌握：  必看：水杯分水、割金条、烧绳子 理解思路：概率、组合、锦标赛、毒药消耗 其他困难：海盗分钱、秘书问题、二人博弈等">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://pic2.zhimg.com/80/v2-0c8c580817a9552d44b979d3a7004391_720w.jpg">
 <meta property="og:image" content="https://pic4.zhimg.com/80/v2-ae30efa94d1f3e654a97735ee6701c97_720w.jpg">
@@ -36,13 +36,13 @@
 <meta property="og:image" content="https://pic3.zhimg.com/80/v2-e6eb68ec90e18c90246d3664ad393a92_720w.jpg">
 <meta property="og:image" content="https://pic3.zhimg.com/80/v2-9c8b874adc54277efae777e5a8085f6a_720w.jpg">
 <meta property="article:published_time" content="2022-04-23T08:00:00.000Z">
-<meta property="article:modified_time" content="2022-04-23T08:15:01.755Z">
+<meta property="article:modified_time" content="2022-04-23T11:27:46.777Z">
 <meta property="article:author" content="Lury">
 <meta property="article:tag" content="面经">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://pic2.zhimg.com/80/v2-0c8c580817a9552d44b979d3a7004391_720w.jpg">
 
-<link rel="canonical" href="https://luryzhu.github.io/2022/04/23/interview/interview_IQ/">
+<link rel="canonical" href="https://luryzhu.github.io/2022/04/23/interview/interview2_IQ/">
 
 
 <script id="page-configurations">
@@ -199,7 +199,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://luryzhu.github.io/2022/04/23/interview/interview_IQ/">
+    <link itemprop="mainEntityOfPage" href="https://luryzhu.github.io/2022/04/23/interview/interview2_IQ/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -223,7 +223,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-04-23 16:00:00 / 修改时间：16:15:01" itemprop="dateCreated datePublished" datetime="2022-04-23T16:00:00+08:00">2022-04-23</time>
+              <time title="创建时间：2022-04-23 16:00:00 / 修改时间：19:27:46" itemprop="dateCreated datePublished" datetime="2022-04-23T16:00:00+08:00">2022-04-23</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -248,7 +248,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>8.8k</span>
+              <span>8.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -268,7 +268,11 @@
 
       
         <p>重点掌握：</p>
-<p>水杯分水、割金条、烧绳子，其他看一下思路</p>
+<ul>
+<li>必看：水杯分水、割金条、烧绳子</li>
+<li>理解思路：概率、组合、锦标赛、毒药消耗</li>
+<li>其他困难：海盗分钱、秘书问题、二人博弈等</li>
+</ul>
 <span id="more"></span>
 
 <p>参考：</p>
@@ -519,12 +523,12 @@
 <div style="text-align:center;color: #ccc;font-size:14px;">------ 版权信息 ------</div>
  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
  
- <p><span>本文标题:</span><a href="/2022/04/23/interview/interview_IQ/">面经整理2：大厂智力题</a></p>
+ <p><span>本文标题:</span><a href="/2022/04/23/interview/interview2_IQ/">面经整理2：大厂智力题</a></p>
  <p><span>文章作者:</span><a href="/" title="访问 Lury 的个人博客">Lury</a></p>
  <p><span>发布时间:</span>2022年04月23日 - 16:00</p>
- <p><span>最后更新:</span>2022年04月23日 - 16:15</p>
- <p><span>原始链接:</span><a href="/2022/04/23/interview/interview_IQ/" title="面经整理2：大厂智力题">https://luryzhu.github.io/2022/04/23/interview/interview_IQ/</a>
-    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://luryzhu.github.io/2022/04/23/interview/interview_IQ/"  aria-label="复制成功！"></i></span>
+ <p><span>最后更新:</span>2022年04月23日 - 19:27</p>
+ <p><span>原始链接:</span><a href="/2022/04/23/interview/interview2_IQ/" title="面经整理2：大厂智力题">https://luryzhu.github.io/2022/04/23/interview/interview2_IQ/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://luryzhu.github.io/2022/04/23/interview/interview2_IQ/"  aria-label="复制成功！"></i></span>
  </p>
  <p><span>许可协议:</span><a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
 </div>
@@ -559,8 +563,8 @@
       <i class="fa fa-chevron-left"></i> CSS笔记1：两栏布局和三栏布局
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/04/23/exercise/BackTpTop/" rel="next" title="HTML+CSS实战：返回顶部">
-      HTML+CSS实战：返回顶部 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/04/23/exercise/BackTpTop/" rel="next" title="React实战：返回顶部">
+      React实战：返回顶部 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
