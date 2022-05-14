@@ -5431,4 +5431,766 @@
         <category>KTV小助手</category>
       </categories>
   </entry>
+  <entry>
+    <title>CSS进阶实战1：项目资源与架构</title>
+    <url>/2022/05/11/CSS/omnifood1_overview/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote>
+<p>参考课程：Build Responsive Real-World Websites with HTML and CSS<br><a href="https://www.bilibili.com/video/BV1A34y1e7wL?p=101&spm_id_from=pageDriver">视频</a> | <a href="https://github.com/jonasschmedtmann/html-css-course">源码</a></p>
+</blockquote>
+<p>基于React的响应式单页应用开发、优化和部署</p>
+<ul>
+<li>项目地址：<a href="https://github.com/luryZhu/omnifood">https://github.com/luryZhu/omnifood</a></li>
+<li>在线demo：<a href="https://omnifood-lury.netlify.app/">https://omnifood-lury.netlify.app/</a></li>
+</ul>
+<span id="more"></span>
+
+<hr>
+<h1 id="工具-x2F-资源"><a href="#工具-x2F-资源" class="headerlink" title="工具&#x2F;资源"></a>工具&#x2F;资源</h1><p><strong>免费素材网站</strong></p>
+<p>背景：<a href="https://unsplash.com/">unsplash</a></p>
+<p>人像：<a href="https://www.uifaces.co/">UIfaces</a></p>
+<p>字体：<a href="https://fonts.google.com/">Google fonts</a></p>
+<p><strong>前端设计</strong></p>
+<p>亮色阴影色：<a href="https://maketintsandshades.com/">Tints and Shades</a></p>
+<p>响应式网站：<a href="https://mediaqueri.es/">Media Queries</a></p>
+<p>浏览器支持：<a href="https://caniuse.com/">Can i use</a></p>
+<p><strong>VScode插件</strong></p>
+<p>高亮颜色：Color Highlight </p>
+<p><img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220428152742565.png?raw=true" alt="image-20220428152742565"></p>
+<p><strong>第三方库</strong></p>
+<p>style-resource：配置less全局变量</p>
+<p>react-scroll：实现平滑滚动</p>
+<p><strong>优化</strong></p>
+<p>LightHouse</p>
+<p>图像压缩：<a href="https://squoosh.app/">Squoosh</a></p>
+<h1 id="项目架构"><a href="#项目架构" class="headerlink" title="项目架构"></a>项目架构</h1><p>技术栈：React + React Hooks + Less</p>
+<p>响应式布局：rem + grid + media query </p>
+<p>部署：netlify</p>
+<p>实现组件</p>
+<ul>
+<li>Header 导航</li>
+<li>Hero 介绍</li>
+<li>How does it work 原理</li>
+<li>Testimonials 案例</li>
+<li>Meals 食谱</li>
+<li>Pricing 定价</li>
+<li>Call to action 登录</li>
+<li>Footer 相关链接</li>
+</ul>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>CSS笔记</category>
+        <category>CSS进阶实战</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CSS进阶实战3：平滑滚动、禁止滚动、监听滚动</title>
+    <url>/2022/05/12/CSS/omnifood3_scroll/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>平滑滚动：scrollIntoView、react-scroll</p>
+<p>禁止滚动：桌面端禁止滚动，移动端禁止滚动</p>
+<p>监听滚动：IntersectionObserver</p>
+<span id="more"></span>
+
+<hr>
+<blockquote>
+<p>参考课程：Build Responsive Real-World Websites with HTML and CSS<br><a href="https://www.bilibili.com/video/BV1A34y1e7wL?p=101&spm_id_from=pageDriver">视频</a> | <a href="https://github.com/jonasschmedtmann/html-css-course">源码</a></p>
+</blockquote>
+<p>基于React的响应式单页应用开发、优化和部署</p>
+<ul>
+<li>项目地址：<a href="https://github.com/luryZhu/omnifood">https://github.com/luryZhu/omnifood</a></li>
+<li>在线demo：<a href="https://omnifood-lury.netlify.app/">https://omnifood-lury.netlify.app/</a></li>
+</ul>
+<hr>
+<h1 id="平滑滚动"><a href="#平滑滚动" class="headerlink" title="平滑滚动"></a>平滑滚动</h1><p>实现平滑且可被浏览器兼容的滚动</p>
+<p>使用场景：</p>
+<p>点击导航栏连接，产生一个动画平滑地滚动到指定位置</p>
+<img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220511171619128.png?raw=true" alt="image-20220511171619128" style="zoom:50%;" />
+
+<h2 id="一般方式"><a href="#一般方式" class="headerlink" title="一般方式"></a>一般方式</h2><p>导航栏中的按钮为a标签实现的超链接</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#cta&quot;</span> <span class="attr">class</span>=<span class="string">&quot;btn btn--full margin-right-sm&quot;</span>&gt;</span>Start eating well<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>js脚本中选中所有<code>a: link</code>标签，手动绑定点击事件</p>
+<ul>
+<li>阻止默认行为</li>
+<li>获取每个a标签的href属性，得到转跳目标元素的id</li>
+<li>获取目标元素，调用<code>scrollIntoView</code>方法，设置参数<code>behavior: &quot;smooth&quot;</code>，即可平滑滚动</li>
+</ul>
+<p>但是该方法不适用于React的设计逻辑</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> allLinks = <span class="built_in">document</span>.querySelectorAll(<span class="string">&quot;a:link&quot;</span>);</span><br><span class="line"></span><br><span class="line">allLinks.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">link</span>) </span>&#123;</span><br><span class="line">  link.addEventListener(<span class="string">&quot;click&quot;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">    e.preventDefault();</span><br><span class="line">    <span class="keyword">const</span> href = link.getAttribute(<span class="string">&quot;href&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Scroll back to top</span></span><br><span class="line">    <span class="keyword">if</span> (href === <span class="string">&quot;#&quot;</span>)</span><br><span class="line">      <span class="built_in">window</span>.scrollTo(&#123;</span><br><span class="line">        <span class="attr">top</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">behavior</span>: <span class="string">&quot;smooth&quot;</span>,</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Scroll to other links</span></span><br><span class="line">    <span class="keyword">if</span> (href !== <span class="string">&quot;#&quot;</span> &amp;&amp; href.startsWith(<span class="string">&quot;#&quot;</span>)) &#123;</span><br><span class="line">      <span class="keyword">const</span> sectionEl = <span class="built_in">document</span>.querySelector(href);</span><br><span class="line">      sectionEl.scrollIntoView(&#123; <span class="attr">behavior</span>: <span class="string">&quot;smooth&quot;</span> &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Close mobile naviagtion</span></span><br><span class="line">    <span class="keyword">if</span> (link.classList.contains(<span class="string">&quot;main-nav-link&quot;</span>))</span><br><span class="line">      headerEl.classList.toggle(<span class="string">&quot;nav-open&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>其他方式参考：<a href="https://juejin.cn/post/6898670533567578125">实现页面平滑滚动的N种姿势</a></p>
+<h2 id="React-scroll"><a href="#React-scroll" class="headerlink" title="React-scroll"></a>React-scroll</h2><p>使用React插件<a href="https://www.npmjs.com/package/react-scroll">react-scroll</a></p>
+<p>使用例：<a href="https://codesandbox.io/s/basic-6t84k">https://codesandbox.io/s/basic-6t84k</a></p>
+<h3 id="常用API"><a href="#常用API" class="headerlink" title="常用API"></a>常用API</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Link, animateScroll <span class="keyword">as</span> scroll&#125; <span class="keyword">from</span> <span class="string">&#x27;react-scroll&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Link"><a href="#Link" class="headerlink" title="Link"></a>Link</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>用例</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>activeClass</td>
+<td>‘active’</td>
+<td>判断滚动到指定的元素后，会在Link元素上加上一个css class，一般设类名为active</td>
+</tr>
+<tr>
+<td>to</td>
+<td>‘cta’</td>
+<td>目标元素id或name</td>
+</tr>
+<tr>
+<td>spy</td>
+<td>true</td>
+<td>判断滚动到指定的元素后，使对应的Link元素变成选中状态（就是加上activeClass）</td>
+</tr>
+<tr>
+<td>hashSpy</td>
+<td>true</td>
+<td>判断滚动到指定的元素后，在网页url后面显示哈希路径，例如 <code>localhost:3000/#meals</code></td>
+</tr>
+<tr>
+<td>smooth</td>
+<td>true</td>
+<td>是否平滑</td>
+</tr>
+<tr>
+<td>offset</td>
+<td>-80</td>
+<td>额外滚动距离，单位为px，传参时直接传数值</td>
+</tr>
+<tr>
+<td>duration</td>
+<td>500</td>
+<td>持续时间，单位为ms</td>
+</tr>
+</tbody></table>
+<h4 id="animateScroll-as-scroll"><a href="#animateScroll-as-scroll" class="headerlink" title="animateScroll as scroll"></a>animateScroll as scroll</h4><p><a href="https://github.com/fisshy/react-scroll/blob/master/modules/mixins/animate-scroll.js">源码</a></p>
+<p>options</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">duration</span>: <span class="number">1500</span>,</span><br><span class="line">  <span class="attr">delay</span>: <span class="number">100</span>,</span><br><span class="line">  <span class="attr">smooth</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">containerId</span>: <span class="string">&#x27;ContainerElementID&#x27;</span>,</span><br><span class="line">  <span class="attr">offset</span>: <span class="number">50</span>, <span class="comment">// Scrolls to element + 50 pixels down the page</span></span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Scroll To Top</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">scroll.scrollToTop(options);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Scroll To Bottom</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">scroll.scrollToBottom(options);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Scroll To (position)</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">scroll.scrollTo(100, options);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Scroll To (Element)</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">scroll.scrollTo(element, options);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Scroll More (px)</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">scroll.scrollMore(10, options);</span><br></pre></td></tr></table></figure>
+
+<h3 id="手写封装：NavLink"><a href="#手写封装：NavLink" class="headerlink" title="手写封装：NavLink"></a>手写封装：NavLink</h3><p>入参：</p>
+<ul>
+<li>className：给a标签加上class</li>
+<li>to：目标元素id</li>
+<li>onClick：除了转跳意外的点击事件处理函数</li>
+<li>props.children</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Link, animateScroll <span class="keyword">as</span> scroll &#125; <span class="keyword">from</span> <span class="string">&#x27;react-scroll&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> NavLink = <span class="function">(<span class="params">props</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        <span class="comment">// &lt;a className=&#x27;main-nav-link&#x27; href=&quot;#how&quot;&gt;How it works&lt;/a&gt;</span></span><br><span class="line">        props.to !== <span class="string">&quot;#&quot;</span></span><br><span class="line">            ?</span><br><span class="line">            (<span class="xml"><span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">activeClass</span>=<span class="string">&quot;active&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">className</span>=<span class="string">&#123;props.className&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">to</span>=<span class="string">&#123;props.to&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">smooth</span>=<span class="string">&#123;true&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">duration</span>=<span class="string">&#123;500&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">offset</span>=<span class="string">&#123;-40&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">onClick</span>=<span class="string">&#123;props.onClick&#125;</span>&gt;</span></span></span><br><span class="line"><span class="xml">                &#123;props.children&#125;</span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span>)</span><br><span class="line">            :</span><br><span class="line">            <span class="xml"><span class="tag">&lt;<span class="name">a</span> <span class="attr">className</span>=<span class="string">&#123;props.className&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">href</span>=<span class="string">&quot;/#&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> scroll.scrollToTop(&#123; duration: 500 &#125;)&#125;&gt;</span></span><br><span class="line"><span class="xml">                &#123;props.children&#125;</span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span></span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> NavLink</span><br></pre></td></tr></table></figure>
+
+<p>使用：</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">&lt;NavLink className=<span class="string">&#x27;main-nav-link&#x27;</span> to=<span class="string">&quot;how&quot;</span> onClick=&#123;onCloseHandle&#125;&gt;How it works&lt;/NavLink&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>spy和hashSpy会出现滚动到指定位置，但是判定激活的是上面的当前元素上面的那个元素，目前没有找到解决方案</p>
+<p>参考：<a href="https://github.com/fisshy/react-scroll/issues/422">https://github.com/fisshy/react-scroll/issues/422</a></p>
+<blockquote>
+<p>I solved this by letting <a href="https://www.npmjs.com/package/react-waypoint">react-waypoint</a> do the “set active” handling instead. So I removed <code>spy</code> and <code>onSetActive</code> from my <code>&lt;Link&gt;</code> elements and wrapped each targeted element with <code>&lt;Waypoint&gt;</code>. That way you get more control of when the target element is activated, and you can offset the triggers freely with using waypoints, while still keeping any scroll offset set in the <code>&lt;Link&gt;</code> element.</p>
+</blockquote>
+<h1 id="阻止滚动"><a href="#阻止滚动" class="headerlink" title="阻止滚动"></a>阻止滚动</h1><p>场景：</p>
+<p>产生弹窗或打开导航栏时，不希望下层的页面能够滚动，需要手动禁用</p>
+<img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513195237097.png?raw=true" alt="image-20220513195237097" style="zoom:50%;" />
+
+<h2 id="桌面端"><a href="#桌面端" class="headerlink" title="桌面端"></a>桌面端</h2><p><strong>粗暴的方法</strong>：</p>
+<p>html或body元素的overflow设为hidden（测试后是加在html元素上有效）</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="built_in">document</span>.documentElement.style.overflow = <span class="string">&#x27;hidden&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>问题：</p>
+<p>这样设置会影响子元素的overflow属性，造成页面布局抖动，不好</p>
+<p><strong>其他解决方案</strong>：</p>
+<p>参考：<a href="https://juejin.cn/post/6869740995290857479#heading-3">阻止滚轮滚动事件</a></p>
+<p>监听鼠标滚轮滚动mousewheel事件，阻止默认行为</p>
+<p>问题：</p>
+<p>用户仍然可以拖动滚动条进行操作</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> preventScroll = useCallback(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">  e.preventDefault()</span><br><span class="line">&#125;, [])</span><br><span class="line">useEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (isNavOpen) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">document</span>.documentElement.addEventListener(</span><br><span class="line">      <span class="string">&#x27;mousewheel&#x27;</span>,</span><br><span class="line">      preventScroll,</span><br><span class="line">      &#123; <span class="attr">passive</span>: <span class="literal">false</span> &#125;</span><br><span class="line">    );  <span class="comment">//passive 参数不能省略，用来兼容ios和android</span></span><br><span class="line"></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">document</span>.documentElement.removeEventListener(</span><br><span class="line">      <span class="string">&#x27;mousewheel&#x27;</span>,</span><br><span class="line">      preventScroll</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [isNavOpen, preventScroll])</span><br></pre></td></tr></table></figure>
+
+<h2 id="移动端"><a href="#移动端" class="headerlink" title="移动端"></a>移动端</h2><p>考虑兼容性的方法：touchmove事件，阻止默认行为</p>
+<p>原理：参考 <a href="https://www.jianshu.com/p/bf4b3693a4f1">React禁止页面滚动踩坑实践与方案梳理</a></p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> preventScroll = useCallback(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">  e.preventDefault()</span><br><span class="line">&#125;, [])</span><br><span class="line">useEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (isNavOpen) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">document</span>.documentElement.addEventListener(</span><br><span class="line">      <span class="string">&#x27;touchmove&#x27;</span>,</span><br><span class="line">      preventScroll,</span><br><span class="line">      &#123; <span class="attr">passive</span>: <span class="literal">false</span> &#125;</span><br><span class="line">    );  <span class="comment">//passive 参数不能省略，用来兼容ios和android</span></span><br><span class="line"></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">document</span>.documentElement.removeEventListener(</span><br><span class="line">      <span class="string">&#x27;touchmove&#x27;</span>,</span><br><span class="line">      preventScroll</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [isNavOpen, preventScroll])</span><br></pre></td></tr></table></figure>
+
+<h1 id="监听滚动"><a href="#监听滚动" class="headerlink" title="监听滚动"></a>监听滚动</h1><p>场景：监听页面滚动，如果滚动到指定位置触发事件</p>
+<h2 id="IntersectionObserver"><a href="#IntersectionObserver" class="headerlink" title="IntersectionObserver"></a>IntersectionObserver</h2><p>文档：<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver">https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver</a></p>
+<p><code>IntersectionObserver</code><strong>接口</strong> (从属于<a href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API">Intersection Observer API</a>) 提供了一种异步观察目标元素与其祖先元素或顶级文档视窗(<a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Viewport">viewport</a>)交叉状态的方法。祖先元素与视窗(<a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Viewport">viewport</a>)被称为<strong>根(root)。</strong></p>
+<p>可以用于检测某一元素是否滚动到窗口内，或者在窗口类滚动到的比例</p>
+<h3 id="API"><a href="#API" class="headerlink" title="API"></a>API</h3><p>使用<code>new</code> 关键字调用 <code>IntersectionObserver</code> 接口，返回一个新的<code>IntersectionObserver</code>对象，当其监听到目标元素的可见部分穿过了一个或多个**阈(thresholds)**时，会执行指定的回调函数。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> observer = <span class="keyword">new</span> IntersectionObserver(callback[, options]);</span><br></pre></td></tr></table></figure>
+
+<p>入参：</p>
+<ul>
+<li><p>回调函数，当元素可见比例超过指定阈值后，会调用该回调函数，此回调函数接受两个参数：</p>
+<ul>
+<li><p><code>entries</code></p>
+<p>一个<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserverEntry"><code>IntersectionObserverEntry</code></a>对象的数组，每个被触发的阈值，都或多或少与指定阈值有偏差。</p>
+</li>
+<li><p><code>observer</code></p>
+<p>被调用的<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver"><code>IntersectionObserver</code></a>实例。一般只传entries</p>
+</li>
+</ul>
+</li>
+<li><p><code>options</code> 可选</p>
+<p>一个可以用来<strong>配置observer实例</strong>的对象。如果<code>options</code>未指定，observer实例默认使用文档视口作为root，并且没有margin，阈值为0%（意味着即使一像素的改变都会触发回调函数）。可以指定以下配置：</p>
+<ul>
+<li><p><code>root</code></p>
+<p>监听元素的祖先元素<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element"><code>Element</code></a>对象，其边界盒将被视作视口。目标在根的可见区域的的任何不可见部分都会被视为不可见。</p>
+</li>
+<li><p><code>rootMargin</code></p>
+<p>一个在计算交叉值时添加至根的边界盒(<a href="https://developer.mozilla.org/en-US/docs/Glossary/bounding_box">bounding_box (en-US)</a>)中的一组偏移量，类型为字符串(string) ，可以有效的缩小或扩大根的判定范围从而满足计算需要。语法大致和CSS 中的<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/margin"><code>margin</code></a> 属性等同; 可以参考 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#the_root_element_and_root_margin">The root element and root margin</a> in <a href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API">Intersection Observer API</a>来深入了解margin的工作原理及其语法。默认值是”0px 0px 0px 0px”。</p>
+</li>
+<li><p><code>threshold</code></p>
+<p>规定了一个监听目标与边界盒交叉区域的比例值，可以是一个具体的数值或是一组0.0到1.0之间的数组。若指定值为0.0，则意味着监听元素即使与根有1像素交叉，此元素也会被视为可见. 若指定值为1.0，则意味着整个元素都在可见范围内时才算可见。可以参考<a href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#thresholds">Thresholds</a> in <a href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API">Intersection Observer API</a> 来深入了解阈值是如何使用的。阈值的默认值为0.0。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>以下使用场景：</p>
+<ul>
+<li>检测某一元素（section-hero）是否滚动到视窗内，滚动则在body元素上绑定新css属性（’sticky’）</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> Hero = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> heroRef = useRef(<span class="literal">null</span>);</span><br><span class="line">  <span class="keyword">const</span> scrollObserver = useCallback(</span><br><span class="line">    <span class="function"><span class="params">node</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">new</span> IntersectionObserver(<span class="function"><span class="params">entries</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> en = entries[<span class="number">0</span>]</span><br><span class="line">        <span class="built_in">console</span>.log(en.isIntersecting)</span><br><span class="line">        <span class="keyword">if</span> (!en.isIntersecting) &#123;</span><br><span class="line">          <span class="comment">// 不相交，则sticky</span></span><br><span class="line">          <span class="built_in">document</span>.body.classList.add(<span class="string">&#x27;sticky&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="built_in">document</span>.body.classList.remove(<span class="string">&#x27;sticky&#x27;</span>)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">root</span>: <span class="literal">null</span>,</span><br><span class="line">        <span class="attr">threshold</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">rootMargin</span>: <span class="string">&#x27;-80px&#x27;</span>,</span><br><span class="line">      &#125;).observe(node);</span><br><span class="line">    &#125;,</span><br><span class="line">    []</span><br><span class="line">  );</span><br><span class="line">  useEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (heroRef.current) &#123;</span><br><span class="line">      scrollObserver(heroRef.current);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, [scrollObserver, heroRef]);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">section</span> <span class="attr">ref</span>=<span class="string">&#123;heroRef&#125;</span> <span class="attr">className</span>=<span class="string">&quot;section-hero&quot;</span>&gt;</span></span></span><br><span class="line"><span class="xml">      ...</span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">section</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>CSS笔记</category>
+        <category>CSS进阶实战</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CSS进阶实战4：响应式实现思路</title>
+    <url>/2022/05/13/CSS/omnifood4_responsive/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>响应式：响应不同屏幕设备合适地展现网页效果的方式或着手段</p>
+<ul>
+<li>桌面端优先vs移动端优先</li>
+<li>rem弹性布局</li>
+<li>媒体查询</li>
+<li>响应式导航栏（折叠+粘性布局）实现方案</li>
+</ul>
+<span id="more"></span>
+
+<hr>
+<blockquote>
+<p>参考课程：Build Responsive Real-World Websites with HTML and CSS<br><a href="https://www.bilibili.com/video/BV1A34y1e7wL?p=101&spm_id_from=pageDriver">视频</a> | <a href="https://github.com/jonasschmedtmann/html-css-course">源码</a></p>
+</blockquote>
+<p>基于React的响应式单页应用开发、优化和部署</p>
+<ul>
+<li>项目地址：<a href="https://github.com/luryZhu/omnifood">https://github.com/luryZhu/omnifood</a></li>
+<li>在线demo：<a href="https://omnifood-lury.netlify.app/">https://omnifood-lury.netlify.app/</a></li>
+</ul>
+<hr>
+<h1 id="桌面端优先vs移动端优先"><a href="#桌面端优先vs移动端优先" class="headerlink" title="桌面端优先vs移动端优先"></a>桌面端优先vs移动端优先</h1><p>目前更常用的是移动端优先，本项目采用桌面端优先</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>桌面端优先</th>
+<th>移动端优先</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>设计理念</td>
+<td>先设计大屏幕的网页，然后逐步适配到小屏幕</td>
+<td>先小再大</td>
+</tr>
+<tr>
+<td>实现方式</td>
+<td>基于max-width</td>
+<td>基于min-width</td>
+</tr>
+<tr>
+<td></td>
+<td><code>@media screen (max-width: 1200px)</code></td>
+<td><code>@media screen (min-width: 600px)</code></td>
+</tr>
+</tbody></table>
+<p><img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220428143726604.png?raw=true" alt="image-20220428143726604"></p>
+<h1 id="rem弹性布局"><a href="#rem弹性布局" class="headerlink" title="rem弹性布局"></a>rem弹性布局</h1><p>DOM根元素html中的字体大小，如果没有定义，则是浏览器默认字体大小：16px</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">html</span>&#123;</span><br><span class="line">    <span class="comment">/* </span></span><br><span class="line"><span class="comment">    效果：1rem = 10px </span></span><br><span class="line"><span class="comment">    计算方法：默认为16px</span></span><br><span class="line"><span class="comment">    10/16 *100%=62.5%</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="attribute">font-size</span>: <span class="number">62.5%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过上面的转换，将html元素的字体大小转换为10px，即<code>1rem=10px</code></p>
+<p>可以把font-size, width, padding, margin之类的值都设置为以rem为单位，这样需要统一修改布局大小的时候（例如适配小屏幕）直接修改html元素的font-size就行</p>
+<h1 id="媒体查询"><a href="#媒体查询" class="headerlink" title="媒体查询"></a>媒体查询</h1><h2 id="media"><a href="#media" class="headerlink" title="@media"></a>@media</h2><p>注意单位：rem &amp; em</p>
+<ul>
+<li>在media query中不是基于HTML元素的设置的</li>
+<li>在这里固定 1rem&#x3D;1em&#x3D;16px</li>
+<li>媒体查询中rem有问题，一般使用em</li>
+</ul>
+<p>桌面端优先和移动端优先的差异：</p>
+<ul>
+<li>桌面端优先，用max-width</li>
+<li>移动端优先，用min-width</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 1344px 较小pc */</span></span><br><span class="line"><span class="keyword">@media</span> screen <span class="keyword">and</span> (<span class="attribute">max-width</span>:<span class="number">84em</span>) &#123;</span><br><span class="line">    <span class="selector-class">.hero</span> &#123;</span><br><span class="line">        <span class="attribute">max-width</span>: <span class="number">120rem</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	// ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>只要满足要求，所有媒体查询都会生效，后定义的会覆盖前定义的，所以顺序很重要！</p>
+<h2 id="breakpoint"><a href="#breakpoint" class="headerlink" title="breakpoint"></a>breakpoint</h2><p>一般断点可以认为是1200 900 600 300之类的</p>
+<p>开发时可以直接用chrome调试断点，推荐Responsive模式</p>
+<ul>
+<li>可以从大到小拉视窗，找到布局出现问题的大致宽度，然后在附近的位置加断点</li>
+<li>一般一个媒体查询生效的范围差不多在200px左右，也就是两个端点之间差不多隔200px</li>
+</ul>
+<p><img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513190413121.png?raw=true" alt="image-20220513190413121"></p>
+<p>参考：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">// 等于或大于 <span class="number">34</span>*<span class="number">16</span> = <span class="number">544px</span>（手机横屏）</span><br><span class="line"><span class="keyword">@media</span> (<span class="attribute">min-width</span>: <span class="number">34em</span>) &#123; ... &#125;</span><br><span class="line"></span><br><span class="line">// 等于或大于 <span class="number">48</span>*<span class="number">16</span> = <span class="number">768px</span>(平板竖屏)</span><br><span class="line"><span class="keyword">@media</span> (<span class="attribute">min-width</span>: <span class="number">48em</span>) &#123; ... &#125;</span><br><span class="line"></span><br><span class="line">// 等于或大于  <span class="number">62</span>*<span class="number">16</span> = <span class="number">992px</span>（pc窄屏）</span><br><span class="line"><span class="keyword">@media</span> (<span class="attribute">min-width</span>: <span class="number">62em</span>) &#123; ... &#125;</span><br><span class="line"></span><br><span class="line">// 等于或大于 <span class="number">75</span>*<span class="number">16</span> = <span class="number">1200px</span>（ pc宽屏）</span><br><span class="line"><span class="keyword">@media</span> (<span class="attribute">min-width</span>: <span class="number">75em</span>) &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h1><p>以实现桌面端到移动端的导航栏为例，响应式是实现方案一般是</p>
+<ul>
+<li>满足触发条件后，给需要改变样式的元素重写样式，样式的交互动画可以新增css类实现</li>
+<li>满足触发条件后，在body元素加上某一css类，然后用嵌套css类选择器定义新样式</li>
+</ul>
+<h2 id="折叠导航栏"><a href="#折叠导航栏" class="headerlink" title="折叠导航栏"></a>折叠导航栏</h2><p>场景：</p>
+<p>视窗宽度较小时导航栏折叠起来，通过点击按钮展开</p>
+<p><img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513191603694.png?raw=true" alt="image-20220513191603694"></p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><ul>
+<li>导航栏中的连接都包在一个flex容器里（<code>main-nav</code>）</li>
+<li>媒体查询重写flex容器的样式（<code>flex-direction</code>, <code>gap</code>, <code>font-size</code>, …）</li>
+<li>给按钮绑定事件<ul>
+<li>事件触发会给元素加上或删去css类（<code>nav-open</code>）</li>
+<li>在css类里控制导航栏的偏移 （<code>position: fixed</code>，注意父元素要<code>position: relative</code>）<ul>
+<li>打开导航，则移入视窗 （<code>transform: translateX(0)</code>）</li>
+<li>关闭导航，则移出视窗 （<code>transform: translateX(100%)</code>）</li>
+<li>设置渐入渐隐效果<ul>
+<li>动画：<code>transition: all 0.5s ease-in</code></li>
+<li>透明度：<code>opacity: 0/1</code></li>
+<li>事件触发：<code>pointer-events: none/auto</code></li>
+<li>不被屏幕阅读器识别：<code>visibility: hidden/visible</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> Header = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> [isNavOpen, setIsNavOpen] = useState(<span class="literal">false</span>)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">onClickHandle</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    setIsNavOpen(!isNavOpen)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">onCloseHandle</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    setIsNavOpen(<span class="literal">false</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">header</span> <span class="attr">className</span>=<span class="string">&#123;</span>&#x27;<span class="attr">header</span> &#x27; + (<span class="attr">isNavOpen</span> ? &#x27;<span class="attr">nav-open</span> &#x27; <span class="attr">:</span> &#x27;&#x27;)&#125;&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">NavLink</span> <span class="attr">to</span>=<span class="string">&quot;#&quot;</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">img</span> <span class="attr">className</span>=<span class="string">&#x27;logo&#x27;</span> <span class="attr">src</span>=<span class="string">&#123;Logo&#125;</span> <span class="attr">alt</span>=<span class="string">&quot;omnifood logo&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">NavLink</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">nav</span> <span class="attr">className</span>=<span class="string">&#x27;main-nav&#x27;</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">ul</span> <span class="attr">className</span>=<span class="string">&#x27;main-nav-list&#x27;</span>&gt;</span></span></span><br><span class="line"><span class="xml">          <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">NavLink</span> <span class="attr">className</span>=<span class="string">&#x27;main-nav-link&#x27;</span> <span class="attr">to</span>=<span class="string">&quot;how&quot;</span> <span class="attr">onClick</span>=<span class="string">&#123;onCloseHandle&#125;</span>&gt;</span>How it works<span class="tag">&lt;/<span class="name">NavLink</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="xml">          <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">NavLink</span> <span class="attr">className</span>=<span class="string">&#x27;main-nav-link&#x27;</span> <span class="attr">to</span>=<span class="string">&quot;meals&quot;</span> <span class="attr">onClick</span>=<span class="string">&#123;onCloseHandle&#125;</span>&gt;</span>Meals<span class="tag">&lt;/<span class="name">NavLink</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="xml">          <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">NavLink</span> <span class="attr">className</span>=<span class="string">&#x27;main-nav-link&#x27;</span> <span class="attr">to</span>=<span class="string">&quot;testimonials&quot;</span> <span class="attr">onClick</span>=<span class="string">&#123;onCloseHandle&#125;</span>&gt;</span>Testimonials<span class="tag">&lt;/<span class="name">NavLink</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="xml">          <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">NavLink</span> <span class="attr">className</span>=<span class="string">&#x27;main-nav-link&#x27;</span> <span class="attr">to</span>=<span class="string">&quot;pricing&quot;</span> <span class="attr">onClick</span>=<span class="string">&#123;onCloseHandle&#125;</span>&gt;</span>Pricing<span class="tag">&lt;/<span class="name">NavLink</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="xml">          <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">NavLink</span> <span class="attr">className</span>=<span class="string">&#x27;main-nav-link nav-cta&#x27;</span> <span class="attr">to</span>=<span class="string">&quot;cta&quot;</span> <span class="attr">onClick</span>=<span class="string">&#123;onCloseHandle&#125;</span>&gt;</span>Try for free<span class="tag">&lt;/<span class="name">NavLink</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">nav</span>&gt;</span></span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">className</span>=<span class="string">&#x27;btn-mobile-nav&#x27;</span> <span class="attr">aria-label</span>=<span class="string">&#x27;open navigation&#x27;</span> <span class="attr">onClick</span>=<span class="string">&#123;onClickHandle&#125;</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">i</span> <span class="attr">className</span>=<span class="string">&#x27;icon-mobile-nav iconfont icon-menu&#x27;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">          <span class="attr">name</span>=<span class="string">&quot;btn-menu&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">i</span> <span class="attr">className</span>=<span class="string">&#x27;icon-mobile-nav iconfont icon-close&#x27;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">          <span class="attr">name</span>=<span class="string">&quot;btn-close&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">header</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>CSS</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="keyword">@media</span> screen <span class="keyword">and</span> (<span class="attribute">max-width</span>:<span class="number">59em</span>) &#123;</span><br><span class="line">    <span class="selector-class">.main-nav</span> &#123;</span><br><span class="line">        <span class="attribute">position</span>: fixed;</span><br><span class="line">        <span class="attribute">background-color</span>: <span class="built_in">rgba</span>(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">0.9</span>);</span><br><span class="line">        -webkit-backdrop-<span class="attribute">filter</span>: <span class="built_in">blur</span>(<span class="number">10px</span>);</span><br><span class="line">        backdrop-<span class="attribute">filter</span>: <span class="built_in">blur</span>(<span class="number">10px</span>);</span><br><span class="line">        <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">        <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">        <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">        <span class="attribute">height</span>: <span class="number">100vh</span>;</span><br><span class="line">        <span class="attribute">transform</span>: <span class="built_in">translateX</span>(<span class="number">100%</span>);</span><br><span class="line">        <span class="attribute">z-index</span>: <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">display</span>: flex;</span><br><span class="line">        <span class="attribute">align-items</span>: center;</span><br><span class="line">        <span class="attribute">justify-content</span>: center;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">transition</span>: all <span class="number">0.5s</span> ease-in;</span><br><span class="line">        // <span class="number">1</span>. 透明度改为<span class="number">0</span></span><br><span class="line">        <span class="attribute">opacity</span>: <span class="number">0</span>;</span><br><span class="line">        // <span class="number">2</span>. 取消事件触发</span><br><span class="line">        <span class="attribute">pointer-events</span>: none;</span><br><span class="line">        // <span class="number">3</span>. 对屏幕阅读器不可见</span><br><span class="line">        <span class="attribute">visibility</span>: hidden;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="selector-class">.nav-open</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="selector-class">.main-nav</span> &#123;</span><br><span class="line">            <span class="attribute">opacity</span>: <span class="number">1</span>;</span><br><span class="line">            <span class="attribute">pointer-events</span>: auto;</span><br><span class="line">            <span class="attribute">visibility</span>: visible;</span><br><span class="line">            <span class="attribute">transform</span>: <span class="built_in">translateX</span>(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="selector-class">.icon-mobile-nav</span> &#123;</span><br><span class="line"></span><br><span class="line">            &amp;<span class="selector-attr">[name=<span class="string">&quot;btn-close&quot;</span>]</span> &#123;</span><br><span class="line">                <span class="attribute">display</span>: block;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &amp;<span class="selector-attr">[name=<span class="string">&quot;btn-menu&quot;</span>]</span> &#123;</span><br><span class="line">                <span class="attribute">display</span>: none;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="粘性导航栏"><a href="#粘性导航栏" class="headerlink" title="粘性导航栏"></a>粘性导航栏</h2><p>场景：</p>
+<p>滚动到顶部时，导航栏在标准流中，滚动到一定位置时，导航栏脱标固定在顶端</p>
+<h3 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h3><ul>
+<li>给<strong>body元素</strong>添加css类 <code>sticky</code></li>
+<li>滚动到顶部时，移除 <code>sticky</code> 类，否则，加上 <code>sticky</code> 类<ul>
+<li>事件应该写在导航栏元素之后的第一个元素（<code>section-hero</code>）</li>
+</ul>
+</li>
+<li>修改元素的样式，使用嵌套选择器 <code>.sticky .xxx</code>，这样就能使sticky元素影响所有的元素<ul>
+<li>导航栏的样式要修改<ul>
+<li><code>position: fixed</code></li>
+</ul>
+</li>
+<li>导航栏以后第一个元素要（<code>section-hero</code>）加上 <code>margin-top</code> <ul>
+<li>值等于导航栏的高度（为了视觉上没有高度抖动）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><p><strong>方案1</strong>：IntersectionObserver</p>
+<p>见上一篇scroll方案，这个方案丑，放弃了</p>
+<p><strong>方案2</strong>：scrollTop</p>
+<p>判断scrollTop是不是等于0</p>
+<p>JS</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> Hero = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> [isTop, setIsTop] = useState(<span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">  useEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">scrollHandle</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">const</span> scrollTop = <span class="built_in">document</span>.documentElement.scrollTop || <span class="built_in">document</span>.body.scrollTop;</span><br><span class="line">      <span class="comment">// console.log(scrollTop)</span></span><br><span class="line">      <span class="keyword">if</span> (scrollTop === <span class="number">0</span>) &#123;</span><br><span class="line">        setIsTop(<span class="literal">true</span>)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        setIsTop(<span class="literal">false</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">window</span>.addEventListener(<span class="string">&#x27;scroll&#x27;</span>, scrollHandle)</span><br><span class="line">    <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">window</span>.removeEventListener(<span class="string">&#x27;scroll&#x27;</span>, scrollHandle)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;, [])</span><br><span class="line"></span><br><span class="line">  useEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (isTop) &#123;</span><br><span class="line">      <span class="built_in">document</span>.body.classList.remove(<span class="string">&#x27;sticky&#x27;</span>)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="built_in">document</span>.body.classList.add(<span class="string">&#x27;sticky&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, [isTop])</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>CSS</p>
+<figure class="highlight less"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.sticky</span> &#123;</span><br><span class="line">    <span class="selector-class">.header</span> &#123;</span><br><span class="line">        <span class="attribute">position</span>: fixed;</span><br><span class="line">        <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">        <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">        <span class="attribute">bottom</span>: <span class="number">0</span>;</span><br><span class="line">        <span class="attribute">height</span>: <span class="number">8rem</span>;</span><br><span class="line">        <span class="attribute">padding-top</span>: <span class="number">0</span>;</span><br><span class="line">        <span class="attribute">padding-bottom</span>: <span class="number">0</span>;</span><br><span class="line">        <span class="attribute">z-index</span>: <span class="number">9</span>;</span><br><span class="line">        <span class="attribute">background-color</span>: rgba(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">0.95</span>);</span><br><span class="line">        <span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">1.2rem</span> <span class="number">3.2rem</span> rgba(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0.05</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="selector-class">.section-hero</span> &#123;</span><br><span class="line">        <span class="attribute">margin-top</span>: <span class="number">8rem</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>CSS笔记</category>
+        <category>CSS进阶实战</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
+        <tag>响应式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CSS进阶实战2：grid使用技巧</title>
+    <url>/2022/05/12/CSS/omnifood2_grid/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><ul>
+<li>容器属性<ul>
+<li>列宽、行高：grid-template-columns | grid-template-rows</li>
+<li>间距：row-gap | column-gap | gap</li>
+<li>对齐：justify-items | align-items</li>
+</ul>
+</li>
+<li>项目属性<ul>
+<li>跨度：grid-row | grid-column</li>
+<li>对齐：justify-self | align-self</li>
+</ul>
+</li>
+<li>Flexbox中使用gap属性</li>
+</ul>
+<span id="more"></span>
+
+<hr>
+<blockquote>
+<p>参考课程：Build Responsive Real-World Websites with HTML and CSS<br><a href="https://www.bilibili.com/video/BV1A34y1e7wL?p=101&spm_id_from=pageDriver">视频</a> | <a href="https://github.com/jonasschmedtmann/html-css-course">源码</a></p>
+</blockquote>
+<p>基于React的响应式单页应用开发、优化和部署</p>
+<ul>
+<li>项目地址：<a href="https://github.com/luryZhu/omnifood">https://github.com/luryZhu/omnifood</a></li>
+<li>在线demo：<a href="https://omnifood-lury.netlify.app/">https://omnifood-lury.netlify.app/</a></li>
+</ul>
+<hr>
+<p>参考：</p>
+<p><a href="https://ruanyifeng.com/blog/2019/03/grid-layout-tutorial.html">CSS Grid 网格布局教程 - 阮一峰的网络日志</a></p>
+<p>grid+less方案</p>
+<figure class="highlight less"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.grid</span>(<span class="variable">@col</span>, <span class="variable">@align</span>: unset) &#123;</span><br><span class="line">    <span class="attribute">display</span>: grid;</span><br><span class="line">    <span class="attribute">column-gap</span>: <span class="number">6.4rem</span>;</span><br><span class="line">    row-gap: 9.6rem;</span><br><span class="line">    grid-template-<span class="attribute">columns</span>: repeat(<span class="variable">@col</span>, <span class="number">1</span>fr);</span><br><span class="line">    <span class="attribute">align-items</span>: <span class="variable">@align</span>;</span><br><span class="line"></span><br><span class="line">    <span class="selector-tag">&amp;</span><span class="selector-pseudo">:not</span>(:last-child) &#123;</span><br><span class="line">        <span class="attribute">margin-bottom</span>: <span class="number">9.6rem</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.grid--col2</span> &#123;</span><br><span class="line">    <span class="selector-class">.grid</span>(<span class="number">2</span>, center);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="容器属性"><a href="#容器属性" class="headerlink" title="容器属性"></a>容器属性</h1><p>定义在容器上的属性</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">display</span>: grid</span><br></pre></td></tr></table></figure>
+
+<h2 id="grid-template-columns"><a href="#grid-template-columns" class="headerlink" title="grid-template-columns"></a>grid-template-columns</h2><p>该属性定义每一列的列宽（定义行高为grid-template-rows）</p>
+<p>列宽的单位可以是：</p>
+<ul>
+<li>像素：<code>grid-template-columns: 100px 100px 100px</code></li>
+<li>百分比：<code>grid-template-columns: 33.3% 33.3% 33.3%</code></li>
+<li>fr关键字（fraction），数值表示列之间的宽度比：<code>grid-template-columns: 1fr 1fr 1fr</code></li>
+<li>也可以结合使用：<code>grid-template-columns: 150px 1fr 2fr;</code></li>
+</ul>
+<p>语法糖：</p>
+<p><code>repeat()</code>接受两个参数，第一个参数是重复的次数（上例是3），第二个参数是所要重复的值。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">grid-template-<span class="attribute">columns</span>: <span class="number">100px</span> <span class="number">100px</span> <span class="number">100px</span>;</span><br><span class="line">grid-template-<span class="attribute">columns</span>: <span class="number">33.3%</span> <span class="number">33.3%</span> <span class="number">33.3%</span>;</span><br><span class="line">grid-template-<span class="attribute">columns</span>: <span class="number">1</span>fr <span class="number">1</span>fr <span class="number">1</span>fr;</span><br><span class="line">grid-template-<span class="attribute">columns</span>: <span class="built_in">repeat</span>(<span class="number">3</span>, <span class="number">1</span>fr);</span><br><span class="line"></span><br><span class="line">grid-template-<span class="attribute">columns</span>: <span class="number">70%</span> <span class="number">30%</span>;</span><br><span class="line">grid-template-<span class="attribute">columns</span>: <span class="number">7</span>fr <span class="number">3</span>fr;</span><br><span class="line"></span><br><span class="line">grid-template-<span class="attribute">columns</span>: <span class="number">150px</span> <span class="number">1</span>fr <span class="number">2</span>fr;  				// px和fr混用</span><br><span class="line">grid-template-<span class="attribute">columns</span>: <span class="number">1</span>fr <span class="number">1</span>fr <span class="built_in">minmax</span>(<span class="number">100px</span>, <span class="number">1</span>fr); 	// minmax定义长度范围</span><br><span class="line">grid-template-<span class="attribute">columns</span>: <span class="number">100px</span> auto <span class="number">100px</span>; 			// <span class="attribute">auto</span>自适应</span><br><span class="line">grid-template-<span class="attribute">columns</span>: [c1] <span class="number">100px</span> [c2] <span class="number">100px</span> [c3] auto [c4];	// 可以给网格线命名</span><br></pre></td></tr></table></figure>
+
+<h2 id="row-gap-column-gap-gap"><a href="#row-gap-column-gap-gap" class="headerlink" title="row-gap | column-gap | gap"></a>row-gap | column-gap | gap</h2><ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/row-gap"><code>row-gap</code></a> 属性设置行间距</li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/column-gap"><code>column-gap</code></a> 属性设置列间距</li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/gap"><code>gap</code></a> 属性是用来设置网格行与列之间的间隙，是上面两个的简写<ul>
+<li>第一个参数为row-gap，第二个为column-gap</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">row-gap: <span class="number">9.6rem</span>;</span><br><span class="line"><span class="attribute">column-gap</span>: <span class="number">6.4rem</span>;</span><br><span class="line"></span><br><span class="line">gap: <span class="number">9.6rem</span> <span class="number">6.4rem</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="justify-items-align-items"><a href="#justify-items-align-items" class="headerlink" title="justify-items | align-items"></a>justify-items | align-items</h2><ul>
+<li><p><code>justify-items</code>属性设置单元格内容的水平位置（左中右）</p>
+</li>
+<li><p><code>align-items</code>属性设置单元格内容的垂直位置（上中下）</p>
+</li>
+<li><p><code>place-items</code>属性是<code>align-items</code>属性和<code>justify-items</code>属性的合并简写形式</p>
+<ul>
+<li>第一个参数为align-items，第二个为justify-items</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.container</span> &#123;</span><br><span class="line">  justify-items: start | end | center | stretch;</span><br><span class="line">  <span class="attribute">align-items</span>: start | end | center | stretch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>关键字含义</p>
+<ul>
+<li>start：对齐单元格的起始边缘。</li>
+<li>end：对齐单元格的结束边缘。</li>
+<li>center：单元格内部居中。</li>
+<li>stretch：拉伸，占满单元格的整个宽度（默认值）。</li>
+</ul>
+<h1 id="项目属性"><a href="#项目属性" class="headerlink" title="项目属性"></a>项目属性</h1><p>定义在项目上的属性</p>
+<h2 id="grid-row-grid-column"><a href="#grid-row-grid-column" class="headerlink" title="grid-row | grid-column"></a>grid-row | grid-column</h2><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.item</span> &#123;</span><br><span class="line">  grid-column: &lt;start-line&gt; / &lt;end-line&gt;;</span><br><span class="line">  grid-row: &lt;start-line&gt; / &lt;end-line&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>两个参数，用斜杠<code>/</code>分隔，以grid-column为例</p>
+<ul>
+<li>第一个参数是起始列线（从1开始计数）</li>
+<li>第二个参数是结束列线</li>
+</ul>
+<p>斜杠<code>/</code>和后面的第二个参数可省略，表示只跨越一格</p>
+<h3 id="顺序"><a href="#顺序" class="headerlink" title="顺序"></a>顺序</h3><p>可以将元素强制显示在某一行</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">grid-row: <span class="number">1</span>;</span><br><span class="line">grid-row: <span class="number">5</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="跨度"><a href="#跨度" class="headerlink" title="跨度"></a>跨度</h3><p>span 后面写跨几格</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">grid-row: <span class="number">1</span> / span <span class="number">2</span>;</span><br><span class="line">grid-row: span <span class="number">2</span>;</span><br><span class="line">grid-row: <span class="number">1</span> / <span class="number">3</span>;	// 等效写法</span><br></pre></td></tr></table></figure>
+
+<p>场景：表格第一行分三列，第二行分两列</p>
+<ul>
+<li>把grid声明为6列</li>
+<li>第一行元素跨度2，第二行元素跨度3</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.nav-grid</span>&#123;</span><br><span class="line">    <span class="attribute">display</span>: grid; </span><br><span class="line">    grid-template-<span class="attribute">columns</span>: <span class="built_in">repeat</span>(<span class="number">6</span>, <span class="number">1</span>fr)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.nav-col</span> &#123;</span><br><span class="line">    grid-column: span <span class="number">2</span>;</span><br><span class="line">    grid-row: <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.addr-col</span> &#123;</span><br><span class="line">    grid-column: span <span class="number">3</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Html</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;.addr-col&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;.addr-col&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;.nav-col&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;.nav-col&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;.nav-col&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="justify-self-align-self"><a href="#justify-self-align-self" class="headerlink" title="justify-self | align-self"></a>justify-self | align-self</h2><p>对齐，但只作用于单个项目</p>
+<ul>
+<li><p><code>justify-self</code>属性设置单元格内容的水平位置（左中右）</p>
+</li>
+<li><p><code>align-self</code>属性设置单元格内容的垂直位置（上中下）</p>
+</li>
+<li><p><code>place-self</code>属性是<code>align-self</code>属性和<code>justify-self</code>属性的合并简写形式</p>
+<ul>
+<li>第一个参数为align-self，第二个为justify-self</li>
+</ul>
+</li>
+</ul>
+<p>关键字含义</p>
+<ul>
+<li>start：对齐单元格的起始边缘。</li>
+<li>end：对齐单元格的结束边缘。</li>
+<li>center：单元格内部居中。</li>
+<li>stretch：拉伸，占满单元格的整个宽度（默认值）。</li>
+</ul>
+<p>场景：grid里三个元素，列数为2，希望单独成行的那一个元素能居中</p>
+<p>在单独成行的那个元素上设置css属性：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.element</span> &#123;</span><br><span class="line">    grid-column: <span class="number">1</span> / -<span class="number">1</span>; // 横跨一整行</span><br><span class="line">    justify-self: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="flex-gap"><a href="#flex-gap" class="headerlink" title="flex gap"></a>flex gap</h1><p>Felxbox也可以用gap，用法跟grid一样，但是有些浏览器不兼容</p>
+<p><img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513205338975.png?raw=true" alt="image-20220513205338975"></p>
+<p>其他写法</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.main-nav-list</span>&#123;</span><br><span class="line">    <span class="attribute">display</span>: flex;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.main-nav-list</span> <span class="selector-tag">li</span><span class="selector-pseudo">:not</span>(<span class="selector-pseudo">:last-child</span>) &#123;</span><br><span class="line">    <span class="attribute">margin-right</span>: <span class="number">4.8rem</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="修复兼容性"><a href="#修复兼容性" class="headerlink" title="修复兼容性"></a>修复兼容性</h2><p>可以在项目中引入以下脚本</p>
+<p>原理：</p>
+<ul>
+<li>检测浏览器是否支持flex gap</li>
+<li>如果不支持，在body元素注入no-flexbox-gap类</li>
+<li>在对应的css文件中手动写替换的flex样式</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">///////////////////////////////////////////////////////////</span></span><br><span class="line"><span class="comment">// Fixing flexbox gap property missing in some Safari versions</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">checkFlexGap</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;run check felx gap&quot;</span>)</span><br><span class="line">    <span class="keyword">var</span> flex = <span class="built_in">document</span>.createElement(<span class="string">&quot;div&quot;</span>);</span><br><span class="line">    flex.style.display = <span class="string">&quot;flex&quot;</span>;</span><br><span class="line">    flex.style.flexDirection = <span class="string">&quot;column&quot;</span>;</span><br><span class="line">    flex.style.rowGap = <span class="string">&quot;1px&quot;</span>;</span><br><span class="line"></span><br><span class="line">    flex.appendChild(<span class="built_in">document</span>.createElement(<span class="string">&quot;div&quot;</span>));</span><br><span class="line">    flex.appendChild(<span class="built_in">document</span>.createElement(<span class="string">&quot;div&quot;</span>));</span><br><span class="line"></span><br><span class="line">    <span class="built_in">document</span>.body.appendChild(flex);</span><br><span class="line">    <span class="keyword">var</span> isSupported = flex.scrollHeight === <span class="number">1</span>;</span><br><span class="line">    flex.parentNode.removeChild(flex);</span><br><span class="line">    <span class="built_in">console</span>.log(isSupported);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!isSupported) <span class="built_in">document</span>.body.classList.add(<span class="string">&quot;no-flexbox-gap&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">checkFlexGap();</span><br></pre></td></tr></table></figure>
+
+<p>在css中是以嵌套css类选择器的形式实现</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">// CSS</span><br><span class="line"><span class="selector-class">.no-flexbox-gap</span> <span class="selector-class">.main-nav-list</span> <span class="selector-tag">li</span><span class="selector-pseudo">:not</span>(<span class="selector-pseudo">:last-child</span>) &#123;</span><br><span class="line">  <span class="attribute">margin-right</span>: <span class="number">4.8rem</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.no-flexbox-gap</span> <span class="selector-class">.list-item</span><span class="selector-pseudo">:not</span>(<span class="selector-pseudo">:last-child</span>) &#123;</span><br><span class="line">  <span class="attribute">margin-bottom</span>: <span class="number">1.6rem</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>CSS笔记</category>
+        <category>CSS进阶实战</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
+        <tag>grid</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CSS进阶实战5：兼容性&amp;优化</title>
+    <url>/2022/05/14/CSS/omnifood5_optimization/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>考虑兼容性和优化的细节：</p>
+<ul>
+<li>favicon：适配桌面端、ios和安卓端</li>
+<li>图片：选择合适尺寸、使用webp格式、使用srcset适配</li>
+</ul>
+<p>性能评估工具：LightHouse</p>
+<span id="more"></span>
+
+<hr>
+<blockquote>
+<p>参考课程：Build Responsive Real-World Websites with HTML and CSS<br><a href="https://www.bilibili.com/video/BV1A34y1e7wL?p=101&spm_id_from=pageDriver">视频</a> | <a href="https://github.com/jonasschmedtmann/html-css-course">源码</a></p>
+</blockquote>
+<p>基于React的响应式单页应用开发、优化和部署</p>
+<ul>
+<li>项目地址：<a href="https://github.com/luryZhu/omnifood">https://github.com/luryZhu/omnifood</a></li>
+<li>在线demo：<a href="https://omnifood-lury.netlify.app/">https://omnifood-lury.netlify.app/</a></li>
+</ul>
+<hr>
+<h1 id="兼容性-amp-优化"><a href="#兼容性-amp-优化" class="headerlink" title="兼容性&amp;优化"></a>兼容性&amp;优化</h1><h2 id="favicon"><a href="#favicon" class="headerlink" title="favicon"></a>favicon</h2><p>react项目中的public目录下</p>
+<p><img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512171800884.png?raw=true" alt="image-20220512171800884"></p>
+<p>在index.html中设置favicon，不同的端有不同的设置</p>
+<p><strong>桌面端</strong></p>
+<p>需要对应图片分辨率为64x64</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;icon&quot;</span> <span class="attr">href</span>=<span class="string">&quot;%PUBLIC_URL%/favicon.png?raw=true&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>ios</strong></p>
+<p>需要对应图片分辨率为180x180</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;apple-touch-icon&quot;</span> <span class="attr">href</span>=<span class="string">&quot;%PUBLIC_URL%/apple-touch-icon.png?raw=true&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>android</strong></p>
+<p>需要两种图片尺寸192x192，512x512</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;manifest&quot;</span> <span class="attr">href</span>=<span class="string">&quot;%PUBLIC_URL%/manifest.json&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>需要在同目录下的manifest.json文件中配置图片路径</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;short_name&quot;</span>: <span class="string">&quot;Omnifood&quot;</span>,</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;Omnifood | Never cook again!&quot;</span>,</span><br><span class="line">  <span class="string">&quot;icons&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;src&quot;</span>: <span class="string">&quot;favicon.png?raw=true&quot;</span>,</span><br><span class="line">      <span class="string">&quot;sizes&quot;</span>: <span class="string">&quot;64x64 32x32 24x24 16x16&quot;</span>,</span><br><span class="line">      <span class="string">&quot;type&quot;</span>: <span class="string">&quot;image/x-icon&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;src&quot;</span>: <span class="string">&quot;favicon-192.png?raw=true&quot;</span>,</span><br><span class="line">      <span class="string">&quot;type&quot;</span>: <span class="string">&quot;image/png?raw=true&quot;</span>,</span><br><span class="line">      <span class="string">&quot;sizes&quot;</span>: <span class="string">&quot;192x192&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;src&quot;</span>: <span class="string">&quot;favicon-512.png?raw=true&quot;</span>,</span><br><span class="line">      <span class="string">&quot;type&quot;</span>: <span class="string">&quot;image/png?raw=true&quot;</span>,</span><br><span class="line">      <span class="string">&quot;sizes&quot;</span>: <span class="string">&quot;512x512&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;start_url&quot;</span>: <span class="string">&quot;.&quot;</span>,</span><br><span class="line">  <span class="string">&quot;display&quot;</span>: <span class="string">&quot;standalone&quot;</span>,</span><br><span class="line">  <span class="string">&quot;theme_color&quot;</span>: <span class="string">&quot;#e67e22&quot;</span>,</span><br><span class="line">  <span class="string">&quot;background_color&quot;</span>: <span class="string">&quot;#fdf2e9&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><p>查看Network，可以观察到传输了4.1MB的数据，其中大部分是图片，需要对图片进行压缩</p>
+<img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512163159155.png?raw=true" alt="image-20220512163159155" style="zoom: 67%;" />
+
+<h3 id="图片尺寸"><a href="#图片尺寸" class="headerlink" title="图片尺寸"></a>图片尺寸</h3><img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512163537771.png?raw=true" alt="image-20220512163537771" style="zoom:50%;" />
+
+<p>通常来说是这样判断，以上图为例：</p>
+<ul>
+<li>一开始有一张很大的图片</li>
+<li>在浏览器里检查图片能够显示的最大宽度（554）</li>
+<li>对这个数值四舍五入后×2（600×2&#x3D;1200），以适应二倍屏的手机</li>
+</ul>
+<h3 id="webp"><a href="#webp" class="headerlink" title="webp"></a>webp</h3><p>使用Google的在线图像压缩工具：<a href="https://squoosh.app/">Squoosh</a></p>
+<p>目前最优的图片格式为webp，可以不断调整找到最佳压缩比</p>
+<img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512163837227.png?raw=true" alt="image-20220512163837227" style="zoom:50%;" />
+
+<h3 id="srcset"><a href="#srcset" class="headerlink" title="srcset"></a>srcset</h3><p>webp不能在所有浏览器上支持 <a href="https://caniuse.com/?search=webp">https://caniuse.com/?search=webp</a></p>
+<p><img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512163959369.png?raw=true" alt="image-20220512163959369"></p>
+<p>所以可以使用<code>srcset</code>做兼容</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">&lt;picture&gt;</span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">source</span> <span class="attr">srcSet</span>=<span class="string">&#123;HeroImgWebp&#125;</span> <span class="attr">type</span>=<span class="string">&quot;image/webp&quot;</span> /&gt;</span></span></span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">source</span> <span class="attr">srcSet</span>=<span class="string">&#123;HeroImg&#125;</span> <span class="attr">type</span>=<span class="string">&quot;image/png?raw=true&quot;</span> /&gt;</span></span></span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">className</span>=<span class="string">&quot;hero-img&quot;</span> <span class="attr">src</span>=<span class="string">&#123;HeroImgWebp&#125;</span> <span class="attr">alt</span>=<span class="string">&quot;woman enjoying food&quot;</span> /&gt;</span></span></span><br><span class="line">&lt;/picture&gt;</span><br></pre></td></tr></table></figure>
+
+<p>解读：</p>
+<ul>
+<li>用picture标签包裹住img标签</li>
+<li>source标签声明可以使用的源和类型</li>
+<li>img标签中的src属性赋值为想要默认显示的图片，这里设置为webp格式的源</li>
+<li>浏览器会根据自己支持的源请求图片</li>
+</ul>
+<h1 id="LightHouse"><a href="#LightHouse" class="headerlink" title="LightHouse"></a>LightHouse</h1><p>参考</p>
+<ul>
+<li><a href="https://www.cnblogs.com/wenxuehai/p/14236426.html">性能测评工具lighthouse的使用</a></li>
+</ul>
+<p>chrome自带的性能评估工具</p>
+<ul>
+<li>可以选择设备，评估类型，根据报告修改</li>
+</ul>
+<img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512172821610.png?raw=true" alt="image-20220512172821610" style="zoom: 67%;" />
+
+<img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513165846760.png?raw=true" alt="image-20220513165846760" style="zoom: 67%;" />
+
+<h2 id="性能-Performance"><a href="#性能-Performance" class="headerlink" title="性能 Performance"></a>性能 Performance</h2><h3 id="Properly-size-images"><a href="#Properly-size-images" class="headerlink" title="Properly size images"></a>Properly size images</h3><blockquote>
+<p>Serve images that are appropriately-sized to save cellular data and improve load time. <a href="https://web.dev/uses-responsive-images/?utm_source=lighthouse&utm_medium=devtools">Learn more</a>.</p>
+</blockquote>
+<p>修改图片大小，小窗口不需要大图片</p>
+<p><strong>解决方案：</strong>考虑用 <a href="#srcset">srcset</a></p>
+<h3 id="Serve-images-in-next-gen-formats"><a href="#Serve-images-in-next-gen-formats" class="headerlink" title="Serve images in next-gen formats"></a>Serve images in next-gen formats</h3><blockquote>
+<p>Image formats like WebP and AVIF often provide better compression than png?raw&#x3D;true or JPEG, which means faster downloads and less data consumption. <a href="https://web.dev/uses-webp-images/?utm_source=lighthouse&utm_medium=devtools">Learn more</a>.</p>
+</blockquote>
+<p><strong>解决方案：</strong>图片推荐使用<strong>webp格式</strong>，参考 <a href="#webp">webp</a></p>
+<h3 id="Eliminate-render-blocking-resources"><a href="#Eliminate-render-blocking-resources" class="headerlink" title="Eliminate render-blocking resources"></a>Eliminate render-blocking resources</h3><blockquote>
+<p>Resources are blocking the first paint of your page. Consider delivering critical JS&#x2F;CSS inline and deferring all non-critical JS&#x2F;styles. <a href="https://web.dev/render-blocking-resources/?utm_source=lighthouse&utm_medium=devtools">Learn more</a>.</p>
+</blockquote>
+<p>引入外部的字体和iconfont会这样</p>
+<p><strong>解决方案：</strong>todo</p>
+<h3 id="Ensure-text-remains-visible-during-webfont-load"><a href="#Ensure-text-remains-visible-during-webfont-load" class="headerlink" title="Ensure text remains visible during webfont load"></a>Ensure text remains visible during webfont load</h3><blockquote>
+<p>Leverage the font-display CSS feature to ensure text is user-visible while webfonts are loading. <a href="https://web.dev/font-display/?utm_source=lighthouse&utm_medium=devtools">Learn more</a>.</p>
+</blockquote>
+<p>引入外部字体和iconfont时会产生这个问题，字体加载会导致文字闪烁</p>
+<p><strong>解决方案：</strong>todo</p>
+<h3 id="Image-elements-do-not-have-explicit-width-and-height"><a href="#Image-elements-do-not-have-explicit-width-and-height" class="headerlink" title="Image elements do not have explicit width and height"></a>Image elements do not have explicit <code>width</code> and <code>height</code></h3><blockquote>
+<p>Set an explicit width and height on image elements to reduce layout shifts and improve CLS. <a href="https://web.dev/optimize-cls/?utm_source=lighthouse&utm_medium=devtools#images-without-dimensions">Learn more</a></p>
+</blockquote>
+<p>图片没有明确宽高，下载完图片之前浏览器没法知道图片的宽高，会导致布局闪烁</p>
+<p><strong>解决方案：</strong></p>
+<p>定义img标签时先自带宽高，尽量写得和真实图片一致</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#123;Meal1&#125;</span> <span class="attr">className</span>=<span class="string">&quot;meal-img&quot;</span> <span class="attr">width</span>=<span class="string">&#123;700&#125;</span> <span class="attr">height</span>=<span class="string">&#123;467&#125;</span> <span class="attr">alt</span>=<span class="string">&quot;Japanese Gyozas&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在css中，通常是设置宽度100%，这里需要加上高度自动</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.meal-img</span> &#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">    <span class="attribute">height</span>: auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>- </p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>CSS笔记</category>
+        <category>CSS进阶实战</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
+        <tag>响应式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CSS进阶实战6：netlify部署项目</title>
+    <url>/2022/05/14/CSS/omnifood6_deploy/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>使用 <a href="https://www.netlify.com/">netlify</a> 部署React项目，2种方式：</p>
+<ul>
+<li>直接部署静态资源</li>
+<li>关联git仓库动态部署</li>
+</ul>
+<span id="more"></span>
+
+<hr>
+<blockquote>
+<p>参考课程：Build Responsive Real-World Websites with HTML and CSS<br><a href="https://www.bilibili.com/video/BV1A34y1e7wL?p=101&spm_id_from=pageDriver">视频</a> | <a href="https://github.com/jonasschmedtmann/html-css-course">源码</a></p>
+</blockquote>
+<p>基于React的响应式单页应用开发、优化和部署</p>
+<ul>
+<li>项目地址：<a href="https://github.com/luryZhu/omnifood">https://github.com/luryZhu/omnifood</a></li>
+<li>在线demo：<a href="https://omnifood-lury.netlify.app/">https://omnifood-lury.netlify.app/</a></li>
+</ul>
+<hr>
+<h1 id="直接部署静态资源"><a href="#直接部署静态资源" class="headerlink" title="直接部署静态资源"></a>直接部署静态资源</h1><blockquote>
+<p>参考：</p>
+<ul>
+<li>直接部署构建好的静态文件：<a href="https://blog.csdn.net/qq_38586850/article/details/83246606">【React】技巧之用netlify云服务部署react应用</a></li>
+<li>创建项目同时部署：<a href="https://www.netlify.com/blog/2016/07/22/deploy-react-apps-in-less-than-30-seconds/">How to deploy React Apps in less than 30 Seconds</a></li>
+</ul>
+</blockquote>
+<p>适用场景：</p>
+<ul>
+<li>本地已经build构建好静态资源</li>
+</ul>
+<p>1）构建</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm run build</span><br></pre></td></tr></table></figure>
+
+<p>2）部署</p>
+<p>注册登录netlify</p>
+<p><img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513171525838.png?raw=true" alt="image-20220513171525838"></p>
+<p>直接把上一步生成的build目录上传就能完成部署</p>
+<h1 id="关联git仓库动态部署"><a href="#关联git仓库动态部署" class="headerlink" title="关联git仓库动态部署"></a>关联git仓库动态部署</h1><p>适用场景：</p>
+<ul>
+<li>本地仓库已经关联到github远程仓库</li>
+<li>每次分支推送自动更新并重新部署</li>
+</ul>
+<p>1）创建git仓库并上传项目</p>
+<p>2）部署</p>
+<p><img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513171726112.png?raw=true" alt="image-20220513171726112"></p>
+<p>github授权后选择要部署的仓库</p>
+<img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513171904742.png?raw=true" alt="image-20220513171904742" style="zoom:67%;" />
+
+<p>注意配置：其他默认即可</p>
+<ul>
+<li>选择要部署的分支</li>
+<li>路径改成<code>./build</code></li>
+</ul>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>部署失败，可以点击log查看原因</p>
+<img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513172225685.png?raw=true" alt="image-20220513172225685" style="zoom: 67%;" />
+
+<h3 id="build失败"><a href="#build失败" class="headerlink" title="build失败"></a>build失败</h3><p><img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513172121854.png?raw=true" alt="image-20220513172121854"></p>
+<p>本地可以成功构建，但是在netlify上失败，报错</p>
+<blockquote>
+<p>Treating warnings as errors because process.env.CI &#x3D; true.<br>Most CI servers set it automatically.</p>
+</blockquote>
+<p>本质原因是，jenkins使用ESLint代码检查构建时会自动将warn转成成错误</p>
+<p><strong>解决方案：</strong></p>
+<ol>
+<li><p>解决掉ESLint的警告</p>
+</li>
+<li><p><a href="https://dev.to/kapi1/solved-treating-warnings-as-errors-because-of-process-env-ci-true-bk5">参考</a> CI设置为false，把netlify的构建指令修改为 <code>CI=false npm run build</code></p>
+</li>
+</ol>
+<p><a href="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220428130913950.png?raw=true">https://github.com/luryZhu/omnifood/blob/main/readme/image-20220428130913950.png?raw=true</a><br><img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513173345800.png?raw=true" alt="image-20220513173345800" style="zoom:67%;" /></p>
+<h3 id="deploy失败"><a href="#deploy失败" class="headerlink" title="deploy失败"></a>deploy失败</h3><img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513172346200.png?raw=true" alt="image-20220513172346200" style="zoom:67%;" />
+
+<p>找不到deploy目录</p>
+<p>原因是配置时没有改部署目录</p>
+<p><strong>解决方案：</strong></p>
+<p>在setting里面改成<code>./build</code>即可</p>
+<img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513173345800.png?raw=true" alt="image-20220513173345800" style="zoom:67%;" /><link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">]]></content>
+      <categories>
+        <category>CSS笔记</category>
+        <category>CSS进阶实战</category>
+      </categories>
+      <tags>
+        <tag>部署</tag>
+      </tags>
+  </entry>
 </search>

@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"luryzhu.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="容器属性 列宽、行高：grid-template-columns | grid-template-rows 间距：row-gap | column-gap | gap 对齐：justify-items | align-items   项目属性 跨度：grid-row | grid-column 对齐：justify-self | align-self   Flexbox中使用gap属性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS进阶实战2：grid使用技巧">
+<meta property="og:url" content="https://luryzhu.github.io/2022/05/12/CSS/omnifood2_grid/index.html">
+<meta property="og:site_name" content="Lury的世界尽头">
+<meta property="og:description" content="容器属性 列宽、行高：grid-template-columns | grid-template-rows 间距：row-gap | column-gap | gap 对齐：justify-items | align-items   项目属性 跨度：grid-row | grid-column 对齐：justify-self | align-self   Flexbox中使用gap属性">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513205338975.png?raw=true">
+<meta property="article:published_time" content="2022-05-12T13:24:54.000Z">
+<meta property="article:modified_time" content="2022-05-14T12:13:08.040Z">
+<meta property="article:author" content="Lury">
+<meta property="article:tag" content="CSS">
+<meta property="article:tag" content="grid">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513205338975.png?raw=true">
+
+<link rel="canonical" href="https://luryzhu.github.io/2022/05/12/CSS/omnifood2_grid/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CSS进阶实战2：grid使用技巧 | Lury的世界尽头</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lury的世界尽头</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://luryzhu.github.io/2022/05/12/CSS/omnifood2_grid/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Lury">
+      <meta itemprop="description" content="前端学习中...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lury的世界尽头">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CSS进阶实战2：grid使用技巧
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-12 21:24:54" itemprop="dateCreated datePublished" datetime="2022-05-12T21:24:54+08:00">2022-05-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-14 20:13:08" itemprop="dateModified" datetime="2022-05-14T20:13:08+08:00">2022-05-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CSS%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CSS笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CSS%E7%AC%94%E8%AE%B0/CSS%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">CSS进阶实战</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>容器属性<ul>
+<li>列宽、行高：grid-template-columns | grid-template-rows</li>
+<li>间距：row-gap | column-gap | gap</li>
+<li>对齐：justify-items | align-items</li>
+</ul>
+</li>
+<li>项目属性<ul>
+<li>跨度：grid-row | grid-column</li>
+<li>对齐：justify-self | align-self</li>
+</ul>
+</li>
+<li>Flexbox中使用gap属性</li>
+</ul>
+<span id="more"></span>
+
+<hr>
+<blockquote>
+<p>参考课程：Build Responsive Real-World Websites with HTML and CSS<br><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1A34y1e7wL?p=101&spm_id_from=pageDriver">视频</a> | <a target="_blank" rel="noopener" href="https://github.com/jonasschmedtmann/html-css-course">源码</a></p>
+</blockquote>
+<p>基于React的响应式单页应用开发、优化和部署</p>
+<ul>
+<li>项目地址：<a target="_blank" rel="noopener" href="https://github.com/luryZhu/omnifood">https://github.com/luryZhu/omnifood</a></li>
+<li>在线demo：<a target="_blank" rel="noopener" href="https://omnifood-lury.netlify.app/">https://omnifood-lury.netlify.app/</a></li>
+</ul>
+<hr>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://ruanyifeng.com/blog/2019/03/grid-layout-tutorial.html">CSS Grid 网格布局教程 - 阮一峰的网络日志</a></p>
+<p>grid+less方案</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.grid</span>(<span class="variable">@col</span>, <span class="variable">@align</span>: unset) &#123;</span><br><span class="line">    <span class="attribute">display</span>: grid;</span><br><span class="line">    <span class="attribute">column-gap</span>: <span class="number">6.4rem</span>;</span><br><span class="line">    row-gap: 9.6rem;</span><br><span class="line">    grid-template-<span class="attribute">columns</span>: repeat(<span class="variable">@col</span>, <span class="number">1</span>fr);</span><br><span class="line">    <span class="attribute">align-items</span>: <span class="variable">@align</span>;</span><br><span class="line"></span><br><span class="line">    <span class="selector-tag">&amp;</span><span class="selector-pseudo">:not</span>(:last-child) &#123;</span><br><span class="line">        <span class="attribute">margin-bottom</span>: <span class="number">9.6rem</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.grid--col2</span> &#123;</span><br><span class="line">    <span class="selector-class">.grid</span>(<span class="number">2</span>, center);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="容器属性"><a href="#容器属性" class="headerlink" title="容器属性"></a>容器属性</h1><p>定义在容器上的属性</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">display</span>: grid</span><br></pre></td></tr></table></figure>
+
+<h2 id="grid-template-columns"><a href="#grid-template-columns" class="headerlink" title="grid-template-columns"></a>grid-template-columns</h2><p>该属性定义每一列的列宽（定义行高为grid-template-rows）</p>
+<p>列宽的单位可以是：</p>
+<ul>
+<li>像素：<code>grid-template-columns: 100px 100px 100px</code></li>
+<li>百分比：<code>grid-template-columns: 33.3% 33.3% 33.3%</code></li>
+<li>fr关键字（fraction），数值表示列之间的宽度比：<code>grid-template-columns: 1fr 1fr 1fr</code></li>
+<li>也可以结合使用：<code>grid-template-columns: 150px 1fr 2fr;</code></li>
+</ul>
+<p>语法糖：</p>
+<p><code>repeat()</code>接受两个参数，第一个参数是重复的次数（上例是3），第二个参数是所要重复的值。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">grid-template-<span class="attribute">columns</span>: <span class="number">100px</span> <span class="number">100px</span> <span class="number">100px</span>;</span><br><span class="line">grid-template-<span class="attribute">columns</span>: <span class="number">33.3%</span> <span class="number">33.3%</span> <span class="number">33.3%</span>;</span><br><span class="line">grid-template-<span class="attribute">columns</span>: <span class="number">1</span>fr <span class="number">1</span>fr <span class="number">1</span>fr;</span><br><span class="line">grid-template-<span class="attribute">columns</span>: <span class="built_in">repeat</span>(<span class="number">3</span>, <span class="number">1</span>fr);</span><br><span class="line"></span><br><span class="line">grid-template-<span class="attribute">columns</span>: <span class="number">70%</span> <span class="number">30%</span>;</span><br><span class="line">grid-template-<span class="attribute">columns</span>: <span class="number">7</span>fr <span class="number">3</span>fr;</span><br><span class="line"></span><br><span class="line">grid-template-<span class="attribute">columns</span>: <span class="number">150px</span> <span class="number">1</span>fr <span class="number">2</span>fr;  				// px和fr混用</span><br><span class="line">grid-template-<span class="attribute">columns</span>: <span class="number">1</span>fr <span class="number">1</span>fr <span class="built_in">minmax</span>(<span class="number">100px</span>, <span class="number">1</span>fr); 	// minmax定义长度范围</span><br><span class="line">grid-template-<span class="attribute">columns</span>: <span class="number">100px</span> auto <span class="number">100px</span>; 			// <span class="attribute">auto</span>自适应</span><br><span class="line">grid-template-<span class="attribute">columns</span>: [c1] <span class="number">100px</span> [c2] <span class="number">100px</span> [c3] auto [c4];	// 可以给网格线命名</span><br></pre></td></tr></table></figure>
+
+<h2 id="row-gap-column-gap-gap"><a href="#row-gap-column-gap-gap" class="headerlink" title="row-gap | column-gap | gap"></a>row-gap | column-gap | gap</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/row-gap"><code>row-gap</code></a> 属性设置行间距</li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/column-gap"><code>column-gap</code></a> 属性设置列间距</li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/gap"><code>gap</code></a> 属性是用来设置网格行与列之间的间隙，是上面两个的简写<ul>
+<li>第一个参数为row-gap，第二个为column-gap</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">row-gap: <span class="number">9.6rem</span>;</span><br><span class="line"><span class="attribute">column-gap</span>: <span class="number">6.4rem</span>;</span><br><span class="line"></span><br><span class="line">gap: <span class="number">9.6rem</span> <span class="number">6.4rem</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="justify-items-align-items"><a href="#justify-items-align-items" class="headerlink" title="justify-items | align-items"></a>justify-items | align-items</h2><ul>
+<li><p><code>justify-items</code>属性设置单元格内容的水平位置（左中右）</p>
+</li>
+<li><p><code>align-items</code>属性设置单元格内容的垂直位置（上中下）</p>
+</li>
+<li><p><code>place-items</code>属性是<code>align-items</code>属性和<code>justify-items</code>属性的合并简写形式</p>
+<ul>
+<li>第一个参数为align-items，第二个为justify-items</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span> &#123;</span><br><span class="line">  justify-items: start | end | center | stretch;</span><br><span class="line">  <span class="attribute">align-items</span>: start | end | center | stretch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>关键字含义</p>
+<ul>
+<li>start：对齐单元格的起始边缘。</li>
+<li>end：对齐单元格的结束边缘。</li>
+<li>center：单元格内部居中。</li>
+<li>stretch：拉伸，占满单元格的整个宽度（默认值）。</li>
+</ul>
+<h1 id="项目属性"><a href="#项目属性" class="headerlink" title="项目属性"></a>项目属性</h1><p>定义在项目上的属性</p>
+<h2 id="grid-row-grid-column"><a href="#grid-row-grid-column" class="headerlink" title="grid-row | grid-column"></a>grid-row | grid-column</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.item</span> &#123;</span><br><span class="line">  grid-column: &lt;start-line&gt; / &lt;end-line&gt;;</span><br><span class="line">  grid-row: &lt;start-line&gt; / &lt;end-line&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>两个参数，用斜杠<code>/</code>分隔，以grid-column为例</p>
+<ul>
+<li>第一个参数是起始列线（从1开始计数）</li>
+<li>第二个参数是结束列线</li>
+</ul>
+<p>斜杠<code>/</code>和后面的第二个参数可省略，表示只跨越一格</p>
+<h3 id="顺序"><a href="#顺序" class="headerlink" title="顺序"></a>顺序</h3><p>可以将元素强制显示在某一行</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">grid-row: <span class="number">1</span>;</span><br><span class="line">grid-row: <span class="number">5</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="跨度"><a href="#跨度" class="headerlink" title="跨度"></a>跨度</h3><p>span 后面写跨几格</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">grid-row: <span class="number">1</span> / span <span class="number">2</span>;</span><br><span class="line">grid-row: span <span class="number">2</span>;</span><br><span class="line">grid-row: <span class="number">1</span> / <span class="number">3</span>;	// 等效写法</span><br></pre></td></tr></table></figure>
+
+<p>场景：表格第一行分三列，第二行分两列</p>
+<ul>
+<li>把grid声明为6列</li>
+<li>第一行元素跨度2，第二行元素跨度3</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.nav-grid</span>&#123;</span><br><span class="line">    <span class="attribute">display</span>: grid; </span><br><span class="line">    grid-template-<span class="attribute">columns</span>: <span class="built_in">repeat</span>(<span class="number">6</span>, <span class="number">1</span>fr)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.nav-col</span> &#123;</span><br><span class="line">    grid-column: span <span class="number">2</span>;</span><br><span class="line">    grid-row: <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.addr-col</span> &#123;</span><br><span class="line">    grid-column: span <span class="number">3</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Html</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;.addr-col&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;.addr-col&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;.nav-col&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;.nav-col&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;.nav-col&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="justify-self-align-self"><a href="#justify-self-align-self" class="headerlink" title="justify-self | align-self"></a>justify-self | align-self</h2><p>对齐，但只作用于单个项目</p>
+<ul>
+<li><p><code>justify-self</code>属性设置单元格内容的水平位置（左中右）</p>
+</li>
+<li><p><code>align-self</code>属性设置单元格内容的垂直位置（上中下）</p>
+</li>
+<li><p><code>place-self</code>属性是<code>align-self</code>属性和<code>justify-self</code>属性的合并简写形式</p>
+<ul>
+<li>第一个参数为align-self，第二个为justify-self</li>
+</ul>
+</li>
+</ul>
+<p>关键字含义</p>
+<ul>
+<li>start：对齐单元格的起始边缘。</li>
+<li>end：对齐单元格的结束边缘。</li>
+<li>center：单元格内部居中。</li>
+<li>stretch：拉伸，占满单元格的整个宽度（默认值）。</li>
+</ul>
+<p>场景：grid里三个元素，列数为2，希望单独成行的那一个元素能居中</p>
+<p>在单独成行的那个元素上设置css属性：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.element</span> &#123;</span><br><span class="line">    grid-column: <span class="number">1</span> / -<span class="number">1</span>; // 横跨一整行</span><br><span class="line">    justify-self: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="flex-gap"><a href="#flex-gap" class="headerlink" title="flex gap"></a>flex gap</h1><p>Felxbox也可以用gap，用法跟grid一样，但是有些浏览器不兼容</p>
+<p><img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513205338975.png?raw=true" alt="image-20220513205338975"></p>
+<p>其他写法</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.main-nav-list</span>&#123;</span><br><span class="line">    <span class="attribute">display</span>: flex;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.main-nav-list</span> <span class="selector-tag">li</span><span class="selector-pseudo">:not</span>(<span class="selector-pseudo">:last-child</span>) &#123;</span><br><span class="line">    <span class="attribute">margin-right</span>: <span class="number">4.8rem</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="修复兼容性"><a href="#修复兼容性" class="headerlink" title="修复兼容性"></a>修复兼容性</h2><p>可以在项目中引入以下脚本</p>
+<p>原理：</p>
+<ul>
+<li>检测浏览器是否支持flex gap</li>
+<li>如果不支持，在body元素注入no-flexbox-gap类</li>
+<li>在对应的css文件中手动写替换的flex样式</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">///////////////////////////////////////////////////////////</span></span><br><span class="line"><span class="comment">// Fixing flexbox gap property missing in some Safari versions</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">checkFlexGap</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;run check felx gap&quot;</span>)</span><br><span class="line">    <span class="keyword">var</span> flex = <span class="built_in">document</span>.createElement(<span class="string">&quot;div&quot;</span>);</span><br><span class="line">    flex.style.display = <span class="string">&quot;flex&quot;</span>;</span><br><span class="line">    flex.style.flexDirection = <span class="string">&quot;column&quot;</span>;</span><br><span class="line">    flex.style.rowGap = <span class="string">&quot;1px&quot;</span>;</span><br><span class="line"></span><br><span class="line">    flex.appendChild(<span class="built_in">document</span>.createElement(<span class="string">&quot;div&quot;</span>));</span><br><span class="line">    flex.appendChild(<span class="built_in">document</span>.createElement(<span class="string">&quot;div&quot;</span>));</span><br><span class="line"></span><br><span class="line">    <span class="built_in">document</span>.body.appendChild(flex);</span><br><span class="line">    <span class="keyword">var</span> isSupported = flex.scrollHeight === <span class="number">1</span>;</span><br><span class="line">    flex.parentNode.removeChild(flex);</span><br><span class="line">    <span class="built_in">console</span>.log(isSupported);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!isSupported) <span class="built_in">document</span>.body.classList.add(<span class="string">&quot;no-flexbox-gap&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">checkFlexGap();</span><br></pre></td></tr></table></figure>
+
+<p>在css中是以嵌套css类选择器的形式实现</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// CSS</span><br><span class="line"><span class="selector-class">.no-flexbox-gap</span> <span class="selector-class">.main-nav-list</span> <span class="selector-tag">li</span><span class="selector-pseudo">:not</span>(<span class="selector-pseudo">:last-child</span>) &#123;</span><br><span class="line">  <span class="attribute">margin-right</span>: <span class="number">4.8rem</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.no-flexbox-gap</span> <span class="selector-class">.list-item</span><span class="selector-pseudo">:not</span>(<span class="selector-pseudo">:last-child</span>) &#123;</span><br><span class="line">  <span class="attribute">margin-bottom</span>: <span class="number">1.6rem</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+    </div>
+
+    
+    
+    
+            
+
+      
+      <div>
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">------ 本文结束 &#10084 感谢你的阅读 ------</div>
+    
+</div>
+          
+<div class="my_post_copyright">
+<div style="text-align:center;color: #ccc;font-size:14px;">------ 版权信息 ------</div>
+ <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+ 
+ <p><span>本文标题:</span><a href="/2022/05/12/CSS/omnifood2_grid/">CSS进阶实战2：grid使用技巧</a></p>
+ <p><span>文章作者:</span><a href="/" title="访问 Lury 的个人博客">Lury</a></p>
+ <p><span>发布时间:</span>2022年05月12日 - 21:24</p>
+ <p><span>最后更新:</span>2022年05月14日 - 20:13</p>
+ <p><span>原始链接:</span><a href="/2022/05/12/CSS/omnifood2_grid/" title="CSS进阶实战2：grid使用技巧">https://luryzhu.github.io/2022/05/12/CSS/omnifood2_grid/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://luryzhu.github.io/2022/05/12/CSS/omnifood2_grid/"  aria-label="复制成功！"></i></span>
+ </p>
+ <p><span>许可协议:</span><a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+   var clipboard = new Clipboard('.fa-clipboard');
+   $(".fa-clipboard").click(function(){
+     clipboard.on('success', function(){
+       swal({   
+         title: "",   
+         text: '复制成功',
+         icon: "success", 
+         showConfirmButton: true
+         });
+ 	 });
+   });  
+</script>
+
+      </div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CSS/" rel="tag"># CSS</a>
+              <a href="/tags/grid/" rel="tag"># grid</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/11/CSS/omnifood1_overview/" rel="prev" title="CSS进阶实战1：项目资源与架构">
+      <i class="fa fa-chevron-left"></i> CSS进阶实战1：项目资源与架构
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/12/CSS/omnifood3_scroll/" rel="next" title="CSS进阶实战3：平滑滚动、禁止滚动、监听滚动">
+      CSS进阶实战3：平滑滚动、禁止滚动、监听滚动 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E5%B1%9E%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">容器属性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#grid-template-columns"><span class="nav-number">1.1.</span> <span class="nav-text">grid-template-columns</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#row-gap-column-gap-gap"><span class="nav-number">1.2.</span> <span class="nav-text">row-gap | column-gap | gap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#justify-items-align-items"><span class="nav-number">1.3.</span> <span class="nav-text">justify-items | align-items</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E5%B1%9E%E6%80%A7"><span class="nav-number">2.</span> <span class="nav-text">项目属性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#grid-row-grid-column"><span class="nav-number">2.1.</span> <span class="nav-text">grid-row | grid-column</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F"><span class="nav-number">2.1.1.</span> <span class="nav-text">顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%A8%E5%BA%A6"><span class="nav-number">2.1.2.</span> <span class="nav-text">跨度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#justify-self-align-self"><span class="nav-number">2.2.</span> <span class="nav-text">justify-self | align-self</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#flex-gap"><span class="nav-number">3.</span> <span class="nav-text">flex gap</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="nav-number">3.1.</span> <span class="nav-text">修复兼容性</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lury"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Lury</p>
+  <div class="site-description" itemprop="description">前端学习中...</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/luryZhu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;luryZhu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:LuryZhu@outlook.com" title="E-Mail → mailto:LuryZhu@outlook.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lury</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">211k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">3:12</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<!-- hexo injector body_end start --><script src="https://cdn.jsdelivr.net/npm/d3@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.7.4/dist/browser/view.min.js"></script>
+  <script>
+      const mindmaps = document.querySelectorAll('.markmap-svg');
+   
+      for(const mindmap of mindmaps) {
+          markmap.markmap(mindmap, JSON.parse(mindmap.innerHTML));
+      }
+  </script> <!-- hexo injector body_end end --></body>
+</html>

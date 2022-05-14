@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"luryzhu.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="考虑兼容性和优化的细节：  favicon：适配桌面端、ios和安卓端 图片：选择合适尺寸、使用webp格式、使用srcset适配  性能评估工具：LightHouse">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS进阶实战5：兼容性&amp;优化">
+<meta property="og:url" content="https://luryzhu.github.io/2022/05/14/CSS/omnifood5_optimization/index.html">
+<meta property="og:site_name" content="Lury的世界尽头">
+<meta property="og:description" content="考虑兼容性和优化的细节：  favicon：适配桌面端、ios和安卓端 图片：选择合适尺寸、使用webp格式、使用srcset适配  性能评估工具：LightHouse">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512171800884.png?raw=true">
+<meta property="og:image" content="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512163159155.png?raw=true">
+<meta property="og:image" content="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512163537771.png?raw=true">
+<meta property="og:image" content="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512163837227.png?raw=true">
+<meta property="og:image" content="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512163959369.png?raw=true">
+<meta property="og:image" content="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512172821610.png?raw=true">
+<meta property="og:image" content="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513165846760.png?raw=true">
+<meta property="article:published_time" content="2022-05-14T07:28:11.000Z">
+<meta property="article:modified_time" content="2022-05-14T12:12:45.347Z">
+<meta property="article:author" content="Lury">
+<meta property="article:tag" content="CSS">
+<meta property="article:tag" content="响应式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512171800884.png?raw=true">
+
+<link rel="canonical" href="https://luryzhu.github.io/2022/05/14/CSS/omnifood5_optimization/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CSS进阶实战5：兼容性&优化 | Lury的世界尽头</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lury的世界尽头</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://luryzhu.github.io/2022/05/14/CSS/omnifood5_optimization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Lury">
+      <meta itemprop="description" content="前端学习中...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lury的世界尽头">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CSS进阶实战5：兼容性&优化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-14 15:28:11 / 修改时间：20:12:45" itemprop="dateCreated datePublished" datetime="2022-05-14T15:28:11+08:00">2022-05-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CSS%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CSS笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CSS%E7%AC%94%E8%AE%B0/CSS%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">CSS进阶实战</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>考虑兼容性和优化的细节：</p>
+<ul>
+<li>favicon：适配桌面端、ios和安卓端</li>
+<li>图片：选择合适尺寸、使用webp格式、使用srcset适配</li>
+</ul>
+<p>性能评估工具：LightHouse</p>
+<span id="more"></span>
+
+<hr>
+<blockquote>
+<p>参考课程：Build Responsive Real-World Websites with HTML and CSS<br><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1A34y1e7wL?p=101&spm_id_from=pageDriver">视频</a> | <a target="_blank" rel="noopener" href="https://github.com/jonasschmedtmann/html-css-course">源码</a></p>
+</blockquote>
+<p>基于React的响应式单页应用开发、优化和部署</p>
+<ul>
+<li>项目地址：<a target="_blank" rel="noopener" href="https://github.com/luryZhu/omnifood">https://github.com/luryZhu/omnifood</a></li>
+<li>在线demo：<a target="_blank" rel="noopener" href="https://omnifood-lury.netlify.app/">https://omnifood-lury.netlify.app/</a></li>
+</ul>
+<hr>
+<h1 id="兼容性-amp-优化"><a href="#兼容性-amp-优化" class="headerlink" title="兼容性&amp;优化"></a>兼容性&amp;优化</h1><h2 id="favicon"><a href="#favicon" class="headerlink" title="favicon"></a>favicon</h2><p>react项目中的public目录下</p>
+<p><img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512171800884.png?raw=true" alt="image-20220512171800884"></p>
+<p>在index.html中设置favicon，不同的端有不同的设置</p>
+<p><strong>桌面端</strong></p>
+<p>需要对应图片分辨率为64x64</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;icon&quot;</span> <span class="attr">href</span>=<span class="string">&quot;%PUBLIC_URL%/favicon.png?raw=true&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>ios</strong></p>
+<p>需要对应图片分辨率为180x180</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;apple-touch-icon&quot;</span> <span class="attr">href</span>=<span class="string">&quot;%PUBLIC_URL%/apple-touch-icon.png?raw=true&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>android</strong></p>
+<p>需要两种图片尺寸192x192，512x512</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;manifest&quot;</span> <span class="attr">href</span>=<span class="string">&quot;%PUBLIC_URL%/manifest.json&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>需要在同目录下的manifest.json文件中配置图片路径</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;short_name&quot;</span>: <span class="string">&quot;Omnifood&quot;</span>,</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;Omnifood | Never cook again!&quot;</span>,</span><br><span class="line">  <span class="string">&quot;icons&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;src&quot;</span>: <span class="string">&quot;favicon.png?raw=true&quot;</span>,</span><br><span class="line">      <span class="string">&quot;sizes&quot;</span>: <span class="string">&quot;64x64 32x32 24x24 16x16&quot;</span>,</span><br><span class="line">      <span class="string">&quot;type&quot;</span>: <span class="string">&quot;image/x-icon&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;src&quot;</span>: <span class="string">&quot;favicon-192.png?raw=true&quot;</span>,</span><br><span class="line">      <span class="string">&quot;type&quot;</span>: <span class="string">&quot;image/png?raw=true&quot;</span>,</span><br><span class="line">      <span class="string">&quot;sizes&quot;</span>: <span class="string">&quot;192x192&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;src&quot;</span>: <span class="string">&quot;favicon-512.png?raw=true&quot;</span>,</span><br><span class="line">      <span class="string">&quot;type&quot;</span>: <span class="string">&quot;image/png?raw=true&quot;</span>,</span><br><span class="line">      <span class="string">&quot;sizes&quot;</span>: <span class="string">&quot;512x512&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;start_url&quot;</span>: <span class="string">&quot;.&quot;</span>,</span><br><span class="line">  <span class="string">&quot;display&quot;</span>: <span class="string">&quot;standalone&quot;</span>,</span><br><span class="line">  <span class="string">&quot;theme_color&quot;</span>: <span class="string">&quot;#e67e22&quot;</span>,</span><br><span class="line">  <span class="string">&quot;background_color&quot;</span>: <span class="string">&quot;#fdf2e9&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><p>查看Network，可以观察到传输了4.1MB的数据，其中大部分是图片，需要对图片进行压缩</p>
+<img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512163159155.png?raw=true" alt="image-20220512163159155" style="zoom: 67%;" />
+
+<h3 id="图片尺寸"><a href="#图片尺寸" class="headerlink" title="图片尺寸"></a>图片尺寸</h3><img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512163537771.png?raw=true" alt="image-20220512163537771" style="zoom:50%;" />
+
+<p>通常来说是这样判断，以上图为例：</p>
+<ul>
+<li>一开始有一张很大的图片</li>
+<li>在浏览器里检查图片能够显示的最大宽度（554）</li>
+<li>对这个数值四舍五入后×2（600×2&#x3D;1200），以适应二倍屏的手机</li>
+</ul>
+<h3 id="webp"><a href="#webp" class="headerlink" title="webp"></a>webp</h3><p>使用Google的在线图像压缩工具：<a target="_blank" rel="noopener" href="https://squoosh.app/">Squoosh</a></p>
+<p>目前最优的图片格式为webp，可以不断调整找到最佳压缩比</p>
+<img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512163837227.png?raw=true" alt="image-20220512163837227" style="zoom:50%;" />
+
+<h3 id="srcset"><a href="#srcset" class="headerlink" title="srcset"></a>srcset</h3><p>webp不能在所有浏览器上支持 <a target="_blank" rel="noopener" href="https://caniuse.com/?search=webp">https://caniuse.com/?search=webp</a></p>
+<p><img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512163959369.png?raw=true" alt="image-20220512163959369"></p>
+<p>所以可以使用<code>srcset</code>做兼容</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;picture&gt;</span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">source</span> <span class="attr">srcSet</span>=<span class="string">&#123;HeroImgWebp&#125;</span> <span class="attr">type</span>=<span class="string">&quot;image/webp&quot;</span> /&gt;</span></span></span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">source</span> <span class="attr">srcSet</span>=<span class="string">&#123;HeroImg&#125;</span> <span class="attr">type</span>=<span class="string">&quot;image/png?raw=true&quot;</span> /&gt;</span></span></span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">className</span>=<span class="string">&quot;hero-img&quot;</span> <span class="attr">src</span>=<span class="string">&#123;HeroImgWebp&#125;</span> <span class="attr">alt</span>=<span class="string">&quot;woman enjoying food&quot;</span> /&gt;</span></span></span><br><span class="line">&lt;/picture&gt;</span><br></pre></td></tr></table></figure>
+
+<p>解读：</p>
+<ul>
+<li>用picture标签包裹住img标签</li>
+<li>source标签声明可以使用的源和类型</li>
+<li>img标签中的src属性赋值为想要默认显示的图片，这里设置为webp格式的源</li>
+<li>浏览器会根据自己支持的源请求图片</li>
+</ul>
+<h1 id="LightHouse"><a href="#LightHouse" class="headerlink" title="LightHouse"></a>LightHouse</h1><p>参考</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/wenxuehai/p/14236426.html">性能测评工具lighthouse的使用</a></li>
+</ul>
+<p>chrome自带的性能评估工具</p>
+<ul>
+<li>可以选择设备，评估类型，根据报告修改</li>
+</ul>
+<img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220512172821610.png?raw=true" alt="image-20220512172821610" style="zoom: 67%;" />
+
+<img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513165846760.png?raw=true" alt="image-20220513165846760" style="zoom: 67%;" />
+
+<h2 id="性能-Performance"><a href="#性能-Performance" class="headerlink" title="性能 Performance"></a>性能 Performance</h2><h3 id="Properly-size-images"><a href="#Properly-size-images" class="headerlink" title="Properly size images"></a>Properly size images</h3><blockquote>
+<p>Serve images that are appropriately-sized to save cellular data and improve load time. <a target="_blank" rel="noopener" href="https://web.dev/uses-responsive-images/?utm_source=lighthouse&utm_medium=devtools">Learn more</a>.</p>
+</blockquote>
+<p>修改图片大小，小窗口不需要大图片</p>
+<p><strong>解决方案：</strong>考虑用 <a href="#srcset">srcset</a></p>
+<h3 id="Serve-images-in-next-gen-formats"><a href="#Serve-images-in-next-gen-formats" class="headerlink" title="Serve images in next-gen formats"></a>Serve images in next-gen formats</h3><blockquote>
+<p>Image formats like WebP and AVIF often provide better compression than png?raw&#x3D;true or JPEG, which means faster downloads and less data consumption. <a target="_blank" rel="noopener" href="https://web.dev/uses-webp-images/?utm_source=lighthouse&utm_medium=devtools">Learn more</a>.</p>
+</blockquote>
+<p><strong>解决方案：</strong>图片推荐使用<strong>webp格式</strong>，参考 <a href="#webp">webp</a></p>
+<h3 id="Eliminate-render-blocking-resources"><a href="#Eliminate-render-blocking-resources" class="headerlink" title="Eliminate render-blocking resources"></a>Eliminate render-blocking resources</h3><blockquote>
+<p>Resources are blocking the first paint of your page. Consider delivering critical JS&#x2F;CSS inline and deferring all non-critical JS&#x2F;styles. <a target="_blank" rel="noopener" href="https://web.dev/render-blocking-resources/?utm_source=lighthouse&utm_medium=devtools">Learn more</a>.</p>
+</blockquote>
+<p>引入外部的字体和iconfont会这样</p>
+<p><strong>解决方案：</strong>todo</p>
+<h3 id="Ensure-text-remains-visible-during-webfont-load"><a href="#Ensure-text-remains-visible-during-webfont-load" class="headerlink" title="Ensure text remains visible during webfont load"></a>Ensure text remains visible during webfont load</h3><blockquote>
+<p>Leverage the font-display CSS feature to ensure text is user-visible while webfonts are loading. <a target="_blank" rel="noopener" href="https://web.dev/font-display/?utm_source=lighthouse&utm_medium=devtools">Learn more</a>.</p>
+</blockquote>
+<p>引入外部字体和iconfont时会产生这个问题，字体加载会导致文字闪烁</p>
+<p><strong>解决方案：</strong>todo</p>
+<h3 id="Image-elements-do-not-have-explicit-width-and-height"><a href="#Image-elements-do-not-have-explicit-width-and-height" class="headerlink" title="Image elements do not have explicit width and height"></a>Image elements do not have explicit <code>width</code> and <code>height</code></h3><blockquote>
+<p>Set an explicit width and height on image elements to reduce layout shifts and improve CLS. <a target="_blank" rel="noopener" href="https://web.dev/optimize-cls/?utm_source=lighthouse&utm_medium=devtools#images-without-dimensions">Learn more</a></p>
+</blockquote>
+<p>图片没有明确宽高，下载完图片之前浏览器没法知道图片的宽高，会导致布局闪烁</p>
+<p><strong>解决方案：</strong></p>
+<p>定义img标签时先自带宽高，尽量写得和真实图片一致</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#123;Meal1&#125;</span> <span class="attr">className</span>=<span class="string">&quot;meal-img&quot;</span> <span class="attr">width</span>=<span class="string">&#123;700&#125;</span> <span class="attr">height</span>=<span class="string">&#123;467&#125;</span> <span class="attr">alt</span>=<span class="string">&quot;Japanese Gyozas&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在css中，通常是设置宽度100%，这里需要加上高度自动</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.meal-img</span> &#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">    <span class="attribute">height</span>: auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>- </p>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+    </div>
+
+    
+    
+    
+            
+
+      
+      <div>
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">------ 本文结束 &#10084 感谢你的阅读 ------</div>
+    
+</div>
+          
+<div class="my_post_copyright">
+<div style="text-align:center;color: #ccc;font-size:14px;">------ 版权信息 ------</div>
+ <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+ 
+ <p><span>本文标题:</span><a href="/2022/05/14/CSS/omnifood5_optimization/">CSS进阶实战5：兼容性&优化</a></p>
+ <p><span>文章作者:</span><a href="/" title="访问 Lury 的个人博客">Lury</a></p>
+ <p><span>发布时间:</span>2022年05月14日 - 15:28</p>
+ <p><span>最后更新:</span>2022年05月14日 - 20:12</p>
+ <p><span>原始链接:</span><a href="/2022/05/14/CSS/omnifood5_optimization/" title="CSS进阶实战5：兼容性&优化">https://luryzhu.github.io/2022/05/14/CSS/omnifood5_optimization/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://luryzhu.github.io/2022/05/14/CSS/omnifood5_optimization/"  aria-label="复制成功！"></i></span>
+ </p>
+ <p><span>许可协议:</span><a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+   var clipboard = new Clipboard('.fa-clipboard');
+   $(".fa-clipboard").click(function(){
+     clipboard.on('success', function(){
+       swal({   
+         title: "",   
+         text: '复制成功',
+         icon: "success", 
+         showConfirmButton: true
+         });
+ 	 });
+   });  
+</script>
+
+      </div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CSS/" rel="tag"># CSS</a>
+              <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag"># 响应式</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/13/CSS/omnifood4_responsive/" rel="prev" title="CSS进阶实战4：响应式实现思路">
+      <i class="fa fa-chevron-left"></i> CSS进阶实战4：响应式实现思路
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/14/CSS/omnifood6_deploy/" rel="next" title="CSS进阶实战6：netlify部署项目">
+      CSS进阶实战6：netlify部署项目 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%BC%E5%AE%B9%E6%80%A7-amp-%E4%BC%98%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">兼容性&amp;优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#favicon"><span class="nav-number">1.1.</span> <span class="nav-text">favicon</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E7%89%87"><span class="nav-number">1.2.</span> <span class="nav-text">图片</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E7%89%87%E5%B0%BA%E5%AF%B8"><span class="nav-number">1.2.1.</span> <span class="nav-text">图片尺寸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#webp"><span class="nav-number">1.2.2.</span> <span class="nav-text">webp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#srcset"><span class="nav-number">1.2.3.</span> <span class="nav-text">srcset</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LightHouse"><span class="nav-number">2.</span> <span class="nav-text">LightHouse</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD-Performance"><span class="nav-number">2.1.</span> <span class="nav-text">性能 Performance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Properly-size-images"><span class="nav-number">2.1.1.</span> <span class="nav-text">Properly size images</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Serve-images-in-next-gen-formats"><span class="nav-number">2.1.2.</span> <span class="nav-text">Serve images in next-gen formats</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Eliminate-render-blocking-resources"><span class="nav-number">2.1.3.</span> <span class="nav-text">Eliminate render-blocking resources</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ensure-text-remains-visible-during-webfont-load"><span class="nav-number">2.1.4.</span> <span class="nav-text">Ensure text remains visible during webfont load</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Image-elements-do-not-have-explicit-width-and-height"><span class="nav-number">2.1.5.</span> <span class="nav-text">Image elements do not have explicit width and height</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lury"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Lury</p>
+  <div class="site-description" itemprop="description">前端学习中...</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/luryZhu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;luryZhu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:LuryZhu@outlook.com" title="E-Mail → mailto:LuryZhu@outlook.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lury</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">211k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">3:12</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<!-- hexo injector body_end start --><script src="https://cdn.jsdelivr.net/npm/d3@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.7.4/dist/browser/view.min.js"></script>
+  <script>
+      const mindmaps = document.querySelectorAll('.markmap-svg');
+   
+      for(const mindmap of mindmaps) {
+          markmap.markmap(mindmap, JSON.parse(mindmap.innerHTML));
+      }
+  </script> <!-- hexo injector body_end end --></body>
+</html>

@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"luryzhu.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="平滑滚动：scrollIntoView、react-scroll 禁止滚动：桌面端禁止滚动，移动端禁止滚动 监听滚动：IntersectionObserver">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS进阶实战3：平滑滚动、禁止滚动、监听滚动">
+<meta property="og:url" content="https://luryzhu.github.io/2022/05/12/CSS/omnifood3_scroll/index.html">
+<meta property="og:site_name" content="Lury的世界尽头">
+<meta property="og:description" content="平滑滚动：scrollIntoView、react-scroll 禁止滚动：桌面端禁止滚动，移动端禁止滚动 监听滚动：IntersectionObserver">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220511171619128.png?raw=true">
+<meta property="og:image" content="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513195237097.png?raw=true">
+<meta property="article:published_time" content="2022-05-12T13:46:28.000Z">
+<meta property="article:modified_time" content="2022-05-14T11:38:33.751Z">
+<meta property="article:author" content="Lury">
+<meta property="article:tag" content="CSS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220511171619128.png?raw=true">
+
+<link rel="canonical" href="https://luryzhu.github.io/2022/05/12/CSS/omnifood3_scroll/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CSS进阶实战3：平滑滚动、禁止滚动、监听滚动 | Lury的世界尽头</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lury的世界尽头</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://luryzhu.github.io/2022/05/12/CSS/omnifood3_scroll/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Lury">
+      <meta itemprop="description" content="前端学习中...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lury的世界尽头">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CSS进阶实战3：平滑滚动、禁止滚动、监听滚动
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-12 21:46:28" itemprop="dateCreated datePublished" datetime="2022-05-12T21:46:28+08:00">2022-05-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-14 19:38:33" itemprop="dateModified" datetime="2022-05-14T19:38:33+08:00">2022-05-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CSS%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CSS笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CSS%E7%AC%94%E8%AE%B0/CSS%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">CSS进阶实战</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>平滑滚动：scrollIntoView、react-scroll</p>
+<p>禁止滚动：桌面端禁止滚动，移动端禁止滚动</p>
+<p>监听滚动：IntersectionObserver</p>
+<span id="more"></span>
+
+<hr>
+<blockquote>
+<p>参考课程：Build Responsive Real-World Websites with HTML and CSS<br><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1A34y1e7wL?p=101&spm_id_from=pageDriver">视频</a> | <a target="_blank" rel="noopener" href="https://github.com/jonasschmedtmann/html-css-course">源码</a></p>
+</blockquote>
+<p>基于React的响应式单页应用开发、优化和部署</p>
+<ul>
+<li>项目地址：<a target="_blank" rel="noopener" href="https://github.com/luryZhu/omnifood">https://github.com/luryZhu/omnifood</a></li>
+<li>在线demo：<a target="_blank" rel="noopener" href="https://omnifood-lury.netlify.app/">https://omnifood-lury.netlify.app/</a></li>
+</ul>
+<hr>
+<h1 id="平滑滚动"><a href="#平滑滚动" class="headerlink" title="平滑滚动"></a>平滑滚动</h1><p>实现平滑且可被浏览器兼容的滚动</p>
+<p>使用场景：</p>
+<p>点击导航栏连接，产生一个动画平滑地滚动到指定位置</p>
+<img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220511171619128.png?raw=true" alt="image-20220511171619128" style="zoom:50%;" />
+
+<h2 id="一般方式"><a href="#一般方式" class="headerlink" title="一般方式"></a>一般方式</h2><p>导航栏中的按钮为a标签实现的超链接</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#cta&quot;</span> <span class="attr">class</span>=<span class="string">&quot;btn btn--full margin-right-sm&quot;</span>&gt;</span>Start eating well<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>js脚本中选中所有<code>a: link</code>标签，手动绑定点击事件</p>
+<ul>
+<li>阻止默认行为</li>
+<li>获取每个a标签的href属性，得到转跳目标元素的id</li>
+<li>获取目标元素，调用<code>scrollIntoView</code>方法，设置参数<code>behavior: &quot;smooth&quot;</code>，即可平滑滚动</li>
+</ul>
+<p>但是该方法不适用于React的设计逻辑</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> allLinks = <span class="built_in">document</span>.querySelectorAll(<span class="string">&quot;a:link&quot;</span>);</span><br><span class="line"></span><br><span class="line">allLinks.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">link</span>) </span>&#123;</span><br><span class="line">  link.addEventListener(<span class="string">&quot;click&quot;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">    e.preventDefault();</span><br><span class="line">    <span class="keyword">const</span> href = link.getAttribute(<span class="string">&quot;href&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Scroll back to top</span></span><br><span class="line">    <span class="keyword">if</span> (href === <span class="string">&quot;#&quot;</span>)</span><br><span class="line">      <span class="built_in">window</span>.scrollTo(&#123;</span><br><span class="line">        <span class="attr">top</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">behavior</span>: <span class="string">&quot;smooth&quot;</span>,</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Scroll to other links</span></span><br><span class="line">    <span class="keyword">if</span> (href !== <span class="string">&quot;#&quot;</span> &amp;&amp; href.startsWith(<span class="string">&quot;#&quot;</span>)) &#123;</span><br><span class="line">      <span class="keyword">const</span> sectionEl = <span class="built_in">document</span>.querySelector(href);</span><br><span class="line">      sectionEl.scrollIntoView(&#123; <span class="attr">behavior</span>: <span class="string">&quot;smooth&quot;</span> &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Close mobile naviagtion</span></span><br><span class="line">    <span class="keyword">if</span> (link.classList.contains(<span class="string">&quot;main-nav-link&quot;</span>))</span><br><span class="line">      headerEl.classList.toggle(<span class="string">&quot;nav-open&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>其他方式参考：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6898670533567578125">实现页面平滑滚动的N种姿势</a></p>
+<h2 id="React-scroll"><a href="#React-scroll" class="headerlink" title="React-scroll"></a>React-scroll</h2><p>使用React插件<a target="_blank" rel="noopener" href="https://www.npmjs.com/package/react-scroll">react-scroll</a></p>
+<p>使用例：<a target="_blank" rel="noopener" href="https://codesandbox.io/s/basic-6t84k">https://codesandbox.io/s/basic-6t84k</a></p>
+<h3 id="常用API"><a href="#常用API" class="headerlink" title="常用API"></a>常用API</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Link, animateScroll <span class="keyword">as</span> scroll&#125; <span class="keyword">from</span> <span class="string">&#x27;react-scroll&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Link"><a href="#Link" class="headerlink" title="Link"></a>Link</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>用例</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>activeClass</td>
+<td>‘active’</td>
+<td>判断滚动到指定的元素后，会在Link元素上加上一个css class，一般设类名为active</td>
+</tr>
+<tr>
+<td>to</td>
+<td>‘cta’</td>
+<td>目标元素id或name</td>
+</tr>
+<tr>
+<td>spy</td>
+<td>true</td>
+<td>判断滚动到指定的元素后，使对应的Link元素变成选中状态（就是加上activeClass）</td>
+</tr>
+<tr>
+<td>hashSpy</td>
+<td>true</td>
+<td>判断滚动到指定的元素后，在网页url后面显示哈希路径，例如 <code>localhost:3000/#meals</code></td>
+</tr>
+<tr>
+<td>smooth</td>
+<td>true</td>
+<td>是否平滑</td>
+</tr>
+<tr>
+<td>offset</td>
+<td>-80</td>
+<td>额外滚动距离，单位为px，传参时直接传数值</td>
+</tr>
+<tr>
+<td>duration</td>
+<td>500</td>
+<td>持续时间，单位为ms</td>
+</tr>
+</tbody></table>
+<h4 id="animateScroll-as-scroll"><a href="#animateScroll-as-scroll" class="headerlink" title="animateScroll as scroll"></a>animateScroll as scroll</h4><p><a target="_blank" rel="noopener" href="https://github.com/fisshy/react-scroll/blob/master/modules/mixins/animate-scroll.js">源码</a></p>
+<p>options</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">duration</span>: <span class="number">1500</span>,</span><br><span class="line">  <span class="attr">delay</span>: <span class="number">100</span>,</span><br><span class="line">  <span class="attr">smooth</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">containerId</span>: <span class="string">&#x27;ContainerElementID&#x27;</span>,</span><br><span class="line">  <span class="attr">offset</span>: <span class="number">50</span>, <span class="comment">// Scrolls to element + 50 pixels down the page</span></span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Scroll To Top</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scroll.scrollToTop(options);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Scroll To Bottom</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scroll.scrollToBottom(options);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Scroll To (position)</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scroll.scrollTo(100, options);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Scroll To (Element)</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scroll.scrollTo(element, options);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Scroll More (px)</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scroll.scrollMore(10, options);</span><br></pre></td></tr></table></figure>
+
+<h3 id="手写封装：NavLink"><a href="#手写封装：NavLink" class="headerlink" title="手写封装：NavLink"></a>手写封装：NavLink</h3><p>入参：</p>
+<ul>
+<li>className：给a标签加上class</li>
+<li>to：目标元素id</li>
+<li>onClick：除了转跳意外的点击事件处理函数</li>
+<li>props.children</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Link, animateScroll <span class="keyword">as</span> scroll &#125; <span class="keyword">from</span> <span class="string">&#x27;react-scroll&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> NavLink = <span class="function">(<span class="params">props</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        <span class="comment">// &lt;a className=&#x27;main-nav-link&#x27; href=&quot;#how&quot;&gt;How it works&lt;/a&gt;</span></span><br><span class="line">        props.to !== <span class="string">&quot;#&quot;</span></span><br><span class="line">            ?</span><br><span class="line">            (<span class="xml"><span class="tag">&lt;<span class="name">Link</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">activeClass</span>=<span class="string">&quot;active&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">className</span>=<span class="string">&#123;props.className&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">to</span>=<span class="string">&#123;props.to&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">smooth</span>=<span class="string">&#123;true&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">duration</span>=<span class="string">&#123;500&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">offset</span>=<span class="string">&#123;-40&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">onClick</span>=<span class="string">&#123;props.onClick&#125;</span>&gt;</span></span></span><br><span class="line"><span class="xml">                &#123;props.children&#125;</span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;/<span class="name">Link</span>&gt;</span></span>)</span><br><span class="line">            :</span><br><span class="line">            <span class="xml"><span class="tag">&lt;<span class="name">a</span> <span class="attr">className</span>=<span class="string">&#123;props.className&#125;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">href</span>=<span class="string">&quot;/#&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> scroll.scrollToTop(&#123; duration: 500 &#125;)&#125;&gt;</span></span><br><span class="line"><span class="xml">                &#123;props.children&#125;</span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span></span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> NavLink</span><br></pre></td></tr></table></figure>
+
+<p>使用：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;NavLink className=<span class="string">&#x27;main-nav-link&#x27;</span> to=<span class="string">&quot;how&quot;</span> onClick=&#123;onCloseHandle&#125;&gt;How it works&lt;/NavLink&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>spy和hashSpy会出现滚动到指定位置，但是判定激活的是上面的当前元素上面的那个元素，目前没有找到解决方案</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://github.com/fisshy/react-scroll/issues/422">https://github.com/fisshy/react-scroll/issues/422</a></p>
+<blockquote>
+<p>I solved this by letting <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/react-waypoint">react-waypoint</a> do the “set active” handling instead. So I removed <code>spy</code> and <code>onSetActive</code> from my <code>&lt;Link&gt;</code> elements and wrapped each targeted element with <code>&lt;Waypoint&gt;</code>. That way you get more control of when the target element is activated, and you can offset the triggers freely with using waypoints, while still keeping any scroll offset set in the <code>&lt;Link&gt;</code> element.</p>
+</blockquote>
+<h1 id="阻止滚动"><a href="#阻止滚动" class="headerlink" title="阻止滚动"></a>阻止滚动</h1><p>场景：</p>
+<p>产生弹窗或打开导航栏时，不希望下层的页面能够滚动，需要手动禁用</p>
+<img src="https://github.com/luryZhu/omnifood/blob/main/readme/image-20220513195237097.png?raw=true" alt="image-20220513195237097" style="zoom:50%;" />
+
+<h2 id="桌面端"><a href="#桌面端" class="headerlink" title="桌面端"></a>桌面端</h2><p><strong>粗暴的方法</strong>：</p>
+<p>html或body元素的overflow设为hidden（测试后是加在html元素上有效）</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.documentElement.style.overflow = <span class="string">&#x27;hidden&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>问题：</p>
+<p>这样设置会影响子元素的overflow属性，造成页面布局抖动，不好</p>
+<p><strong>其他解决方案</strong>：</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6869740995290857479#heading-3">阻止滚轮滚动事件</a></p>
+<p>监听鼠标滚轮滚动mousewheel事件，阻止默认行为</p>
+<p>问题：</p>
+<p>用户仍然可以拖动滚动条进行操作</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> preventScroll = useCallback(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">  e.preventDefault()</span><br><span class="line">&#125;, [])</span><br><span class="line">useEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (isNavOpen) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">document</span>.documentElement.addEventListener(</span><br><span class="line">      <span class="string">&#x27;mousewheel&#x27;</span>,</span><br><span class="line">      preventScroll,</span><br><span class="line">      &#123; <span class="attr">passive</span>: <span class="literal">false</span> &#125;</span><br><span class="line">    );  <span class="comment">//passive 参数不能省略，用来兼容ios和android</span></span><br><span class="line"></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">document</span>.documentElement.removeEventListener(</span><br><span class="line">      <span class="string">&#x27;mousewheel&#x27;</span>,</span><br><span class="line">      preventScroll</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [isNavOpen, preventScroll])</span><br></pre></td></tr></table></figure>
+
+<h2 id="移动端"><a href="#移动端" class="headerlink" title="移动端"></a>移动端</h2><p>考虑兼容性的方法：touchmove事件，阻止默认行为</p>
+<p>原理：参考 <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/bf4b3693a4f1">React禁止页面滚动踩坑实践与方案梳理</a></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> preventScroll = useCallback(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">  e.preventDefault()</span><br><span class="line">&#125;, [])</span><br><span class="line">useEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (isNavOpen) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">document</span>.documentElement.addEventListener(</span><br><span class="line">      <span class="string">&#x27;touchmove&#x27;</span>,</span><br><span class="line">      preventScroll,</span><br><span class="line">      &#123; <span class="attr">passive</span>: <span class="literal">false</span> &#125;</span><br><span class="line">    );  <span class="comment">//passive 参数不能省略，用来兼容ios和android</span></span><br><span class="line"></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">document</span>.documentElement.removeEventListener(</span><br><span class="line">      <span class="string">&#x27;touchmove&#x27;</span>,</span><br><span class="line">      preventScroll</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [isNavOpen, preventScroll])</span><br></pre></td></tr></table></figure>
+
+<h1 id="监听滚动"><a href="#监听滚动" class="headerlink" title="监听滚动"></a>监听滚动</h1><p>场景：监听页面滚动，如果滚动到指定位置触发事件</p>
+<h2 id="IntersectionObserver"><a href="#IntersectionObserver" class="headerlink" title="IntersectionObserver"></a>IntersectionObserver</h2><p>文档：<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver">https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver</a></p>
+<p><code>IntersectionObserver</code><strong>接口</strong> (从属于<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API">Intersection Observer API</a>) 提供了一种异步观察目标元素与其祖先元素或顶级文档视窗(<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/Viewport">viewport</a>)交叉状态的方法。祖先元素与视窗(<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/Viewport">viewport</a>)被称为<strong>根(root)。</strong></p>
+<p>可以用于检测某一元素是否滚动到窗口内，或者在窗口类滚动到的比例</p>
+<h3 id="API"><a href="#API" class="headerlink" title="API"></a>API</h3><p>使用<code>new</code> 关键字调用 <code>IntersectionObserver</code> 接口，返回一个新的<code>IntersectionObserver</code>对象，当其监听到目标元素的可见部分穿过了一个或多个**阈(thresholds)**时，会执行指定的回调函数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> observer = <span class="keyword">new</span> IntersectionObserver(callback[, options]);</span><br></pre></td></tr></table></figure>
+
+<p>入参：</p>
+<ul>
+<li><p>回调函数，当元素可见比例超过指定阈值后，会调用该回调函数，此回调函数接受两个参数：</p>
+<ul>
+<li><p><code>entries</code></p>
+<p>一个<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserverEntry"><code>IntersectionObserverEntry</code></a>对象的数组，每个被触发的阈值，都或多或少与指定阈值有偏差。</p>
+</li>
+<li><p><code>observer</code></p>
+<p>被调用的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver"><code>IntersectionObserver</code></a>实例。一般只传entries</p>
+</li>
+</ul>
+</li>
+<li><p><code>options</code> 可选</p>
+<p>一个可以用来<strong>配置observer实例</strong>的对象。如果<code>options</code>未指定，observer实例默认使用文档视口作为root，并且没有margin，阈值为0%（意味着即使一像素的改变都会触发回调函数）。可以指定以下配置：</p>
+<ul>
+<li><p><code>root</code></p>
+<p>监听元素的祖先元素<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element"><code>Element</code></a>对象，其边界盒将被视作视口。目标在根的可见区域的的任何不可见部分都会被视为不可见。</p>
+</li>
+<li><p><code>rootMargin</code></p>
+<p>一个在计算交叉值时添加至根的边界盒(<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Glossary/bounding_box">bounding_box (en-US)</a>)中的一组偏移量，类型为字符串(string) ，可以有效的缩小或扩大根的判定范围从而满足计算需要。语法大致和CSS 中的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/margin"><code>margin</code></a> 属性等同; 可以参考 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#the_root_element_and_root_margin">The root element and root margin</a> in <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API">Intersection Observer API</a>来深入了解margin的工作原理及其语法。默认值是”0px 0px 0px 0px”。</p>
+</li>
+<li><p><code>threshold</code></p>
+<p>规定了一个监听目标与边界盒交叉区域的比例值，可以是一个具体的数值或是一组0.0到1.0之间的数组。若指定值为0.0，则意味着监听元素即使与根有1像素交叉，此元素也会被视为可见. 若指定值为1.0，则意味着整个元素都在可见范围内时才算可见。可以参考<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#thresholds">Thresholds</a> in <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API">Intersection Observer API</a> 来深入了解阈值是如何使用的。阈值的默认值为0.0。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>以下使用场景：</p>
+<ul>
+<li>检测某一元素（section-hero）是否滚动到视窗内，滚动则在body元素上绑定新css属性（’sticky’）</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Hero = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> heroRef = useRef(<span class="literal">null</span>);</span><br><span class="line">  <span class="keyword">const</span> scrollObserver = useCallback(</span><br><span class="line">    <span class="function"><span class="params">node</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">new</span> IntersectionObserver(<span class="function"><span class="params">entries</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> en = entries[<span class="number">0</span>]</span><br><span class="line">        <span class="built_in">console</span>.log(en.isIntersecting)</span><br><span class="line">        <span class="keyword">if</span> (!en.isIntersecting) &#123;</span><br><span class="line">          <span class="comment">// 不相交，则sticky</span></span><br><span class="line">          <span class="built_in">document</span>.body.classList.add(<span class="string">&#x27;sticky&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="built_in">document</span>.body.classList.remove(<span class="string">&#x27;sticky&#x27;</span>)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">root</span>: <span class="literal">null</span>,</span><br><span class="line">        <span class="attr">threshold</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">rootMargin</span>: <span class="string">&#x27;-80px&#x27;</span>,</span><br><span class="line">      &#125;).observe(node);</span><br><span class="line">    &#125;,</span><br><span class="line">    []</span><br><span class="line">  );</span><br><span class="line">  useEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (heroRef.current) &#123;</span><br><span class="line">      scrollObserver(heroRef.current);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, [scrollObserver, heroRef]);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">section</span> <span class="attr">ref</span>=<span class="string">&#123;heroRef&#125;</span> <span class="attr">className</span>=<span class="string">&quot;section-hero&quot;</span>&gt;</span></span></span><br><span class="line"><span class="xml">      ...</span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">section</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<link rel="stylesheet" href="/css/markmap.css" type="text/css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text/javascript" src="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/hexo-simple-mindmap@0.2.0/dist/mindmap.min.css">
+    </div>
+
+    
+    
+    
+            
+
+      
+      <div>
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">------ 本文结束 &#10084 感谢你的阅读 ------</div>
+    
+</div>
+          
+<div class="my_post_copyright">
+<div style="text-align:center;color: #ccc;font-size:14px;">------ 版权信息 ------</div>
+ <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+ 
+ <p><span>本文标题:</span><a href="/2022/05/12/CSS/omnifood3_scroll/">CSS进阶实战3：平滑滚动、禁止滚动、监听滚动</a></p>
+ <p><span>文章作者:</span><a href="/" title="访问 Lury 的个人博客">Lury</a></p>
+ <p><span>发布时间:</span>2022年05月12日 - 21:46</p>
+ <p><span>最后更新:</span>2022年05月14日 - 19:38</p>
+ <p><span>原始链接:</span><a href="/2022/05/12/CSS/omnifood3_scroll/" title="CSS进阶实战3：平滑滚动、禁止滚动、监听滚动">https://luryzhu.github.io/2022/05/12/CSS/omnifood3_scroll/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://luryzhu.github.io/2022/05/12/CSS/omnifood3_scroll/"  aria-label="复制成功！"></i></span>
+ </p>
+ <p><span>许可协议:</span><a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+   var clipboard = new Clipboard('.fa-clipboard');
+   $(".fa-clipboard").click(function(){
+     clipboard.on('success', function(){
+       swal({   
+         title: "",   
+         text: '复制成功',
+         icon: "success", 
+         showConfirmButton: true
+         });
+ 	 });
+   });  
+</script>
+
+      </div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CSS/" rel="tag"># CSS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/12/CSS/omnifood2_grid/" rel="prev" title="CSS进阶实战2：grid使用技巧">
+      <i class="fa fa-chevron-left"></i> CSS进阶实战2：grid使用技巧
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/13/CSS/omnifood4_responsive/" rel="next" title="CSS进阶实战4：响应式实现思路">
+      CSS进阶实战4：响应式实现思路 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B9%B3%E6%BB%91%E6%BB%9A%E5%8A%A8"><span class="nav-number">1.</span> <span class="nav-text">平滑滚动</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">一般方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-scroll"><span class="nav-number">1.2.</span> <span class="nav-text">React-scroll</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8API"><span class="nav-number">1.2.1.</span> <span class="nav-text">常用API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Link"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">Link</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#animateScroll-as-scroll"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">animateScroll as scroll</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E5%86%99%E5%B0%81%E8%A3%85%EF%BC%9ANavLink"><span class="nav-number">1.2.2.</span> <span class="nav-text">手写封装：NavLink</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">1.2.3.</span> <span class="nav-text">问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%98%BB%E6%AD%A2%E6%BB%9A%E5%8A%A8"><span class="nav-number">2.</span> <span class="nav-text">阻止滚动</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%8C%E9%9D%A2%E7%AB%AF"><span class="nav-number">2.1.</span> <span class="nav-text">桌面端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A7%BB%E5%8A%A8%E7%AB%AF"><span class="nav-number">2.2.</span> <span class="nav-text">移动端</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%91%E5%90%AC%E6%BB%9A%E5%8A%A8"><span class="nav-number">3.</span> <span class="nav-text">监听滚动</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IntersectionObserver"><span class="nav-number">3.1.</span> <span class="nav-text">IntersectionObserver</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#API"><span class="nav-number">3.1.1.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B"><span class="nav-number">3.1.2.</span> <span class="nav-text">实例</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lury"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Lury</p>
+  <div class="site-description" itemprop="description">前端学习中...</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/luryZhu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;luryZhu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:LuryZhu@outlook.com" title="E-Mail → mailto:LuryZhu@outlook.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lury</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">211k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">3:12</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<!-- hexo injector body_end start --><script src="https://cdn.jsdelivr.net/npm/d3@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.7.4/dist/browser/view.min.js"></script>
+  <script>
+      const mindmaps = document.querySelectorAll('.markmap-svg');
+   
+      for(const mindmap of mindmaps) {
+          markmap.markmap(mindmap, JSON.parse(mindmap.innerHTML));
+      }
+  </script> <!-- hexo injector body_end end --></body>
+</html>
