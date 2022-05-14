@@ -84,6 +84,20 @@
 <li><p>在主题配置文件_config.yml中添加字段</p>
 <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 文章末尾添加“版权声明”标记</span></span><br><span class="line"><span class="attr">my_copyright:</span></span><br><span class="line"> <span class="attr">enabled:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure></li>
 </ol>
+<h3 id="文章结束"><a href="#文章结束" class="headerlink" title="文章结束"></a>文章结束</h3><p>在文章末尾，版权信息之前加入文章结束标志，<a href="https://blog.csdn.net/u011236348/article/details/88169391">参考</a></p>
+<ol>
+<li>在目录 <code>themes/next/layout/_macro/</code> 下添加 <code>passage-end-tag.swig</code> ，内容如下：</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    &#123;% if not is_index %&#125;</span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;margin:96px 0 48px 0;text-align:center;color: #ccc;font-size:14px;&quot;</span>&gt;</span></span><br><span class="line">            ------ 本文结束 &amp;#10084 感谢你的阅读 ------</span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    &#123;% endif %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>打开 <code>themes/next/layout/_macro/post.swig</code> 文件，新增内容如下（跟配置版权信息的内容可以放在一起）：</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">&#123;### post end tag + copyright ###&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    &#123;%- if not is_index %&#125;</span><br><span class="line">        &#123;% include &#x27;passage-end-tag.swig&#x27; %&#125;</span><br><span class="line">        &#123;% include &#x27;my-copyright.swig&#x27; %&#125;</span><br><span class="line">    &#123;%- endif %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>打开主题配置文件 ，添加代码如下：</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"># 文章末尾添加“文章结束”标记</span><br><span class="line"><span class="attr">passage_end_tag</span>:</span><br><span class="line">  enabled: <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="思维导图插件"><a href="#思维导图插件" class="headerlink" title="思维导图插件"></a>思维导图插件</h3><p><a href="https://github.com/MaxChang3/hexo-markmap">Github</a> | <a href="https://markmap.js.org/repl">markmap语法</a></p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install hexo-markmap</span><br></pre></td></tr></table></figure>
 
